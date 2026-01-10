@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useCart } from '@/hooks/useCart';
-import { createRazorpayOrder, verifyPayment, createCODOrder } from '@/services/api';
-import { loadRazorpayScript, initializeRazorpayCheckout } from '@/services/razorpay';
 import PriceDisplay from '@/components/product/PriceDisplay';
-import toast from 'react-hot-toast';
-import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, PAYMENT_METHODS } from '@/utils/constants';
+import { useCart } from '@/hooks/useCart';
+import { createCODOrder, createRazorpayOrder, verifyPayment } from '@/services/api';
+import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
-import { CreditCard, Wallet, Truck, Lock, ArrowRight, ShoppingBag } from 'lucide-react';
+import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, PAYMENT_METHODS } from '@/utils/constants';
+import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Wallet } from 'lucide-react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -56,9 +56,19 @@ export default function Checkout() {
         if (response.success) {
           toast.success('COD order placed successfully!');
           clearCart();
-          navigate(`/orders/${response.data.id}`);
+          // Use id (UUID) or orderId as fallback
+          const orderId = response.data?.id || response.data?.orderId;
+          if (orderId) {
+            navigate(`/orders/${orderId}`);
+          } else {
+            // Fallback to home if order ID is not available
+            console.error('Order ID not found in response:', response.data);
+            navigate('/');
+          }
+          // Note: setLoading(false) not needed here as navigation unmounts component
         } else {
           toast.error(response.message || 'Failed to place order');
+          setLoading(false);
         }
       } else {
         const scriptLoaded = await loadRazorpayScript();
@@ -302,11 +312,10 @@ export default function Checkout() {
               </div>
               <div className="space-y-4">
                 <label
-                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${
-                    paymentMethod === 'razorpay'
+                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'razorpay'
                       ? 'border-primary-500 bg-primary-50'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -329,11 +338,10 @@ export default function Checkout() {
                 </label>
 
                 <label
-                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${
-                    paymentMethod === 'cod'
+                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod'
                       ? 'border-primary-500 bg-primary-50'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"

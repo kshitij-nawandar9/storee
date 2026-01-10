@@ -1,13 +1,14 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import Home from '@/pages/Home';
-import Products from '@/pages/Products';
-import ProductDetail from '@/pages/ProductDetail';
+import Navbar from '@/components/layout/Navbar';
 import Cart from '@/pages/Cart';
 import Checkout from '@/pages/Checkout';
+import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
+import OrderConfirmation from '@/pages/OrderConfirmation';
+import ProductDetail from '@/pages/ProductDetail';
+import Products from '@/pages/Products';
+import { Toaster } from 'react-hot-toast';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/products/:slug" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/orders/:id" element={<OrderConfirmation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
