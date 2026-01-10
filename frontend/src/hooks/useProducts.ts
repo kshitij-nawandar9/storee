@@ -38,16 +38,19 @@ export const useProduct = (slug: string) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      console.log('[useProduct] Fetching product with slug:', slug);
       try {
         setLoading(true);
         setError(null);
         const response = await getProductBySlug(slug);
+        console.log('[useProduct] Response:', response);
         if (response.success) {
           setProduct(response.data);
         } else {
           setError(response.message || 'Product not found');
         }
       } catch (err) {
+        console.error('[useProduct] Error:', err);
         setError(err instanceof Error ? err.message : 'Product not found');
       } finally {
         setLoading(false);
@@ -56,6 +59,10 @@ export const useProduct = (slug: string) => {
 
     if (slug) {
       fetchProduct();
+    } else {
+      console.warn('[useProduct] No slug provided');
+      setLoading(false);
+      setError('No product slug provided');
     }
   }, [slug]);
 

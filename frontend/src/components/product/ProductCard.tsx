@@ -9,15 +9,19 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const displayPrice = product.basePrice;
-  const primaryImage =
-    product.images?.find((img) => img.isPrimary) || product.images?.[0];
+  
+  // Get default variant image (_1) or fallback to primary image
+  const defaultVariant = product.variants?.find((v) => v.isDefault);
+  const primaryImage = defaultVariant?.image || 
+    product.images?.find((img) => img.isPrimary)?.url || 
+    product.images?.[0]?.url;
 
   return (
     <div className="card card-hover group">
       <Link to={`/products/${product.slug}`} className="block">
         <div className="relative overflow-hidden bg-gray-100">
           <img
-            src={primaryImage?.url || '/placeholder.jpg'}
+            src={primaryImage || '/placeholder.jpg'}
             alt={product.name}
             className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
           />

@@ -1,16 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { ProductVariant } from '@/types';
 
 interface ProductGalleryProps {
   images: string[];
   productName: string;
+  variants?: ProductVariant[];
+  selectedVariant?: ProductVariant | null;
+  onVariantSelect?: (variant: ProductVariant) => void;
 }
 
-export default function ProductGallery({ images, productName }: ProductGalleryProps) {
+export default function ProductGallery({ 
+  images, 
+  productName, 
+  variants,
+  selectedVariant,
+  onVariantSelect 
+}: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!images || images.length === 0) {
+  // Update selected image when variant changes
+  useEffect(() => {
+    if (selectedVariant && variants) {
+      const variantIndex = variants.findIndex((v) => v.id === selectedVariant.id);
+      if (variantIndex >= 0) {
+        setSelectedImage(variantIndex);
+      }
+    }
+  }, [selectedVariant, variants]);
+
+  // Use variant images if available, otherwise use provided images
+  const displayImages = variants && variants.length > 0 
+    ? variants.map((v) => v.image).filter(Boolean)
+    : images;
+
+  if (!displayImages || displayImages.length === 0) {
     return (
       <div className="flex items-center justify-center bg-gray-100 rounded-xl h-96 border-2 border-dashed border-gray-300">
         <span className="text-gray-400">No image available</span>
@@ -19,11 +44,19 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
   }
 
   const nextImage = () => {
-    setSelectedImage((prev) => (prev + 1) % images.length);
+    setSelectedImage((prev) => (prev + 1) % displayImages.length);
   };
 
   const prevImage = () => {
-    setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
+    setSelectedImage((prev) => (prev - 1 + displayImages.length) % displayImages.length);
+  };
+
+  const handleImageSelect = (index: number) => {
+    setSelectedImage(index);
+    // If variants exist and onVariantSelect is provided, select the variant
+    if (variants && variants[index] && onVariantSelect) {
+      onVariantSelect(variants[index]);
+    }
   };
 
   return (
@@ -34,7 +67,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
         onClick={() => setIsModalOpen(true)}
       >
         <img
-          src={images[selectedImage]}
+          src={displayImages[selectedImage]}
           alt={productName}
           className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -45,7 +78,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
         </div>
         
         {/* Navigation Arrows - Desktop */}
-        {images.length > 1 && (
+        {displayImages.length > 1 && (
           <>
             <button
               onClick={(e) => {
@@ -72,12 +105,12 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
       </div>
 
       {/* Thumbnail Gallery */}
-      {images.length > 1 && (
+      {displayImages.length > 1 && (
         <div className="thumbnail-grid grid grid-cols-4 gap-3">
-          {images.map((img, index) => (
+          {displayImages.map((img, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(index)}
+              onClick={() => handleImageSelect(index)}
               className={`thumbnail p-1 border-2 rounded-lg transition-all overflow-hidden ${
                 selectedImage === index
                   ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
@@ -114,12 +147,12 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
             
             <div className="relative">
               <img
-                src={images[selectedImage]}
+                src={displayImages[selectedImage]}
                 alt={productName}
                 className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
               />
               
-              {images.length > 1 && (
+              {displayImages.length > 1 && (
                 <>
                   <button
                     onClick={prevImage}
@@ -139,12 +172,12 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
               )}
             </div>
             
-            {images.length > 1 && (
+            {displayImages.length > 1 && (
               <div className="flex gap-3 mt-6 justify-center overflow-x-auto pb-2">
-                {images.map((img, index) => (
+                {displayImages.map((img, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(index)}
+                    onClick={() => handleImageSelect(index)}
                     className={`w-20 h-20 flex-shrink-0 p-1 border-2 rounded-lg transition-all ${
                       selectedImage === index
                         ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'

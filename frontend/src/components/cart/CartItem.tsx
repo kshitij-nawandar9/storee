@@ -42,7 +42,7 @@ export default function CartItem({ item }: CartItemProps) {
         {/* Quantity Selector */}
         <QuantitySelector
           quantity={quantity}
-          maxQuantity={product.stock || 0}
+          maxQuantity={999}
           onQuantityChange={handleQuantityChange}
         />
       </div>

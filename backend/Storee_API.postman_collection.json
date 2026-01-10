@@ -1,0 +1,353 @@
+{
+  "info": {
+    "_postman_id": "storee-api-collection",
+    "name": "Storee API",
+    "description": "API collection for Storee e-commerce backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check if the API server is running"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            },
+            "description": "Get all active products. Optionally filter by category using query parameter."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products?category=pouch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "pouch",
+                  "description": "Filter products by category"
+                }
+              ]
+            },
+            "description": "Get products filtered by category"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Product UUID or ID"
+                }
+              ]
+            },
+            "description": "Get a specific product by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/slug/:slug",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "slug", ":slug"],
+              "variable": [
+                {
+                  "key": "slug",
+                  "value": "medicine-pouch",
+                  "description": "Product slug"
+                }
+              ]
+            },
+            "description": "Get a specific product by its slug"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Razorpay",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 69900,\n  \"items\": [\n    {\n      \"product\": {\n        \"id\": \"1\",\n        \"name\": \"Medicine Pouch\",\n        \"basePrice\": 69900\n      },\n      \"quantity\": 1\n    }\n  ],\n  \"customer\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"9876543210\"\n  },\n  \"address\": {\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apartment 4B\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"pincode\": \"400001\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/razorpay/create-order",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "razorpay", "create-order"]
+            },
+            "description": "Create a new Razorpay order. Amount should be in paise (e.g., 69900 = ₹699.00)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"order_abc123xyz\",\n  \"payment_id\": \"pay_abc123xyz\",\n  \"signature\": \"abc123def456ghi789\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/razorpay/verify-payment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "razorpay", "verify-payment"]
+            },
+            "description": "Verify Razorpay payment signature after successful payment"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create COD Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 69900,\n  \"items\": [\n    {\n      \"product\": {\n        \"id\": \"1\",\n        \"name\": \"Medicine Pouch\",\n        \"basePrice\": 69900\n      },\n      \"quantity\": 1\n    }\n  ],\n  \"customer\": {\n    \"name\": \"Jane Doe\",\n    \"email\": \"jane.doe@example.com\",\n    \"phone\": \"9876543210\"\n  },\n  \"address\": {\n    \"line1\": \"456 Oak Avenue\",\n    \"line2\": \"Floor 2\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"pincode\": \"110001\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/cod",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", "cod"]
+            },
+            "description": "Create a Cash on Delivery (COD) order. Amount should be in paise."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Product\",\n  \"slug\": \"new-product\",\n  \"description\": \"Product description here\",\n  \"basePrice\": 99900,\n  \"category\": \"pouch\",\n  \"stock\": 100,\n  \"isActive\": true,\n  \"features\": [\n    \"Multipurpose Storage\",\n    \"Water-Resistant Protection\",\n    \"Durable & Easy to Wash\",\n    \"Perfect for Travel\",\n    \"Stylish & Functional\"\n  ],\n  \"images\": [\n    {\n      \"url\": \"/images/products/product-image.jpeg\",\n      \"altText\": \"New Product\",\n      \"order\": 1,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "products"]
+            },
+            "description": "Create a new product. Requires admin API key in X-API-Key header."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "products"]
+            },
+            "description": "Get all products including inactive ones. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Product Name\",\n  \"basePrice\": 89900,\n  \"stock\": 50,\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Product UUID"
+                }
+              ]
+            },
+            "description": "Update an existing product. Only include fields you want to update. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Product UUID"
+                }
+              ]
+            },
+            "description": "Delete a product (soft delete). Requires admin API key."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}

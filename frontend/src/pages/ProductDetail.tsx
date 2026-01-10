@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useProduct } from '@/hooks/useProducts';
 import { useCart } from '@/hooks/useCart';
 import ProductGallery from '@/components/product/ProductGallery';
@@ -9,28 +9,52 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import toast from 'react-hot-toast';
 import { FREE_SHIPPING_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
-import { ShoppingCart, Truck, Shield, CheckCircle } from 'lucide-react';
+import { ShoppingCart, Truck, Shield, CheckCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { ProductVariant } from '@/types';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
+  console.log('[ProductDetail] Component mounted. Slug from URL:', slug);
   const { product, loading, error } = useProduct(slug || '');
+  console.log('[ProductDetail] State:', { loading, error, hasProduct: !!product, productName: product?.name });
   const { addItem } = useCart();
+  
+  // All hooks must be called before any conditional returns
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
+
+  // Get default variant or first variant (calculate before conditional returns)
+  const defaultVariant = product?.variants?.find((v) => v.isDefault) || product?.variants?.[0];
+  const currentVariant = selectedVariant || defaultVariant;
+  
+  // Debug: Log render state
+  useEffect(() => {
+    console.log('[ProductDetail] Render state changed:', { slug, loading, error, hasProduct: !!product });
+  }, [slug, loading, error, product]);
+  
+  // Initialize selected variant on mount
+  useEffect(() => {
+    if (!selectedVariant && defaultVariant) {
+      setSelectedVariant(defaultVariant);
+    }
+  }, [selectedVariant, defaultVariant]);
+
+  // Update modal image index when variant changes
+  useEffect(() => {
+    if (currentVariant && product?.variants && product.variants.length > 0) {
+      const index = product.variants.findIndex((v) => v.id === currentVariant.id);
+      if (index >= 0) {
+        setModalImageIndex(index);
+      }
+    }
+  }, [currentVariant, product?.variants]);
 
   const handleAddToCart = () => {
     if (!product) {
       toast.error('Product not found');
-      return;
-    }
-
-    const stock = product.stock || 0;
-    if (stock < quantity) {
-      toast.error('Insufficient stock available');
-      return;
-    }
-
-    if (stock === 0) {
-      toast.error('Product is out of stock');
       return;
     }
 
@@ -45,12 +69,33 @@ export default function ProductDetail() {
     });
   };
 
+  // Conditional returns must come AFTER all hooks
   if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error} />;
-  if (!product) return <ErrorMessage message="Product not found" />;
+  if (error) {
+    console.error('ProductDetail error:', error);
+    return <ErrorMessage message={error} />;
+  }
+  if (!product) {
+    console.error('ProductDetail: Product not found for slug:', slug);
+    return <ErrorMessage message="Product not found" />;
+  }
 
-  const displayImages = product.images.map((img) => img.url);
-  const stock = product.stock || 0;
+  console.log('ProductDetail: Product loaded:', product.name, 'Variants:', product.variants?.length);
+
+  // Get all variant images for gallery
+  const variantImages = product.variants?.map((v) => v.image).filter(Boolean) || [];
+  const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
+  const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
+
+  // Compute display image based on hover or selection
+  const displayImage = hoveredVariant?.image || 
+    currentVariant?.image || 
+    product.images?.find((img) => img.isPrimary)?.url ||
+    product.images?.find((img) => img.url)?.url ||
+    product.images?.[0]?.url || 
+    (typeof product.images?.[0] === 'string' ? product.images[0] : null) ||
+    displayImages[0] ||
+    '/placeholder.jpg';
 
   return (
     <div className="min-h-screen py-12 bg-gray-50">
@@ -59,7 +104,67 @@ export default function ProductDetail() {
           {/* Left: Product Images */}
           <div className="animate-fade-in">
             <div className="card p-4">
-              <ProductGallery images={displayImages} productName={product.name} />
+              {/* Main Image - Updates on hover/selection */}
+              <div 
+                className="relative mb-4 overflow-hidden rounded-xl bg-gray-100 group cursor-pointer min-h-[400px] flex items-center justify-center"
+                onClick={() => {
+                  if (displayImages.length > 0) {
+                    // Find the index of the current display image
+                    const currentIndex = displayImages.findIndex((img) => img === displayImage);
+                    setModalImageIndex(currentIndex >= 0 ? currentIndex : 0);
+                    setIsImageModalOpen(true);
+                  }
+                }}
+              >
+                {displayImage ? (
+                  <img
+                    src={displayImage}
+                    alt={product.name}
+                    className="w-full h-auto object-cover transition-all duration-300"
+                    key={displayImage}
+                    onError={(e) => {
+                      console.error('Image failed to load:', displayImage);
+                      (e.target as HTMLImageElement).src = '/placeholder.jpg';
+                    }}
+                  />
+                ) : (
+                  <div className="text-gray-400">No image available</div>
+                )}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
+                  <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium bg-black/50 px-4 py-2 rounded-lg">
+                    Click to enlarge
+                  </span>
+                </div>
+              </div>
+              
+              {/* Thumbnail Gallery */}
+              {displayImages.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {displayImages.map((img, index) => {
+                    const variant = product.variants?.[index];
+                    const isSelected = variant?.id === currentVariant?.id;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => variant && setSelectedVariant(variant)}
+                        onMouseEnter={() => variant && setHoveredVariant(variant)}
+                        onMouseLeave={() => setHoveredVariant(null)}
+                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${
+                          isSelected
+                            ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
+                            : 'border-gray-200 hover:border-gray-400'
+                        }`}
+                      >
+                        <img
+                          src={img}
+                          alt={`${product.name} ${index + 1}`}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
@@ -72,7 +177,7 @@ export default function ProductDetail() {
 
               {/* Price */}
               <div className="mb-6">
-                <PriceDisplay regularPrice={product.basePrice} />
+                <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} />
               </div>
 
               {/* Description */}
@@ -80,18 +185,11 @@ export default function ProductDetail() {
                 {product.description}
               </p>
 
-              {/* Stock Status - Only show if out of stock */}
-              {stock === 0 && (
-                <div className="flex items-center gap-2 mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <span className="text-red-700 font-medium">Out of Stock</span>
-                </div>
-              )}
-
               {/* Quantity Selector */}
               <div className="mb-8">
                 <QuantitySelector
                   quantity={quantity}
-                  maxQuantity={stock}
+                  maxQuantity={999}
                   onQuantityChange={setQuantity}
                 />
               </div>
@@ -99,11 +197,10 @@ export default function ProductDetail() {
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                disabled={stock === 0}
                 className="w-full btn-primary text-lg py-4 flex items-center justify-center gap-2 mb-6"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                Add to Cart
               </button>
 
               {/* Features */}
@@ -173,6 +270,85 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {isImageModalOpen && displayImages.length > 0 && (
+        <div
+          className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl max-h-screen bg-white rounded-2xl p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsImageModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-800 hover:text-gray-600 p-2 rounded-full bg-white/90 hover:bg-white transition-all shadow-lg z-10"
+              aria-label="Close image gallery"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="relative">
+              <img
+                src={displayImages[modalImageIndex]}
+                alt={product.name}
+                className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
+              />
+              
+              {displayImages.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModalImageIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="w-6 h-6 text-gray-800" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModalImageIndex((prev) => (prev + 1) % displayImages.length);
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="w-6 h-6 text-gray-800" />
+                  </button>
+                </>
+              )}
+            </div>
+            
+            {displayImages.length > 1 && (
+              <div className="flex gap-3 mt-6 justify-center overflow-x-auto pb-2">
+                {displayImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModalImageIndex(index);
+                    }}
+                    className={`w-20 h-20 flex-shrink-0 p-1 border-2 rounded-lg transition-all ${
+                      modalImageIndex === index
+                        ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt=""
+                      className="w-full h-full object-cover rounded"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

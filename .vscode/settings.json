@@ -1,0 +1,12 @@
+{
+  "go.goroot": "/usr/local/go",
+  "go.gopath": "/Users/kshitij.nawandar/go",
+  "go.toolsEnvVars": {
+    "GOROOT": "/usr/local/go",
+    "GOPATH": "/Users/kshitij.nawandar/go"
+  },
+  "go.useLanguageServer": true,
+  "go.formatTool": "goimports",
+  "go.lintTool": "golangci-lint",
+  "go.testFlags": ["-v"]
+}

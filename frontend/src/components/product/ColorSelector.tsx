@@ -25,7 +25,7 @@ export default function ColorSelector({
   }, [selected, onVariantSelect]);
 
   const handleColorSelect = (variant: ProductVariant) => {
-    if (variant.stock > 0 && variant.isActive) {
+    if (variant.isActive) {
       setSelected(variant);
       onVariantSelect(variant);
     }
@@ -41,22 +41,21 @@ export default function ColorSelector({
       <div className="flex flex-wrap gap-3">
         {variants.map((variant) => {
           const isSelected = selected?.id === variant.id;
-          const isOutOfStock = variant.stock === 0;
 
           return (
             <button
               key={variant.id}
               onClick={() => handleColorSelect(variant)}
-              disabled={isOutOfStock || !variant.isActive}
+              disabled={!variant.isActive}
               className={`
                 relative color-option flex flex-col items-center p-3 border-2 rounded-lg transition-all
                 ${isSelected
                   ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
                   : 'border-gray-200 hover:border-gray-400'
                 }
-                ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                ${!variant.isActive ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
               `}
-              title={`${variant.colorName}${isOutOfStock ? ' - Out of Stock' : ''}`}
+              title={variant.colorName}
             >
               {/* Color Swatch */}
               <div
@@ -74,10 +73,6 @@ export default function ColorSelector({
               )}
 
               <span className="text-sm font-medium">{variant.colorName}</span>
-
-              {isOutOfStock && (
-                <span className="text-xs text-red-500 mt-1">Out of Stock</span>
-              )}
 
               {isSelected && (
                 <div className="absolute top-1 right-1">

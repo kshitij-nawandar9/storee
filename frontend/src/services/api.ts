@@ -3,13 +3,19 @@ import type { Product, ApiResponse } from '@/types';
 import { mockProducts } from '@/data/mockProducts';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+console.log('[API] Environment check:', {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  VITE_USE_MOCK_DATA: import.meta.env.VITE_USE_MOCK_DATA,
+  VITE_FALLBACK_TO_MOCK: import.meta.env.VITE_FALLBACK_TO_MOCK,
+  API_URL
+});
 
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 3000, // 3 second timeout
+  timeout: 10000, // 10 second timeout
 });
 
 // Request interceptor
@@ -42,16 +48,17 @@ api.interceptors.response.use(
   }
 );
 
-// Helper to check if we should use mock data
+// Helper to check if we should use mock data (only if explicitly enabled)
 const shouldUseMockData = () => {
-  // Use mock data if VITE_USE_MOCK_DATA is explicitly set to 'true'
-  // or if VITE_API_URL is not set (development mode)
-  return import.meta.env.VITE_USE_MOCK_DATA === 'true' || !import.meta.env.VITE_API_URL;
+  // Only use mock data if explicitly set to 'true'
+  const useMock = import.meta.env.VITE_USE_MOCK_DATA === 'true';
+  console.log('[API] VITE_USE_MOCK_DATA:', import.meta.env.VITE_USE_MOCK_DATA, 'shouldUseMockData:', useMock);
+  return useMock;
 };
 
 // Product APIs
 export const getProducts = async (category?: string): Promise<ApiResponse<Product[]>> => {
-  // Use mock data if configured
+  // Use mock data only if explicitly enabled
   if (shouldUseMockData()) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     
@@ -63,30 +70,36 @@ export const getProducts = async (category?: string): Promise<ApiResponse<Produc
     
     return {
       success: true,
-      message: 'Products fetched successfully',
+      message: 'Products fetched successfully (mock data)',
       data: products,
     };
   }
 
-  // Try to fetch from backend, fallback to mock data on error
+  // Always try to fetch from backend first
   try {
     const params = category ? { category } : {};
     const response = await api.get('/products', { params });
     return response.data;
   } catch (error) {
-    console.warn('Backend unavailable, using mock data');
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    
-    let products = [...mockProducts];
-    if (category) {
-      products = products.filter((p) => p.category === category);
+    // Only fallback to mock data if explicitly enabled
+    if (import.meta.env.VITE_FALLBACK_TO_MOCK === 'true') {
+      console.warn('Backend unavailable, using mock data as fallback');
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      
+      let products = [...mockProducts];
+      if (category) {
+        products = products.filter((p) => p.category === category);
+      }
+      
+      return {
+        success: true,
+        message: 'Products fetched successfully (mock data fallback)',
+        data: products,
+      };
     }
     
-    return {
-      success: true,
-      message: 'Products fetched successfully (mock data)',
-      data: products,
-    };
+    // Otherwise, throw the error
+    throw error;
   }
 };
 
@@ -101,7 +114,7 @@ export const getProduct = async (id: string): Promise<ApiResponse<Product>> => {
     
     return {
       success: true,
-      message: 'Product fetched successfully',
+      message: 'Product fetched successfully (mock data)',
       data: product,
     };
   }
@@ -110,34 +123,42 @@ export const getProduct = async (id: string): Promise<ApiResponse<Product>> => {
     const response = await api.get(`/products/${id}`);
     return response.data;
   } catch (error) {
-    console.warn('Backend unavailable, using mock data');
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const product = mockProducts.find((p) => p.id === id);
-    
-    if (!product) {
-      throw new Error('Product not found');
+    // Only fallback to mock data if explicitly enabled
+    if (import.meta.env.VITE_FALLBACK_TO_MOCK === 'true') {
+      console.warn('Backend unavailable, using mock data as fallback');
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      const product = mockProducts.find((p) => p.id === id);
+      
+      if (!product) {
+        throw new Error('Product not found');
+      }
+      
+      return {
+        success: true,
+        message: 'Product fetched successfully (mock data fallback)',
+        data: product,
+      };
     }
     
-    return {
-      success: true,
-      message: 'Product fetched successfully (mock data)',
-      data: product,
-    };
+    throw error;
   }
 };
 
 export const getProductBySlug = async (slug: string): Promise<ApiResponse<Product>> => {
   if (shouldUseMockData()) {
+    console.log('[API] Using mock data, searching for slug:', slug);
     await new Promise((resolve) => setTimeout(resolve, 300));
     const product = mockProducts.find((p) => p.slug === slug);
     
     if (!product) {
-      throw new Error('Product not found');
+      console.error('[API] Product not found in mock data. Available slugs:', mockProducts.map(p => p.slug));
+      throw new Error(`Product not found: ${slug}`);
     }
     
+    console.log('[API] Found product:', product.name);
     return {
       success: true,
-      message: 'Product fetched successfully',
+      message: 'Product fetched successfully (mock data)',
       data: product,
     };
   }
@@ -146,19 +167,24 @@ export const getProductBySlug = async (slug: string): Promise<ApiResponse<Produc
     const response = await api.get(`/products/slug/${slug}`);
     return response.data;
   } catch (error) {
-    console.warn('Backend unavailable, using mock data');
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const product = mockProducts.find((p) => p.slug === slug);
-    
-    if (!product) {
-      throw new Error('Product not found');
+    // Only fallback to mock data if explicitly enabled
+    if (import.meta.env.VITE_FALLBACK_TO_MOCK === 'true') {
+      console.warn('Backend unavailable, using mock data as fallback');
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      const product = mockProducts.find((p) => p.slug === slug);
+      
+      if (!product) {
+        throw new Error('Product not found');
+      }
+      
+      return {
+        success: true,
+        message: 'Product fetched successfully (mock data fallback)',
+        data: product,
+      };
     }
     
-    return {
-      success: true,
-      message: 'Product fetched successfully (mock data)',
-      data: product,
-    };
+    throw error;
   }
 };
 
