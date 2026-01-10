@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
 
@@ -36,14 +36,9 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
-                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
+                href="https://www.instagram.com/thestoree.in?igsh=MnU5Mm52ZWQyMXBu"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors"
                 aria-label="Instagram"
               >
@@ -94,11 +89,15 @@ export default function Footer() {
             <ul className="space-y-4 text-gray-400">
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>support@storee.in</span>
+                <a href="mailto:thestoree.in@gmail.com" className="hover:text-white transition-colors">
+                  thestoree.in@gmail.com
+                </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>+91 XXXXX XXXXX</span>
+                <a href="tel:+918329529225" className="hover:text-white transition-colors">
+                  +91 83295 29225
+                </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />

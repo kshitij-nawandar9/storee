@@ -35,7 +35,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl mb-10 text-primary-100 max-w-2xl mx-auto leading-relaxed">
-              Quality Bag Packs & Pouches for Every Need. Organize your life with style and functionality.
+              Home to your belongings
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
