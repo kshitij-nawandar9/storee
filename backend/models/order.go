@@ -19,7 +19,7 @@ type Order struct {
 	Address        datatypes.JSON  `json:"address" gorm:"type:json;not null"`
 	Items          datatypes.JSON  `json:"items" gorm:"type:json;not null"`
 	TotalAmount    int64           `json:"totalAmount" gorm:"not null"` // in paise
-	Status         string          `json:"status" gorm:"type:varchar(50);default:pending"` // pending, paid, processing, shipped, delivered, cancelled
+	Status         string          `json:"status" gorm:"type:varchar(50);default:pending"` // pending, approved, paid, processing, shipped, delivered, cancelled
 	PaymentID     string          `json:"paymentId" gorm:"type:varchar(255)"`                    // Razorpay payment ID
 	PaymentMethod  string         `json:"paymentMethod" gorm:"type:varchar(50);not null"` // razorpay or cod
 	CreatedAt      time.Time       `json:"createdAt"`

@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -18,9 +19,18 @@ type Config struct {
 	GoogleClientID  string
 	GoogleSecret    string
 	JWTSecret       string
+	AdminEmails     []string // List of admin email addresses
 }
 
 func Load() *Config {
+	// Get admin emails from environment or use defaults
+	adminEmailsEnv := getEnv("ADMIN_EMAILS", "thestoree.in@gmail.com,kshitij.nawandar@razorpay.com")
+	adminEmails := strings.Split(adminEmailsEnv, ",")
+	// Trim whitespace from each email
+	for i := range adminEmails {
+		adminEmails[i] = strings.TrimSpace(adminEmails[i])
+	}
+
 	return &Config{
 		Port:            getEnv("PORT", "8080"),
 		Env:             getEnv("ENV", "development"),
@@ -35,6 +45,7 @@ func Load() *Config {
 		GoogleClientID:  getEnv("GOOGLE_CLIENT_ID", ""),
 		GoogleSecret:    getEnv("GOOGLE_CLIENT_SECRET", ""),
 		JWTSecret:       getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
+		AdminEmails:     adminEmails,
 	}
 }
 

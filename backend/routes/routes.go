@@ -58,10 +58,10 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			orders.GET("/history", middleware.AuthMiddleware(cfg.JWTSecret), orderHandler.GetOrderHistory)
 		}
 
-		// Admin routes (protected with API key)
+		// Admin routes (protected with email-based admin auth)
 		adminHandler := handlers.NewAdminHandler(db)
 		admin := v1.Group("/admin")
-		admin.Use(middleware.AdminAuthMiddleware())
+		admin.Use(middleware.AdminAuthMiddleware(cfg.JWTSecret, cfg.AdminEmails))
 		{
 			adminProducts := admin.Group("/products")
 			{
@@ -73,6 +73,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			adminOrders := admin.Group("/orders")
 			{
 				adminOrders.GET("", adminHandler.GetAllOrders)
+				adminOrders.PUT("/:id/approve", adminHandler.ApproveOrder)
 			}
 		}
 	}

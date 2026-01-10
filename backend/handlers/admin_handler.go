@@ -309,6 +309,36 @@ func (h *AdminHandler) GetAllOrders(c *gin.Context) {
 	utils.SuccessResponse(c, http.StatusOK, "Orders fetched successfully", response)
 }
 
+// ApproveOrder handles PUT /api/v1/admin/orders/:id/approve
+func (h *AdminHandler) ApproveOrder(c *gin.Context) {
+	orderID := c.Param("id")
+
+	var order models.Order
+	if err := h.DB.Where("id = ? OR order_id = ?", orderID, orderID).First(&order).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			utils.ErrorResponse(c, http.StatusNotFound, "Order not found", nil)
+			return
+		}
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch order", err)
+		return
+	}
+
+	// Check if order is in a valid state to be approved
+	if order.Status != "pending" && order.Status != "paid" {
+		utils.ErrorResponse(c, http.StatusBadRequest, fmt.Sprintf("Cannot approve order with status: %s. Order must be 'pending' or 'paid'", order.Status), nil)
+		return
+	}
+
+	// Update order status to approved
+	order.Status = "approved"
+	if err := h.DB.Save(&order).Error; err != nil {
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to approve order", err)
+		return
+	}
+
+	utils.SuccessResponse(c, http.StatusOK, "Order approved successfully", order)
+}
+
 // generateSlug creates a URL-friendly slug from a name
 func generateSlug(name string) string {
 	slug := strings.ToLower(name)
