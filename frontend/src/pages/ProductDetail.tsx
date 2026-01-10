@@ -97,7 +97,7 @@ export default function ProductDetail() {
     '/placeholder.jpg';
 
   return (
-    <div className="min-h-screen py-12 bg-gray-50">
+    <div className="min-h-screen py-12 bg-warm-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Left: Product Images */}
@@ -219,7 +219,7 @@ export default function ProductDetail() {
                       const description = featureDescriptions[feature] || feature;
 
                       return (
-                        <div key={index} className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
+                        <div key={index} className="bg-white p-4 rounded-xl border border-orange-100 shadow-warm">
                           <div className="flex items-start gap-3">
                             <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
                             <div>

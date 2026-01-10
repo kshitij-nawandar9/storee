@@ -8,14 +8,10 @@ export default function Products() {
   const { products, loading, error } = useProducts();
 
   return (
-    <div className="min-h-screen py-12 bg-gray-50">
+    <div className="min-h-screen py-12 bg-warm-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full mb-4">
-            <Grid3x3 className="w-4 h-4" />
-            <span className="text-sm font-medium">All Products</span>
-          </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
             Our Collection
           </h1>

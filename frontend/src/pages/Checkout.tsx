@@ -242,7 +242,7 @@ export default function Checkout() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen py-20 bg-gray-50">
+      <div className="min-h-screen py-20 bg-warm-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="w-32 h-32 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -264,7 +264,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen py-12 bg-gray-50">
+    <div className="min-h-screen py-12 bg-warm-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold mb-8 text-gradient">Checkout</h1>
 
@@ -275,7 +275,7 @@ export default function Checkout() {
             <div className="card p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center shadow-sm">
                     <Truck className="w-5 h-5 text-primary-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">Shipping Address</h2>
@@ -306,7 +306,7 @@ export default function Checkout() {
                         handleUseNewAddress();
                       }
                     }}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                   >
                     <option value="">Select a saved address...</option>
                     {savedAddresses.map((addr) => (
@@ -328,7 +328,7 @@ export default function Checkout() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -340,7 +340,7 @@ export default function Checkout() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -353,7 +353,7 @@ export default function Checkout() {
                     pattern="[0-9]{10}"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="10-digit number"
                   />
                 </div>
@@ -370,7 +370,7 @@ export default function Checkout() {
                         address: { ...formData.address, line1: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="Street address"
                   />
                 </div>
@@ -386,7 +386,7 @@ export default function Checkout() {
                         address: { ...formData.address, line2: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="Apartment, suite, etc. (optional)"
                   />
                 </div>
@@ -403,7 +403,7 @@ export default function Checkout() {
                         address: { ...formData.address, city: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="City"
                   />
                 </div>
@@ -419,7 +419,7 @@ export default function Checkout() {
                         address: { ...formData.address, state: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="State"
                   />
                 </div>
@@ -436,7 +436,7 @@ export default function Checkout() {
                         address: { ...formData.address, pincode: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
                     placeholder="6-digit pincode"
                   />
                 </div>
@@ -444,7 +444,7 @@ export default function Checkout() {
 
               {/* Save Address Option */}
               {showSaveOption || (!selectedSavedAddress && savedAddresses.length === 0) ? (
-                <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="mt-6 p-4 bg-warm-100 rounded-xl border border-orange-200">
                   <div className="flex items-start gap-3">
                     <input
                       type="checkbox"
@@ -464,7 +464,7 @@ export default function Checkout() {
                             value={addressLabel}
                             onChange={(e) => setAddressLabel(e.target.value)}
                             placeholder="Label (e.g., Home, Work, Office)"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            className="w-full px-3 py-2 border border-orange-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
                           />
                         </div>
                       )}
@@ -474,7 +474,7 @@ export default function Checkout() {
                     <button
                       type="button"
                       onClick={handleSaveAddress}
-                      className="mt-3 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2 text-sm"
+                      className="mt-3 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors flex items-center gap-2 text-sm shadow-warm"
                     >
                       <Save className="w-4 h-4" />
                       Save Address
@@ -482,7 +482,7 @@ export default function Checkout() {
                   )}
                 </div>
               ) : selectedSavedAddress && (
-                <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200 flex items-center justify-between">
+                <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-green-700">
                     <Check className="w-5 h-5" />
                     <span className="text-sm font-medium">Using saved address</span>
@@ -504,7 +504,7 @@ export default function Checkout() {
             {/* Payment Method */}
             <div className="card p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center shadow-sm">
                   <CreditCard className="w-5 h-5 text-primary-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900">Payment Method</h2>
@@ -513,7 +513,7 @@ export default function Checkout() {
                 <label
                   className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'razorpay'
                       ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      : 'border-orange-200 hover:border-orange-300 hover:bg-warm-50'
                     }`}
                 >
                   <input
@@ -539,7 +539,7 @@ export default function Checkout() {
                 <label
                   className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod'
                       ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      : 'border-orange-200 hover:border-orange-300 hover:bg-warm-50'
                     }`}
                 >
                   <input
@@ -588,7 +588,7 @@ export default function Checkout() {
                       <img
                         src={primaryImage?.url || '/placeholder.jpg'}
                         alt={item.product.name}
-                        className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                        className="w-16 h-16 object-cover rounded-xl border border-orange-200"
                       />
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 truncate">{item.product.name}</p>

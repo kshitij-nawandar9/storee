@@ -19,6 +19,8 @@ export default function Home() {
             backgroundSize: '40px 40px'
           }}></div>
         </div>
+        {/* Warm overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-transparent"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center animate-fade-in">
@@ -57,7 +59,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-warm-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
@@ -104,7 +106,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 bg-gradient-to-b from-warm-100 to-warm-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
@@ -114,24 +116,24 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="card p-8 text-center group hover:border-primary-200">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-lg">
+            <div className="card p-8 text-center group hover:border-orange-200">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-warm">
                 <Truck className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Free Delivery</h3>
               <p className="text-gray-600 leading-relaxed">Free Pan India Delivery on all orders. Fast and reliable shipping.</p>
             </div>
             
-            <div className="card p-8 text-center group hover:border-primary-200">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-lg">
+            <div className="card p-8 text-center group hover:border-orange-200">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-warm">
                 <Shield className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Secure Payment</h3>
               <p className="text-gray-600 leading-relaxed">Safe and secure payment options. Your data is protected.</p>
             </div>
             
-            <div className="card p-8 text-center group hover:border-primary-200">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-lg">
+            <div className="card p-8 text-center group hover:border-orange-200">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-warm">
                 <RotateCcw className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Easy Returns</h3>

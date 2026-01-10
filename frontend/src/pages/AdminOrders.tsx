@@ -167,27 +167,27 @@ export default function AdminOrders() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading orders...</p>
-        </div>
-      </div>
+          <div className="min-h-screen flex items-center justify-center bg-warm-50">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading orders...</p>
+            </div>
+          </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <p className="text-gray-600">Access denied. Admin privileges required.</p>
-        </div>
-      </div>
+          <div className="min-h-screen flex items-center justify-center bg-warm-50">
+            <div className="text-center">
+              <p className="text-gray-600">Access denied. Admin privileges required.</p>
+            </div>
+          </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-12 bg-gray-50">
+    <div className="min-h-screen py-12 bg-warm-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-gradient">Admin Orders</h1>
@@ -331,7 +331,7 @@ export default function AdminOrders() {
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-4 py-2 border border-orange-200 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-warm-50 transition-colors"
             >
               Previous
             </button>
@@ -341,7 +341,7 @@ export default function AdminOrders() {
             <button
               onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
               disabled={page === pagination.pages}
-              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-4 py-2 border border-orange-200 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-warm-50 transition-colors"
             >
               Next
             </button>

@@ -46,7 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                   },
                 });
               }}
-              className="bg-white text-primary-600 px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-primary-50 transition-colors flex items-center gap-2"
+              className="bg-white text-primary-600 px-4 py-2 rounded-xl font-semibold shadow-warm hover:bg-primary-50 transition-colors flex items-center gap-2"
             >
               <ShoppingCart className="w-4 h-4" />
               Quick Add
