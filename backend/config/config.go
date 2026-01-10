@@ -15,6 +15,9 @@ type Config struct {
 	RazorpayKeyID   string
 	RazorpaySecret  string
 	FrontendURL     string
+	GoogleClientID  string
+	GoogleSecret    string
+	JWTSecret       string
 }
 
 func Load() *Config {
@@ -29,6 +32,9 @@ func Load() *Config {
 		RazorpayKeyID:   getEnv("RAZORPAY_KEY_ID", ""),
 		RazorpaySecret:  getEnv("RAZORPAY_KEY_SECRET", ""),
 		FrontendURL:     getEnv("FRONTEND_URL", "http://localhost:5173"),
+		GoogleClientID:  getEnv("GOOGLE_CLIENT_ID", ""),
+		GoogleSecret:    getEnv("GOOGLE_CLIENT_SECRET", ""),
+		JWTSecret:       getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
 	}
 }
 

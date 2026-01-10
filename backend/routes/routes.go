@@ -38,11 +38,21 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			razorpay.POST("/verify-payment", razorpayHandler.VerifyPayment)
 		}
 
+		// Auth routes
+		authHandler := handlers.NewAuthHandler(db, cfg.JWTSecret, cfg.GoogleClientID, cfg.GoogleSecret, cfg.FrontendURL)
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/google", authHandler.GoogleLogin)
+			auth.GET("/me", middleware.AuthMiddleware(cfg.JWTSecret), authHandler.GetCurrentUser)
+		}
+
 		// Order routes
 		orderHandler := handlers.NewOrderHandler(db)
 		orders := v1.Group("/orders")
 		{
 			orders.POST("/cod", orderHandler.CreateCODOrder)
+			// Protected route - requires authentication
+			orders.GET("/history", middleware.AuthMiddleware(cfg.JWTSecret), orderHandler.GetOrderHistory)
 		}
 
 		// Admin routes (protected with API key)

@@ -1,16 +1,37 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogOut, Package } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
-import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect, useRef } from 'react';
 import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
 
 export default function Navbar() {
   const { getItemCount } = useCart();
+  const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
   const itemCount = getItemCount();
   const [logoError, setLogoError] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLogoPath, setCurrentLogoPath] = useState(LOGO_PATH);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuOpen]);
 
   const handleLogoError = () => {
     if (currentLogoPath === LOGO_PATH) {
@@ -73,9 +94,21 @@ export default function Navbar() {
             >
               Cart
             </Link>
+            {isAuthenticated && (
+              <Link
+                to="/orders"
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive('/orders')
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                Orders
+              </Link>
+            )}
           </div>
 
-          {/* Cart Icon */}
+          {/* Cart Icon & User Menu */}
           <div className="flex items-center gap-4">
             <Link
               to="/cart"
@@ -88,6 +121,61 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+
+            {/* User Menu */}
+            {isAuthenticated ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 p-2 text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-all"
+                >
+                  {user?.picture ? (
+                    <img
+                      src={user.picture}
+                      alt={user.name}
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <User className="w-6 h-6" />
+                  )}
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200">
+                      <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
+                    </div>
+                    <Link
+                      to="/orders"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <Package className="w-4 h-4" />
+                      Order History
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/signin"
+                className="px-4 py-2 text-gray-700 hover:text-primary-600 transition-all duration-200 hover:bg-gray-50 rounded-lg font-medium flex items-center gap-2"
+                title="Sign in"
+              >
+                <User className="w-5 h-5" />
+                <span className="hidden sm:inline">Sign In</span>
+              </Link>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -141,6 +229,43 @@ export default function Navbar() {
               >
                 Cart {itemCount > 0 && `(${itemCount})`}
               </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                      isActive('/orders')
+                        ? 'bg-primary-100 text-primary-700'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Orders
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                    isActive('/signin')
+                      ? 'bg-primary-100 text-primary-700'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         )}

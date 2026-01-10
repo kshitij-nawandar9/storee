@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
 import PriceDisplay from './PriceDisplay';
 import { ShoppingCart } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
+import toast from 'react-hot-toast';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addItem } = useCart();
   const displayPrice = product.basePrice;
   
   // Get default variant image (_1) or fallback to primary image
@@ -33,7 +36,15 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Quick add to cart functionality can be added here
+                addItem(product, 1);
+                toast.success(`Added ${product.name} to cart`, {
+                  icon: '🛍️',
+                  style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                  },
+                });
               }}
               className="bg-white text-primary-600 px-4 py-2 rounded-lg font-semibold shadow-lg hover:bg-primary-50 transition-colors flex items-center gap-2"
             >

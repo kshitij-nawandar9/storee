@@ -72,9 +72,18 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	}
 	razorpayOrderID := razorpayOrder.ID
 
+	// Check if user is authenticated
+	var userID *uuid.UUID
+	if userIDVal, exists := c.Get("userID"); exists {
+		if uid, ok := userIDVal.(uuid.UUID); ok {
+			userID = &uid
+		}
+	}
+
 	// Create order record in database
 	order := models.Order{
 		OrderID:       razorpayOrderID,
+		UserID:        userID,
 		CustomerName:  req.Customer.Name,
 		CustomerEmail: req.Customer.Email,
 		CustomerPhone: req.Customer.Phone,
