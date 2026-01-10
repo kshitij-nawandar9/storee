@@ -39,6 +39,11 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			razorpay.POST("/create-order", razorpayHandler.CreateOrder)
 			razorpay.POST("/verify-payment", razorpayHandler.VerifyPayment)
 		}
+		// Webhook route (no auth required, uses signature verification instead)
+		razorpayWebhook := v1.Group("/razorpay")
+		{
+			razorpayWebhook.POST("/webhook", razorpayHandler.HandleWebhook)
+		}
 
 		// Auth routes
 		authHandler := handlers.NewAuthHandler(db, cfg.JWTSecret, cfg.GoogleClientID, cfg.GoogleSecret, cfg.FrontendURL)

@@ -4,8 +4,9 @@ import { createCODOrder, createRazorpayOrder, verifyPayment } from '@/services/a
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
 import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, PAYMENT_METHODS } from '@/utils/constants';
-import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
+import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Wallet, Save, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -31,14 +32,110 @@ export default function Checkout() {
       pincode: '',
     },
   });
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedSavedAddress, setSelectedSavedAddress] = useState<string>('');
+  const [saveAsDefault, setSaveAsDefault] = useState(false);
+  const [showSaveOption, setShowSaveOption] = useState(false);
+  const [addressLabel, setAddressLabel] = useState('');
 
   const total = getTotal();
   const shippingCost = 0;
   const finalTotal = total + shippingCost;
 
+  // Load saved addresses on mount
+  useEffect(() => {
+    const addresses = getSavedAddresses();
+    setSavedAddresses(addresses);
+    
+    // Load default address if available
+    const defaultAddr = getDefaultAddress();
+    if (defaultAddr) {
+      setFormData({
+        name: defaultAddr.name,
+        email: defaultAddr.email,
+        phone: defaultAddr.phone,
+        address: defaultAddr.address,
+      });
+      setSelectedSavedAddress(defaultAddr.id);
+      setShowSaveOption(false);
+    }
+  }, []);
+
+  const loadSavedAddress = (addressId: string) => {
+    const addresses = getSavedAddresses();
+    const address = addresses.find(addr => addr.id === addressId);
+    if (address) {
+      setFormData({
+        name: address.name,
+        email: address.email,
+        phone: address.phone,
+        address: address.address,
+      });
+      setSelectedSavedAddress(addressId);
+      setShowSaveOption(false);
+      toast.success('Address loaded');
+    }
+  };
+
+  const handleSaveAddress = () => {
+    if (!formData.name || !formData.email || !formData.phone || !formData.address.line1) {
+      toast.error('Please fill in all required fields before saving');
+      return;
+    }
+
+    const newAddress = saveAddress({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      isDefault: saveAsDefault,
+      label: addressLabel || undefined,
+    });
+
+    setSavedAddresses(getSavedAddresses());
+    setSelectedSavedAddress(newAddress.id);
+    setShowSaveOption(false);
+    setAddressLabel('');
+    toast.success('Address saved successfully!');
+  };
+
+  const handleUseNewAddress = () => {
+    setSelectedSavedAddress('');
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      address: {
+        line1: '',
+        line2: '',
+        city: '',
+        state: '',
+        pincode: '',
+      },
+    });
+    setShowSaveOption(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Save address if user wants to save it
+    if (saveAsDefault && !selectedSavedAddress) {
+      try {
+        saveAddress({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          isDefault: saveAsDefault,
+          label: addressLabel || undefined,
+        });
+        setSavedAddresses(getSavedAddresses());
+      } catch (error) {
+        console.error('Error saving address:', error);
+      }
+    }
 
     try {
       if (paymentMethod === PAYMENT_METHODS.COD) {
@@ -100,6 +197,7 @@ export default function Checkout() {
         initializeRazorpayCheckout(
           order.razorpay_id,
           order.amount,
+          order.key_id, // Use key_id from backend response
           {
             name: formData.name,
             email: formData.email,
@@ -175,12 +273,53 @@ export default function Checkout() {
           <div className="lg:col-span-2 space-y-6">
             {/* Shipping Address */}
             <div className="card p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-primary-600" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <Truck className="w-5 h-5 text-primary-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900">Shipping Address</h2>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">Shipping Address</h2>
+                {savedAddresses.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleUseNewAddress}
+                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    Use New Address
+                  </button>
+                )}
               </div>
+
+              {/* Saved Addresses Dropdown */}
+              {savedAddresses.length > 0 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">
+                    Select from Saved Addresses
+                  </label>
+                  <select
+                    value={selectedSavedAddress}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        loadSavedAddress(e.target.value);
+                      } else {
+                        handleUseNewAddress();
+                      }
+                    }}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+                  >
+                    <option value="">Select a saved address...</option>
+                    {savedAddresses.map((addr) => (
+                      <option key={addr.id} value={addr.id}>
+                        {addr.label ? `${addr.label} - ` : ''}
+                        {addr.name} ({addr.address.city}, {addr.address.state})
+                        {addr.isDefault ? ' (Default)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold mb-2 text-gray-700">Full Name *</label>
@@ -302,6 +441,64 @@ export default function Checkout() {
                   />
                 </div>
               </div>
+
+              {/* Save Address Option */}
+              {showSaveOption || (!selectedSavedAddress && savedAddresses.length === 0) ? (
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="saveAddress"
+                      checked={saveAsDefault}
+                      onChange={(e) => setSaveAsDefault(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-primary-600 focus:ring-primary-500"
+                    />
+                    <div className="flex-1">
+                      <label htmlFor="saveAddress" className="block text-sm font-medium text-gray-700 mb-2">
+                        Save this address for future orders
+                      </label>
+                      {saveAsDefault && (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={addressLabel}
+                            onChange={(e) => setAddressLabel(e.target.value)}
+                            placeholder="Label (e.g., Home, Work, Office)"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {saveAsDefault && (
+                    <button
+                      type="button"
+                      onClick={handleSaveAddress}
+                      className="mt-3 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2 text-sm"
+                    >
+                      <Save className="w-4 h-4" />
+                      Save Address
+                    </button>
+                  )}
+                </div>
+              ) : selectedSavedAddress && (
+                <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-green-700">
+                    <Check className="w-5 h-5" />
+                    <span className="text-sm font-medium">Using saved address</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSaveOption(true);
+                      setSaveAsDefault(false);
+                    }}
+                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    Edit & Save
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Payment Method */}

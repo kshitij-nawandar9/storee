@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -198,4 +199,130 @@ func (h *RazorpayHandler) verifySignature(orderID, paymentID, signature string) 
 	mac.Write([]byte(message))
 	expectedSignature := hex.EncodeToString(mac.Sum(nil))
 	return hmac.Equal([]byte(expectedSignature), []byte(signature))
+}
+
+// HandleWebhook handles POST /api/v1/razorpay/webhook
+// This endpoint receives webhook events from Razorpay
+func (h *RazorpayHandler) HandleWebhook(c *gin.Context) {
+	// Get the webhook signature from headers
+	webhookSignature := c.GetHeader("X-Razorpay-Signature")
+	if webhookSignature == "" {
+		log.Printf("Webhook: Missing signature header")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Missing signature", nil)
+		return
+	}
+
+	// Read the request body
+	body, err := c.GetRawData()
+	if err != nil {
+		log.Printf("Webhook: Failed to read body: %v", err)
+		utils.ErrorResponse(c, http.StatusBadRequest, "Failed to read request body", nil)
+		return
+	}
+
+	// Verify webhook signature
+	// Razorpay webhook signature is HMAC SHA256 of the request body
+	mac := hmac.New(sha256.New, []byte(h.Config.RazorpaySecret))
+	mac.Write(body)
+	expectedSignature := hex.EncodeToString(mac.Sum(nil))
+
+	if !hmac.Equal([]byte(expectedSignature), []byte(webhookSignature)) {
+		log.Printf("Webhook: Invalid signature")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid webhook signature", nil)
+		return
+	}
+
+	// Parse webhook event
+	var webhookEvent map[string]interface{}
+	if err := json.Unmarshal(body, &webhookEvent); err != nil {
+		log.Printf("Webhook: Failed to parse event: %v", err)
+		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid webhook payload", nil)
+		return
+	}
+
+	// Extract event type and payload
+	eventType, ok := webhookEvent["event"].(string)
+	if !ok {
+		log.Printf("Webhook: Missing event type")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Missing event type", nil)
+		return
+	}
+
+	payload, ok := webhookEvent["payload"].(map[string]interface{})
+	if !ok {
+		log.Printf("Webhook: Invalid payload structure")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid payload structure", nil)
+		return
+	}
+
+	payment, ok := payload["payment"].(map[string]interface{})
+	if !ok {
+		log.Printf("Webhook: Missing payment in payload")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Missing payment in payload", nil)
+		return
+	}
+
+	order, ok := payload["order"].(map[string]interface{})
+	if !ok {
+		log.Printf("Webhook: Missing order in payload")
+		utils.ErrorResponse(c, http.StatusBadRequest, "Missing order in payload", nil)
+		return
+	}
+
+	razorpayOrderID, _ := order["id"].(string)
+	paymentID, _ := payment["id"].(string)
+	paymentStatus, _ := payment["status"].(string)
+
+	log.Printf("Webhook: Received event '%s' for order %s, payment %s, status: %s", eventType, razorpayOrderID, paymentID, paymentStatus)
+
+	// Handle different event types
+	switch eventType {
+	case "payment.authorized", "payment.captured":
+		// Find order by Razorpay order ID
+		var dbOrder models.Order
+		if err := h.DB.Where("razorpay_order_id = ?", razorpayOrderID).First(&dbOrder).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				log.Printf("Webhook: Order not found for Razorpay order ID: %s", razorpayOrderID)
+				utils.ErrorResponse(c, http.StatusNotFound, "Order not found", nil)
+				return
+			}
+			log.Printf("Webhook: Database error: %v", err)
+			utils.ErrorResponse(c, http.StatusInternalServerError, "Database error", nil)
+			return
+		}
+
+		// Update order status based on payment status
+		if paymentStatus == "authorized" || paymentStatus == "captured" {
+			if paymentStatus == "captured" {
+				dbOrder.Status = "paid"
+			} else {
+				dbOrder.Status = "paid" // Treat authorized as paid for now
+			}
+			dbOrder.PaymentID = paymentID
+			
+			if err := h.DB.Save(&dbOrder).Error; err != nil {
+				log.Printf("Webhook: Failed to update order: %v", err)
+				utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to update order", nil)
+				return
+			}
+
+			log.Printf("Webhook: Updated order %s to status: %s", dbOrder.OrderID, dbOrder.Status)
+		}
+
+	case "payment.failed":
+		// Find order and mark as failed
+		var dbOrder models.Order
+		if err := h.DB.Where("razorpay_order_id = ?", razorpayOrderID).First(&dbOrder).Error; err == nil {
+			dbOrder.Status = "cancelled"
+			dbOrder.PaymentID = paymentID
+			h.DB.Save(&dbOrder)
+			log.Printf("Webhook: Marked order %s as cancelled due to payment failure", dbOrder.OrderID)
+		}
+
+	default:
+		log.Printf("Webhook: Unhandled event type: %s", eventType)
+	}
+
+	// Always return 200 OK to acknowledge receipt
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
