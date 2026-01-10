@@ -47,8 +47,37 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 		return
 	}
 
-	// Generate order ID
-	orderID := "COD_" + uuid.New().String()
+	// Generate unique 10-digit alphanumeric order ID
+	// Retry if there's a collision (extremely rare with 36^10 possibilities)
+	var orderID string
+	var order models.Order
+	maxRetries := 5
+	for i := 0; i < maxRetries; i++ {
+		orderID = utils.GenerateOrderID()
+		
+		// Check if order ID already exists
+		var existingOrder models.Order
+		if err := h.DB.Where("order_id = ?", orderID).First(&existingOrder).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				// Order ID is unique, proceed
+				break
+			}
+			// Database error, try again
+			if i == maxRetries-1 {
+				log.Printf("Failed to check order ID uniqueness: %v", err)
+				utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+				return
+			}
+			continue
+		}
+		// Order ID exists, generate a new one
+		if i == maxRetries-1 {
+			log.Printf("Failed to generate unique order ID after %d attempts", maxRetries)
+			utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to generate unique order ID", nil)
+			return
+		}
+	}
+	
 	log.Printf("Creating COD order: %s for customer: %s (%s)", orderID, req.Customer.Name, req.Customer.Email)
 
 	// Check if user is authenticated
@@ -56,11 +85,16 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 	if userIDVal, exists := c.Get("userID"); exists {
 		if uid, ok := userIDVal.(uuid.UUID); ok {
 			userID = &uid
+			log.Printf("COD Order: User authenticated, linking order to user: %s", uid)
+		} else {
+			log.Printf("COD Order: UserID exists but wrong type: %T", userIDVal)
 		}
+	} else {
+		log.Printf("COD Order: No userID in context - guest order")
 	}
 
 	// Create order record
-	order := models.Order{
+	order = models.Order{
 		OrderID:       orderID,
 		UserID:        userID,
 		CustomerName:  req.Customer.Name,
@@ -80,7 +114,11 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 		return
 	}
 
-	log.Printf("COD order created successfully: %s", orderID)
+	if userID != nil {
+		log.Printf("COD order created successfully: %s, linked to user: %s", orderID, *userID)
+	} else {
+		log.Printf("COD order created successfully: %s (guest order)", orderID)
+	}
 	utils.SuccessResponse(c, http.StatusCreated, "COD order created successfully", order)
 }
 
@@ -104,11 +142,18 @@ func (h *OrderHandler) GetOrderHistory(c *gin.Context) {
 	if err := h.DB.Where("user_id = ?", uid).
 		Order("created_at DESC").
 		Find(&orders).Error; err != nil {
-		log.Printf("Failed to fetch order history: %v", err)
+		log.Printf("Failed to fetch order history for user %s: %v", uid, err)
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch orders", err)
 		return
 	}
 
 	log.Printf("Retrieved %d orders for user %s", len(orders), uid)
+	if len(orders) == 0 {
+		log.Printf("No orders found for user %s. Checking if any orders exist with this user_id...", uid)
+		// Debug: Check if there are any orders with this user_id
+		var count int64
+		h.DB.Model(&models.Order{}).Where("user_id = ?", uid).Count(&count)
+		log.Printf("Total orders with user_id %s: %d", uid, count)
+	}
 	utils.SuccessResponse(c, http.StatusOK, "Orders retrieved successfully", orders)
 }

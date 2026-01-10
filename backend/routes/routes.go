@@ -33,6 +33,8 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		// Razorpay routes
 		razorpayHandler := handlers.NewRazorpayHandler(db, cfg)
 		razorpay := v1.Group("/razorpay")
+		// Optional auth - links orders to user if logged in, but allows guest orders
+		razorpay.Use(middleware.OptionalAuthMiddleware(cfg.JWTSecret))
 		{
 			razorpay.POST("/create-order", razorpayHandler.CreateOrder)
 			razorpay.POST("/verify-payment", razorpayHandler.VerifyPayment)
@@ -50,7 +52,8 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		orderHandler := handlers.NewOrderHandler(db)
 		orders := v1.Group("/orders")
 		{
-			orders.POST("/cod", orderHandler.CreateCODOrder)
+			// Optional auth - links orders to user if logged in, but allows guest orders
+			orders.POST("/cod", middleware.OptionalAuthMiddleware(cfg.JWTSecret), orderHandler.CreateCODOrder)
 			// Protected route - requires authentication
 			orders.GET("/history", middleware.AuthMiddleware(cfg.JWTSecret), orderHandler.GetOrderHistory)
 		}

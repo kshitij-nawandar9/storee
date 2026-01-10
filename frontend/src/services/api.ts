@@ -208,7 +208,7 @@ export const createRazorpayOrder = async (data: {
     state: string;
     pincode: string;
   };
-}): Promise<ApiResponse<{ order: { id: string; razorpay_id: string; amount: number; currency: string; key_id: string } }>> => {
+}): Promise<ApiResponse<{ order: { id: string; order_id: string; razorpay_id: string; amount: number; currency: string; key_id: string } }>> => {
   const response = await api.post('/razorpay/create-order', data);
   return response.data;
 };

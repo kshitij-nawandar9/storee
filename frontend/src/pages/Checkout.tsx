@@ -56,8 +56,8 @@ export default function Checkout() {
         if (response.success) {
           toast.success('COD order placed successfully!');
           clearCart();
-          // Use id (UUID) or orderId as fallback
-          const orderId = response.data?.id || response.data?.orderId;
+          // Use orderId (10-digit alphanumeric) or id (UUID) as fallback
+          const orderId = response.data?.orderId || response.data?.id;
           if (orderId) {
             navigate(`/orders/${orderId}`);
           } else {
@@ -116,7 +116,9 @@ export default function Checkout() {
               if (verifyResponse.success) {
                 toast.success('Order placed successfully!');
                 clearCart();
-                navigate(`/orders/${order.id}`);
+                // Use our 10-digit order ID for navigation
+                const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
+                navigate(`/orders/${orderId}`);
               } else {
                 toast.error(verifyResponse.message || 'Payment verification failed');
               }

@@ -6,10 +6,15 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import { Package, Calendar, IndianRupee, MapPin, ShoppingBag } from 'lucide-react';
 
 interface OrderItem {
-  productId: string;
-  name: string;
+  productId?: string;
+  name?: string;
   quantity: number;
-  price: number;
+  price?: number;
+  product?: {
+    id: string;
+    name: string;
+    basePrice: number;
+  };
 }
 
 interface Address {
@@ -90,7 +95,48 @@ export default function OrderHistory() {
         throw new Error(data.message || 'Failed to fetch orders');
       }
 
-      setOrders(data.data || []);
+      // Parse orders and ensure items are properly formatted
+      const parsedOrders = (data.data || []).map((order: any) => {
+        // Parse items if they're stored as JSON string
+        let items = order.items;
+        if (typeof items === 'string') {
+          try {
+            items = JSON.parse(items);
+          } catch (e) {
+            console.error('Failed to parse items:', e, 'Raw items:', items);
+            items = [];
+          }
+        }
+        
+        // Parse address if it's stored as JSON string
+        let address = order.address;
+        if (typeof address === 'string') {
+          try {
+            address = JSON.parse(address);
+          } catch (e) {
+            console.error('Failed to parse address:', e, 'Raw address:', address);
+            address = {};
+          }
+        }
+
+        // Debug: Log order structure
+        console.log('Parsed order:', {
+          id: order.id,
+          orderId: order.orderId,
+          itemsType: typeof items,
+          itemsLength: Array.isArray(items) ? items.length : 'not array',
+          itemsSample: Array.isArray(items) && items.length > 0 ? items[0] : null,
+        });
+
+        return {
+          ...order,
+          items: Array.isArray(items) ? items : [],
+          address: address || {},
+        };
+      });
+
+      console.log('Total orders parsed:', parsedOrders.length);
+      setOrders(parsedOrders);
     } catch (err: any) {
       console.error('Error fetching orders:', err);
       setError(err.message || 'Failed to load order history');
@@ -178,22 +224,34 @@ export default function OrderHistory() {
                 <div className="border-t pt-4 mb-4">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <ShoppingBag className="w-4 h-4" />
-                    Items
+                    Items ({Array.isArray(order.items) ? order.items.length : 0})
                   </h4>
                   <div className="space-y-2">
                     {Array.isArray(order.items) && order.items.length > 0 ? (
-                      order.items.map((item: any, index: number) => (
-                        <div key={index} className="flex justify-between text-sm">
-                          <span>
-                            {item.name || item.productId} × {item.quantity}
-                          </span>
-                          <span className="font-medium">
-                            {formatAmount((item.price || 0) * (item.quantity || 1))}
-                          </span>
-                        </div>
-                      ))
+                      order.items.map((item: any, index: number) => {
+                        // Handle both CartItem structure (with product object) and flat structure
+                        const itemName = item.product?.name || item.name || item.productId || 'Unknown Product';
+                        const itemPrice = item.product?.basePrice || item.price || 0;
+                        const itemQuantity = item.quantity || 1;
+                        
+                        return (
+                          <div key={index} className="flex justify-between text-sm py-1">
+                            <span className="text-gray-700">
+                              {itemName} × {itemQuantity}
+                            </span>
+                            <span className="font-medium text-gray-900">
+                              {formatAmount(itemPrice * itemQuantity)}
+                            </span>
+                          </div>
+                        );
+                      })
                     ) : (
-                      <p className="text-sm text-gray-500">No items found</p>
+                      <div className="text-sm text-gray-500">
+                        <p>No items found</p>
+                        {order.items && typeof order.items === 'object' && (
+                          <p className="text-xs mt-1">Items data: {JSON.stringify(order.items).substring(0, 100)}...</p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

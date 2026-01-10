@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"net/http"
 
 	"storee/backend/config"
@@ -63,8 +64,38 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 		return
 	}
 
+	// Generate unique 10-digit alphanumeric order ID
+	// Retry if there's a collision (extremely rare with 36^10 possibilities)
+	var orderID string
+	maxRetries := 5
+	for i := 0; i < maxRetries; i++ {
+		orderID = utils.GenerateOrderID()
+		
+		// Check if order ID already exists
+		var existingOrder models.Order
+		if err := h.DB.Where("order_id = ?", orderID).First(&existingOrder).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				// Order ID is unique, proceed
+				break
+			}
+			// Database error, try again
+			if i == maxRetries-1 {
+				log.Printf("Failed to check order ID uniqueness: %v", err)
+				utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+				return
+			}
+			continue
+		}
+		// Order ID exists, generate a new one
+		if i == maxRetries-1 {
+			log.Printf("Failed to generate unique order ID after %d attempts", maxRetries)
+			utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to generate unique order ID", nil)
+			return
+		}
+	}
+	
 	// Create Razorpay order
-	receipt := "receipt_" + uuid.New().String()[:8]
+	receipt := "receipt_" + orderID
 	razorpayOrder, err := h.RazorpayClient.CreateOrder(req.Amount, receipt)
 	if err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create Razorpay order", err)
@@ -77,21 +108,27 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	if userIDVal, exists := c.Get("userID"); exists {
 		if uid, ok := userIDVal.(uuid.UUID); ok {
 			userID = &uid
+			log.Printf("Razorpay Order: User authenticated, linking order to user: %s", uid)
+		} else {
+			log.Printf("Razorpay Order: UserID exists but wrong type: %T", userIDVal)
 		}
+	} else {
+		log.Printf("Razorpay Order: No userID in context - guest order")
 	}
 
 	// Create order record in database
 	order := models.Order{
-		OrderID:       razorpayOrderID,
-		UserID:        userID,
-		CustomerName:  req.Customer.Name,
-		CustomerEmail: req.Customer.Email,
-		CustomerPhone: req.Customer.Phone,
-		Address:       datatypes.JSON([]byte(fmt.Sprintf(`{"line1":"%s","line2":"%s","city":"%s","state":"%s","pincode":"%s"}`, req.Address.Line1, req.Address.Line2, req.Address.City, req.Address.State, req.Address.Pincode))),
-		Items:         datatypes.JSON(utils.MustMarshalJSON(req.Items)),
-		TotalAmount:   req.Amount,
-		Status:        "pending",
-		PaymentMethod: "razorpay",
+		OrderID:        orderID,
+		RazorpayOrderID: razorpayOrderID,
+		UserID:         userID,
+		CustomerName:   req.Customer.Name,
+		CustomerEmail:  req.Customer.Email,
+		CustomerPhone:  req.Customer.Phone,
+		Address:        datatypes.JSON([]byte(fmt.Sprintf(`{"line1":"%s","line2":"%s","city":"%s","state":"%s","pincode":"%s"}`, req.Address.Line1, req.Address.Line2, req.Address.City, req.Address.State, req.Address.Pincode))),
+		Items:          datatypes.JSON(utils.MustMarshalJSON(req.Items)),
+		TotalAmount:    req.Amount,
+		Status:         "pending",
+		PaymentMethod:  "razorpay",
 	}
 
 	if err := h.DB.Create(&order).Error; err != nil {
@@ -102,6 +139,7 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	response := map[string]any{
 		"order": map[string]any{
 			"id":           order.ID.String(),
+			"order_id":     orderID, // Our 10-digit order ID
 			"razorpay_id":  razorpayOrderID,
 			"amount":       order.TotalAmount,
 			"currency":     "INR",
@@ -120,15 +158,15 @@ func (h *RazorpayHandler) VerifyPayment(c *gin.Context) {
 		return
 	}
 
-	// Verify signature
+	// Verify signature - req.OrderID is Razorpay's order ID
 	if !h.verifySignature(req.OrderID, req.PaymentID, req.Signature) {
 		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid payment signature", nil)
 		return
 	}
 
-	// Update order status
+	// Update order status - find order by Razorpay order ID
 	var order models.Order
-	if err := h.DB.Where("order_id = ?", req.OrderID).First(&order).Error; err != nil {
+	if err := h.DB.Where("razorpay_order_id = ?", req.OrderID).First(&order).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			utils.ErrorResponse(c, http.StatusNotFound, "Order not found", nil)
 			return
@@ -146,7 +184,7 @@ func (h *RazorpayHandler) VerifyPayment(c *gin.Context) {
 
 	response := map[string]string{
 		"paymentId": req.PaymentID,
-		"orderId":   order.ID.String(),
+		"orderId":   order.OrderID, // Return our 10-digit order ID
 	}
 
 	utils.SuccessResponse(c, http.StatusOK, "Payment verified successfully", response)
