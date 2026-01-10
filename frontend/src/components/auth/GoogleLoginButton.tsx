@@ -12,7 +12,6 @@ declare global {
 export default function GoogleLoginButton() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [clientIdMissing, setClientIdMissing] = useState(false);
   const [googleButtonReady, setGoogleButtonReady] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -41,7 +40,6 @@ export default function GoogleLoginButton() {
     document.head.appendChild(script);
 
     script.onload = () => {
-      setScriptLoaded(true);
       initializeGoogleSignIn(clientId);
     };
 
