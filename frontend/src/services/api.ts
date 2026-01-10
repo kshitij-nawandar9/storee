@@ -242,3 +242,33 @@ export const createCODOrder = async (data: {
   const response = await api.post('/orders/cod', data);
   return response.data;
 };
+
+// Admin APIs
+export const getAdminOrders = async (params?: {
+  status?: string;
+  paymentMethod?: string;
+  page?: number;
+  limit?: number;
+}): Promise<ApiResponse<{
+  orders: any[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}>> => {
+  const queryParams = new URLSearchParams();
+  if (params?.status) queryParams.append('status', params.status);
+  if (params?.paymentMethod) queryParams.append('paymentMethod', params.paymentMethod);
+  if (params?.page) queryParams.append('page', params.page.toString());
+  if (params?.limit) queryParams.append('limit', params.limit.toString());
+
+  const response = await api.get(`/admin/orders?${queryParams.toString()}`);
+  return response.data;
+};
+
+export const approveOrder = async (orderId: string): Promise<ApiResponse<any>> => {
+  const response = await api.put(`/admin/orders/${orderId}/approve`);
+  return response.data;
+};

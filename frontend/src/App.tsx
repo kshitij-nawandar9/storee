@@ -10,6 +10,7 @@ import OrderHistory from '@/pages/OrderHistory';
 import ProductDetail from '@/pages/ProductDetail';
 import Products from '@/pages/Products';
 import SignIn from '@/pages/SignIn';
+import AdminOrders from '@/pages/AdminOrders';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/orders" element={<OrderHistory />} />
             <Route path="/orders/:id" element={<OrderConfirmation />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

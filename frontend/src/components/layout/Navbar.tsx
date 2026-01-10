@@ -5,6 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
 
+const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'kshitij.nawandar@razorpay.com'];
+
 export default function Navbar() {
   const { getItemCount } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
@@ -15,6 +17,8 @@ export default function Navbar() {
   const [currentLogoPath, setCurrentLogoPath] = useState(LOGO_PATH);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  
+  const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -106,6 +110,18 @@ export default function Navbar() {
                 Orders
               </Link>
             )}
+            {isAuthenticated && isAdmin && (
+              <Link
+                to="/admin/orders"
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  isActive('/admin/orders')
+                    ? 'bg-primary-100 text-primary-700'
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                Admin
+              </Link>
+            )}
           </div>
 
           {/* Cart Icon & User Menu */}
@@ -153,6 +169,16 @@ export default function Navbar() {
                       <Package className="w-4 h-4" />
                       Order History
                     </Link>
+                    {isAdmin && (
+                      <Link
+                        to="/admin/orders"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <Package className="w-4 h-4" />
+                        Admin Orders
+                      </Link>
+                    )}
                     <button
                       onClick={() => {
                         logout();
@@ -242,6 +268,19 @@ export default function Navbar() {
                   >
                     Orders
                   </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin/orders"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                        isActive('/admin/orders')
+                          ? 'bg-primary-100 text-primary-700'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      Admin
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       logout();
