@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -251,6 +252,61 @@ func (h *AdminHandler) GetAllProducts(c *gin.Context) {
 	}
 
 	utils.SuccessResponse(c, http.StatusOK, "Products fetched successfully", products)
+}
+
+// GetAllOrders handles GET /api/v1/admin/orders
+func (h *AdminHandler) GetAllOrders(c *gin.Context) {
+	var orders []models.Order
+	query := h.DB.Order("created_at DESC")
+
+	// Filter by status if provided
+	if status := c.Query("status"); status != "" {
+		query = query.Where("status = ?", status)
+	}
+
+	// Filter by payment method if provided
+	if paymentMethod := c.Query("paymentMethod"); paymentMethod != "" {
+		query = query.Where("payment_method = ?", paymentMethod)
+	}
+
+	// Pagination support
+	page := c.DefaultQuery("page", "1")
+	limit := c.DefaultQuery("limit", "50")
+	
+	var pageNum, limitNum int
+	if _, err := fmt.Sscanf(page, "%d", &pageNum); err != nil || pageNum < 1 {
+		pageNum = 1
+	}
+	if _, err := fmt.Sscanf(limit, "%d", &limitNum); err != nil || limitNum < 1 {
+		limitNum = 50
+	}
+	if limitNum > 100 {
+		limitNum = 100 // Max limit
+	}
+
+	offset := (pageNum - 1) * limitNum
+	query = query.Offset(offset).Limit(limitNum)
+
+	// Get total count for pagination
+	var total int64
+	h.DB.Model(&models.Order{}).Count(&total)
+
+	if err := query.Find(&orders).Error; err != nil {
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch orders", err)
+		return
+	}
+
+	response := gin.H{
+		"orders": orders,
+		"pagination": gin.H{
+			"page":  pageNum,
+			"limit": limitNum,
+			"total": total,
+			"pages": (total + int64(limitNum) - 1) / int64(limitNum), // Calculate total pages
+		},
+	}
+
+	utils.SuccessResponse(c, http.StatusOK, "Orders fetched successfully", response)
 }
 
 // generateSlug creates a URL-friendly slug from a name

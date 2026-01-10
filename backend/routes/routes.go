@@ -57,6 +57,10 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 				adminProducts.PUT("/:id", adminHandler.UpdateProduct)
 				adminProducts.DELETE("/:id", adminHandler.DeleteProduct)
 			}
+			adminOrders := admin.Group("/orders")
+			{
+				adminOrders.GET("", adminHandler.GetAllOrders)
+			}
 		}
 	}
 }

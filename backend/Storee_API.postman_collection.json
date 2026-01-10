@@ -325,6 +325,159 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Admin - Orders",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "orders"]
+            },
+            "description": "Get all orders. Supports filtering by status and paymentMethod, and pagination with page and limit query parameters. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders by Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/orders?status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by order status (pending, paid, processing, shipped, delivered, cancelled)"
+                }
+              ]
+            },
+            "description": "Get orders filtered by status. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders by Payment Method",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/orders?paymentMethod=cod",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "orders"],
+              "query": [
+                {
+                  "key": "paymentMethod",
+                  "value": "cod",
+                  "description": "Filter by payment method (razorpay or cod)"
+                }
+              ]
+            },
+            "description": "Get orders filtered by payment method. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/orders?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page (default: 50, max: 100)"
+                }
+              ]
+            },
+            "description": "Get orders with pagination. Requires admin API key."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Orders with Filters and Pagination",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{admin_api_key}}",
+                "description": "Admin API Key"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/admin/orders?status=pending&paymentMethod=cod&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "admin", "orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by order status"
+                },
+                {
+                  "key": "paymentMethod",
+                  "value": "cod",
+                  "description": "Filter by payment method"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page"
+                }
+              ]
+            },
+            "description": "Get orders with combined filters and pagination. Requires admin API key."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -348,6 +501,12 @@
       "key": "base_url",
       "value": "http://localhost:8080",
       "type": "string"
+    },
+    {
+      "key": "admin_api_key",
+      "value": "",
+      "type": "string",
+      "description": "Admin API key for authentication"
     }
   ]
 }
