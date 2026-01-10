@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useProduct } from '@/hooks/useProducts';
 import { useCart } from '@/hooks/useCart';
-import ProductGallery from '@/components/product/ProductGallery';
 import QuantitySelector from '@/components/product/QuantitySelector';
 import PriceDisplay from '@/components/product/PriceDisplay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
