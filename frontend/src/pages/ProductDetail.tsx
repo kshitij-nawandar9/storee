@@ -1,16 +1,15 @@
-import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useProduct } from '@/hooks/useProducts';
-import { useCart } from '@/hooks/useCart';
-import ProductGallery from '@/components/product/ProductGallery';
-import QuantitySelector from '@/components/product/QuantitySelector';
-import PriceDisplay from '@/components/product/PriceDisplay';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import toast from 'react-hot-toast';
-import { FREE_SHIPPING_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
-import { ShoppingCart, Truck, Shield, CheckCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import PriceDisplay from '@/components/product/PriceDisplay';
+import QuantitySelector from '@/components/product/QuantitySelector';
+import { useCart } from '@/hooks/useCart';
+import { useProduct } from '@/hooks/useProducts';
 import type { ProductVariant } from '@/types';
+import { FREE_SHIPPING_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
+import { CheckCircle, ChevronLeft, ChevronRight, Shield, ShoppingCart, Truck, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -18,7 +17,7 @@ export default function ProductDetail() {
   const { product, loading, error } = useProduct(slug || '');
   console.log('[ProductDetail] State:', { loading, error, hasProduct: !!product, productName: product?.name });
   const { addItem } = useCart();
-  
+
   // All hooks must be called before any conditional returns
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -29,12 +28,12 @@ export default function ProductDetail() {
   // Get default variant or first variant (calculate before conditional returns)
   const defaultVariant = product?.variants?.find((v) => v.isDefault) || product?.variants?.[0];
   const currentVariant = selectedVariant || defaultVariant;
-  
+
   // Debug: Log render state
   useEffect(() => {
     console.log('[ProductDetail] Render state changed:', { slug, loading, error, hasProduct: !!product });
   }, [slug, loading, error, product]);
-  
+
   // Initialize selected variant on mount
   useEffect(() => {
     if (!selectedVariant && defaultVariant) {
@@ -88,11 +87,11 @@ export default function ProductDetail() {
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
 
   // Compute display image based on hover or selection
-  const displayImage = hoveredVariant?.image || 
-    currentVariant?.image || 
+  const displayImage = hoveredVariant?.image ||
+    currentVariant?.image ||
     product.images?.find((img) => img.isPrimary)?.url ||
     product.images?.find((img) => img.url)?.url ||
-    product.images?.[0]?.url || 
+    product.images?.[0]?.url ||
     (typeof product.images?.[0] === 'string' ? product.images[0] : null) ||
     displayImages[0] ||
     '/placeholder.jpg';
@@ -105,7 +104,7 @@ export default function ProductDetail() {
           <div className="animate-fade-in">
             <div className="card p-4">
               {/* Main Image - Updates on hover/selection */}
-              <div 
+              <div
                 className="relative mb-4 overflow-hidden rounded-xl bg-gray-100 group cursor-pointer min-h-[400px] flex items-center justify-center"
                 onClick={() => {
                   if (displayImages.length > 0) {
@@ -136,7 +135,7 @@ export default function ProductDetail() {
                   </span>
                 </div>
               </div>
-              
+
               {/* Thumbnail Gallery */}
               {displayImages.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto pb-2">
@@ -149,11 +148,10 @@ export default function ProductDetail() {
                         onClick={() => variant && setSelectedVariant(variant)}
                         onMouseEnter={() => variant && setHoveredVariant(variant)}
                         onMouseLeave={() => setHoveredVariant(null)}
-                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${
-                          isSelected
-                            ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
-                            : 'border-gray-200 hover:border-gray-400'
-                        }`}
+                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${isSelected
+                          ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
+                          : 'border-gray-200 hover:border-gray-400'
+                          }`}
                       >
                         <img
                           src={img}
@@ -217,9 +215,9 @@ export default function ProductDetail() {
                         'Perfect for Travel': 'Compact, lightweight, and functional, these pouches are ideal for travel and daily use. Easy to slip into a handbag, backpack, or suitcase, they ensure hassle-free organization wherever you go',
                         'Stylish & Functional': 'Featuring trendy designs, they seamlessly blend style with utility, adding a fashionable touch to your everyday essentials',
                       };
-                      
+
                       const description = featureDescriptions[feature] || feature;
-                      
+
                       return (
                         <div key={index} className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
                           <div className="flex items-start gap-3">
@@ -288,14 +286,14 @@ export default function ProductDetail() {
             >
               <X className="w-6 h-6" />
             </button>
-            
+
             <div className="relative">
               <img
                 src={displayImages[modalImageIndex]}
                 alt={product.name}
                 className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
               />
-              
+
               {displayImages.length > 1 && (
                 <>
                   <button
@@ -321,7 +319,7 @@ export default function ProductDetail() {
                 </>
               )}
             </div>
-            
+
             {displayImages.length > 1 && (
               <div className="flex gap-3 mt-6 justify-center overflow-x-auto pb-2">
                 {displayImages.map((img, index) => (
@@ -331,11 +329,10 @@ export default function ProductDetail() {
                       e.stopPropagation();
                       setModalImageIndex(index);
                     }}
-                    className={`w-20 h-20 flex-shrink-0 p-1 border-2 rounded-lg transition-all ${
-                      modalImageIndex === index
-                        ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
-                        : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                    className={`w-20 h-20 flex-shrink-0 p-1 border-2 rounded-lg transition-all ${modalImageIndex === index
+                      ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
+                      : 'border-gray-300 hover:border-gray-400'
+                      }`}
                   >
                     <img
                       src={img}

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"storee/backend/models"
@@ -41,12 +42,14 @@ type CreateCODOrderRequest struct {
 func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 	var req CreateCODOrderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		log.Printf("COD Order validation error: %v", err)
 		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid request data", err)
 		return
 	}
 
 	// Generate order ID
 	orderID := "COD_" + uuid.New().String()
+	log.Printf("Creating COD order: %s for customer: %s (%s)", orderID, req.Customer.Name, req.Customer.Email)
 
 	// Create order record
 	order := models.Order{
@@ -62,9 +65,12 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 	}
 
 	if err := h.DB.Create(&order).Error; err != nil {
+		log.Printf("Failed to create COD order in database: %v", err)
+		c.Error(err) // Add error to context for logging middleware
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
 		return
 	}
 
+	log.Printf("COD order created successfully: %s", orderID)
 	utils.SuccessResponse(c, http.StatusCreated, "COD order created successfully", order)
 }

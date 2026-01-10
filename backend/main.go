@@ -34,9 +34,12 @@ func main() {
 	}
 
 	// Auto-migrate database models
+	log.Println("Starting database migration...")
 	if err := database.Migrate(db); err != nil {
+		log.Printf("CRITICAL: Database migration failed: %v", err)
 		log.Fatal("Failed to migrate database:", err)
 	}
+	log.Println("Database migration completed successfully")
 
 	// Set Gin mode
 	if cfg.Env == "production" {
