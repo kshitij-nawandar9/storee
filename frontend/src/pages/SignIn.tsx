@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { User, ShoppingBag } from 'lucide-react';
 
@@ -67,7 +67,15 @@ export default function SignIn() {
           </div>
 
           <p className="text-xs text-gray-500 mt-6 text-center">
-            By signing in, you agree to our terms of service and privacy policy.
+            By signing in, you agree to our{' '}
+            <Link to="/terms" className="text-primary-600 hover:underline">
+              terms of service
+            </Link>{' '}
+            and{' '}
+            <Link to="/privacy" className="text-primary-600 hover:underline">
+              privacy policy
+            </Link>
+            .
             <br />
             Your data is secure and protected.
           </p>

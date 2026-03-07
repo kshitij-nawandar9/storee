@@ -11,6 +11,8 @@ import ProductDetail from '@/pages/ProductDetail';
 import Products from '@/pages/Products';
 import SignIn from '@/pages/SignIn';
 import AdminOrders from '@/pages/AdminOrders';
+import Privacy from '@/pages/Privacy';
+import Terms from '@/pages/Terms';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -31,6 +33,8 @@ function App() {
             <Route path="/orders" element={<OrderHistory />} />
             <Route path="/orders/:id" element={<OrderConfirmation />} />
             <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
