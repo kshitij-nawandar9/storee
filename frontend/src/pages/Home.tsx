@@ -213,7 +213,7 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <a
-              href="https://www.instagram.com/storee.in/"
+              href="https://www.instagram.com/thestoree.in/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-lg px-8 py-4 inline-flex items-center gap-3 group rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -223,7 +223,7 @@ export default function Home() {
               }}
             >
               <Instagram className="w-6 h-6" />
-              Follow @storee.in
+              Follow @thestoree.in
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
