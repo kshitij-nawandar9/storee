@@ -127,14 +127,14 @@ const isComingSoon = !product.images || product.images.length === 0 || product.s
 **Modified Files:**
 - `frontend/src/pages/Home.tsx` - Simplified hero section to show only banner image
 - Removed: Premium Quality badge, tagline, Shop Now button
-- Banner image path: `/images/banner/3.jpg`
+- Banner image path: `/images/banner/2.jpg`
 
 **Changes:**
 ```tsx
 {/* Hero Section */}
 <section className="w-full">
   <img
-    src="/images/banner/3.jpg"
+    src="/images/banner/2.jpg"
     alt="Storee Banner"
     className="w-full h-auto object-cover"
   />

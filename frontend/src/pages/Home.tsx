@@ -13,7 +13,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="w-full">
         <img
-          src="/images/banner/3.jpg"
+          src="/images/banner/2.jpg"
           alt="Storee Banner"
           className="w-full h-auto object-cover"
         />
