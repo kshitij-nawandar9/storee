@@ -20,7 +20,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '0258a103-35f5-4c2f-b8a2-4bab2d4fcbcb',
-        productId: 'bddc617e-8864-4d6d-884e-aaa68079b316',
         url: '/images/products/accessories_kit/accessories_kit_1.jpg',
         altText: 'Accessory Pouch - Design 1',
         order: 1,
@@ -28,7 +27,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'beffbc52-76f3-4d43-b21f-495a1839d59e',
-        productId: 'bddc617e-8864-4d6d-884e-aaa68079b316',
         url: '/images/products/accessories_kit/accessories_kit_2.jpg',
         altText: 'Accessory Pouch - Design 2',
         order: 2,
@@ -36,7 +34,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'eb04ece0-4653-4940-8104-7ceaaf62a050',
-        productId: 'bddc617e-8864-4d6d-884e-aaa68079b316',
         url: '/images/products/accessories_kit/accessories_kit_3.jpg',
         altText: 'Accessory Pouch - Design 3',
         order: 3,
@@ -44,7 +41,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '73a10fd1-5367-4f46-8455-f16e861c6c96',
-        productId: 'bddc617e-8864-4d6d-884e-aaa68079b316',
         url: '/images/products/accessories_kit/accessories_kit_4.jpg',
         altText: 'Accessory Pouch - Design 4',
         order: 4,
@@ -52,7 +48,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '6c549be7-0606-4fb0-929c-5e7c56bf1004',
-        productId: 'bddc617e-8864-4d6d-884e-aaa68079b316',
         url: '/images/products/accessories_kit/accessories_kit_5.jpg',
         altText: 'Accessory Pouch - Design 5',
         order: 5,
@@ -79,7 +74,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '62d10a12-7bbe-4713-b9f1-18e76b76e47b',
-        productId: 'e94068f0-817e-4cce-bb61-46dd9061cd17',
         url: '/images/products/toiletry_kit/toiletry_kit_1.jpg',
         altText: 'Toiletry Kit - Design 1',
         order: 1,
@@ -87,7 +81,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'b0fb2d40-ddc4-4419-b7c7-bb272805a5d2',
-        productId: 'e94068f0-817e-4cce-bb61-46dd9061cd17',
         url: '/images/products/toiletry_kit/toiletry_kit_2.jpg',
         altText: 'Toiletry Kit - Design 2',
         order: 2,
@@ -95,7 +88,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '4d46b395-c2b0-4c44-b913-6bd2bd09b978',
-        productId: 'e94068f0-817e-4cce-bb61-46dd9061cd17',
         url: '/images/products/toiletry_kit/toiletry_kit_3.jpg',
         altText: 'Toiletry Kit - Design 3',
         order: 3,
@@ -103,7 +95,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'af80c01b-ba1a-4755-a7ba-9b9a4a78502a',
-        productId: 'e94068f0-817e-4cce-bb61-46dd9061cd17',
         url: '/images/products/toiletry_kit/toiletry_kit_4.jpg',
         altText: 'Toiletry Kit - Design 4',
         order: 4,
@@ -111,7 +102,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'e58abd70-9d10-4618-9ba7-742b5598184b',
-        productId: 'e94068f0-817e-4cce-bb61-46dd9061cd17',
         url: '/images/products/toiletry_kit/toiletry_kit_5.jpg',
         altText: 'Toiletry Kit - Design 5',
         order: 5,
@@ -138,7 +128,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '7f063ffa-2e41-4211-9437-6132ec9a2281',
-        productId: '655975b3-9bdb-4841-a05f-1d7f325989d6',
         url: '/images/products/foldable_travel_kit/foldable_travel_kit_1.jpg',
         altText: 'Foldable Travel Kit - Design 1',
         order: 1,
@@ -146,7 +135,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'd0ccb2b3-9275-4c78-8f5e-c1877a2f0fa2',
-        productId: '655975b3-9bdb-4841-a05f-1d7f325989d6',
         url: '/images/products/foldable_travel_kit/foldable_travel_kit_2.jpg',
         altText: 'Foldable Travel Kit - Design 2',
         order: 2,
@@ -154,7 +142,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'f76c5d68-23e6-480e-b0b0-202b39a13a21',
-        productId: '655975b3-9bdb-4841-a05f-1d7f325989d6',
         url: '/images/products/foldable_travel_kit/foldable_travel_kit_3.jpg',
         altText: 'Foldable Travel Kit - Design 3',
         order: 3,
@@ -162,7 +149,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '6a72fe85-272c-4d2b-87a9-44c20036d8a1',
-        productId: '655975b3-9bdb-4841-a05f-1d7f325989d6',
         url: '/images/products/foldable_travel_kit/foldable_travel_kit_4.jpg',
         altText: 'Foldable Travel Kit - Design 4',
         order: 4,
@@ -170,7 +156,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '0deba021-383b-4d44-b50f-416ccffd6bd4',
-        productId: '655975b3-9bdb-4841-a05f-1d7f325989d6',
         url: '/images/products/foldable_travel_kit/foldable_travel_kit_5.jpg',
         altText: 'Foldable Travel Kit - Design 5',
         order: 5,
@@ -197,7 +182,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '6f4c2498-d8f5-42ef-bfaa-8cd4169b1739',
-        productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504',
         url: '/images/products/pack_a_week_kit/pack_a_week_kit_1.jpg',
         altText: '7 Days Pack Kit - Design 1',
         order: 1,
@@ -205,7 +189,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '0492fc28-909a-484d-a30c-94aacd843d62',
-        productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504',
         url: '/images/products/pack_a_week_kit/pack_a_week_kit_2.jpg',
         altText: '7 Days Pack Kit - Design 2',
         order: 2,
@@ -213,7 +196,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'dd196528-4e45-4ec1-b00d-3e6e349d380f',
-        productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504',
         url: '/images/products/pack_a_week_kit/pack_a_week_kit_3.jpg',
         altText: '7 Days Pack Kit - Design 3',
         order: 3,
@@ -221,7 +203,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'b635c43e-c66c-4207-9d71-c04f65fee6fa',
-        productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504',
         url: '/images/products/pack_a_week_kit/pack_a_week_kit_4.jpg',
         altText: '7 Days Pack Kit - Design 4',
         order: 4,
@@ -229,7 +210,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '84cf01a0-2629-4886-88b6-38ac11f36a1b',
-        productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504',
         url: '/images/products/pack_a_week_kit/pack_a_week_kit_5.jpg',
         altText: '7 Days Pack Kit - Design 5',
         order: 5,
@@ -256,7 +236,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: 'c219c498-a9cc-4120-907d-ee90b7f34de6',
-        productId: 'a92e319c-25c0-4a4e-94d4-f56621a4a5cb',
         url: '/images/products/packing_cubes/packing_cubes_1.jpg',
         altText: 'Packing Cubes - Design 1',
         order: 1,
@@ -264,7 +243,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '91b9a691-f83f-4efe-930f-335069828d73',
-        productId: 'a92e319c-25c0-4a4e-94d4-f56621a4a5cb',
         url: '/images/products/packing_cubes/packing_cubes_2.jpg',
         altText: 'Packing Cubes - Design 2',
         order: 2,
@@ -272,7 +250,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'b38b2881-015b-41da-b512-84dd5fa55267',
-        productId: 'a92e319c-25c0-4a4e-94d4-f56621a4a5cb',
         url: '/images/products/packing_cubes/packing_cubes_3.jpg',
         altText: 'Packing Cubes - Design 3',
         order: 3,
@@ -280,7 +257,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'e59c9288-088d-4656-9d52-58a6d43b23aa',
-        productId: 'a92e319c-25c0-4a4e-94d4-f56621a4a5cb',
         url: '/images/products/packing_cubes/packing_cubes_4.jpg',
         altText: 'Packing Cubes - Design 4',
         order: 4,
@@ -288,7 +264,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '528aaad7-2456-49c8-8396-229d06babb04',
-        productId: 'a92e319c-25c0-4a4e-94d4-f56621a4a5cb',
         url: '/images/products/packing_cubes/packing_cubes_5.jpg',
         altText: 'Packing Cubes - Design 5',
         order: 5,
@@ -315,7 +290,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: 'bf55f39d-8410-4075-8720-834927d6cf33',
-        productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c',
         url: '/images/products/shoe_pouch/shoe_pouch_1.jpg',
         altText: 'Shoe Pouch - Design 1',
         order: 1,
@@ -323,7 +297,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '2c5a4ee9-95f4-447e-99e6-a6810bcdaacb',
-        productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c',
         url: '/images/products/shoe_pouch/shoe_pouch_2.jpg',
         altText: 'Shoe Pouch - Design 2',
         order: 2,
@@ -331,7 +304,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'c17f3aaf-3bf7-4a40-a8a9-d834820db26c',
-        productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c',
         url: '/images/products/shoe_pouch/shoe_pouch_3.jpg',
         altText: 'Shoe Pouch - Design 3',
         order: 3,
@@ -339,7 +311,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'd3bf43e2-9b06-4403-938f-87a64082f756',
-        productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c',
         url: '/images/products/shoe_pouch/shoe_pouch_4.jpg',
         altText: 'Shoe Pouch - Design 4',
         order: 4,
@@ -347,7 +318,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '4761171d-af83-4f64-83a3-141fd05bc008',
-        productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c',
         url: '/images/products/shoe_pouch/shoe_pouch_5.jpg',
         altText: 'Shoe Pouch - Design 5',
         order: 5,
@@ -374,7 +344,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: 'e07f0114-5a54-459d-b44d-bfdf8a45c22e',
-        productId: 'ead82f2c-ea92-4a92-9702-f7e464262639',
         url: '/images/products/multipurpose_pouch/1.jpg',
         altText: 'Multipurpose Pouch - Design 1',
         order: 1,
@@ -382,7 +351,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'f41a10ce-dc0a-42ef-922e-9cc7ce779a23',
-        productId: 'ead82f2c-ea92-4a92-9702-f7e464262639',
         url: '/images/products/multipurpose_pouch/2.jpg',
         altText: 'Multipurpose Pouch - Design 2',
         order: 2,
@@ -390,7 +358,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '3861394d-9b4f-4029-9662-707ca0dceab7',
-        productId: 'ead82f2c-ea92-4a92-9702-f7e464262639',
         url: '/images/products/multipurpose_pouch/3.jpg',
         altText: 'Multipurpose Pouch - Design 3',
         order: 3,
@@ -398,7 +365,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'e3523746-7c5e-43fb-a9b1-84935a563c3e',
-        productId: 'ead82f2c-ea92-4a92-9702-f7e464262639',
         url: '/images/products/multipurpose_pouch/4.jpg',
         altText: 'Multipurpose Pouch - Design 4',
         order: 4,
@@ -406,7 +372,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '02872f00-9855-4787-9c3f-6ca7d13149a0',
-        productId: 'ead82f2c-ea92-4a92-9702-f7e464262639',
         url: '/images/products/multipurpose_pouch/5.jpg',
         altText: 'Multipurpose Pouch - Design 5',
         order: 5,
@@ -433,7 +398,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '9f130f80-9803-464b-be3c-50d1307257f5',
-        productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce',
         url: '/images/products/on_the_go_foldable_pouch/on_the_go_foldable_pouch_1.jpg',
         altText: 'On-the-Go Foldable Pouch',
         order: 1,
@@ -460,7 +424,6 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       {
         id: '7a0cceb3-4946-4f25-8700-c94cad3ff28a',
-        productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6',
         url: '/images/products/dental_pouch/1.png',
         altText: 'Dental Kit - Design 1',
         order: 1,
@@ -468,7 +431,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: '28c50891-d36c-4787-9375-12ebf64b1a34',
-        productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6',
         url: '/images/products/dental_pouch/2.png',
         altText: 'Dental Kit - Design 2',
         order: 2,
@@ -476,7 +438,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'a8dd3fbf-225d-470e-8ae8-2059570eee75',
-        productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6',
         url: '/images/products/dental_pouch/3.png',
         altText: 'Dental Kit - Design 3',
         order: 3,
@@ -484,7 +445,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'bfaeda0c-7b04-4f9c-a4cf-283f1039c36a',
-        productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6',
         url: '/images/products/dental_pouch/4.png',
         altText: 'Dental Kit - Design 4',
         order: 4,
@@ -492,7 +452,6 @@ export const PRODUCTS_DATA: Product[] = [
       },
       {
         id: 'd8659310-1749-4fcb-8713-2e2f01e954ff',
-        productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6',
         url: '/images/products/dental_pouch/5.png',
         altText: 'Dental Kit - Design 5',
         order: 5,
