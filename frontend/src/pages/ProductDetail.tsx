@@ -81,6 +81,9 @@ export default function ProductDetail() {
 
   console.log('ProductDetail: Product loaded:', product.name, 'Variants:', product.variants?.length);
 
+  // Check if product is coming soon (no images or zero stock)
+  const isComingSoon = !product.images || product.images.length === 0 || product.stock === 0;
+
   // Get all variant images for gallery
   const variantImages = product.variants?.map((v) => v.image).filter(Boolean) || [];
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
@@ -195,10 +198,24 @@ export default function ProductDetail() {
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className="w-full btn-primary text-lg py-4 flex items-center justify-center gap-2 mb-6"
+                disabled={isComingSoon}
+                className={`w-full text-lg py-4 flex items-center justify-center gap-2 mb-6 ${
+                  isComingSoon
+                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    : 'btn-primary'
+                }`}
               >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
+                {isComingSoon ? (
+                  <>
+                    <span className="text-xl">🚀</span>
+                    Coming Soon
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-5 h-5" />
+                    Add to Cart
+                  </>
+                )}
               </button>
 
               {/* Features */}

@@ -12,12 +12,15 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const displayPrice = product.basePrice;
-  
+
   // Get default variant image (_1) or fallback to primary image
   const defaultVariant = product.variants?.find((v) => v.isDefault);
-  const primaryImage = defaultVariant?.image || 
-    product.images?.find((img) => img.isPrimary)?.url || 
+  const primaryImage = defaultVariant?.image ||
+    product.images?.find((img) => img.isPrimary)?.url ||
     product.images?.[0]?.url;
+
+  // Check if product is coming soon (no images or zero stock)
+  const isComingSoon = !product.images || product.images.length === 0 || product.stock === 0;
 
   return (
     <div className="card card-hover group">
@@ -29,29 +32,38 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Quick Add Button - appears on hover */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                addItem(product, 1);
-                toast.success(`Added ${product.name} to cart`, {
-                  icon: '🛍️',
-                  style: {
-                    borderRadius: '10px',
-                    background: '#333',
-                    color: '#fff',
-                  },
-                });
-              }}
-              className="bg-white text-primary-600 px-4 py-2 rounded-xl font-semibold shadow-warm hover:bg-primary-50 transition-colors flex items-center gap-2"
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Quick Add
-            </button>
-          </div>
+
+          {/* Coming Soon Badge */}
+          {isComingSoon && (
+            <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg">
+              Coming Soon
+            </div>
+          )}
+
+          {/* Quick Add Button - appears on hover (only if not coming soon) */}
+          {!isComingSoon && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  addItem(product, 1);
+                  toast.success(`Added ${product.name} to cart`, {
+                    icon: '🛍️',
+                    style: {
+                      borderRadius: '10px',
+                      background: '#333',
+                      color: '#fff',
+                    },
+                  });
+                }}
+                className="bg-white text-primary-600 px-4 py-2 rounded-xl font-semibold shadow-warm hover:bg-primary-50 transition-colors flex items-center gap-2"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Quick Add
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="p-5">

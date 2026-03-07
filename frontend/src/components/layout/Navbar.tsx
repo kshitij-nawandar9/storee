@@ -16,9 +16,15 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLogoPath, setCurrentLogoPath] = useState(LOGO_PATH);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [profilePictureError, setProfilePictureError] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   
   const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
+
+  // Reset profile picture error when user changes
+  useEffect(() => {
+    setProfilePictureError(false);
+  }, [user?.picture]);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -145,11 +151,12 @@ export default function Navbar() {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 p-2 text-gray-700 hover:text-primary-600 hover:bg-warm-50 rounded-xl transition-all"
                 >
-                  {user?.picture ? (
+                  {user?.picture && !profilePictureError ? (
                     <img
                       src={user.picture}
                       alt={user.name}
                       className="w-8 h-8 rounded-full"
+                      onError={() => setProfilePictureError(true)}
                     />
                   ) : (
                     <User className="w-6 h-6" />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getProducts, getProductBySlug } from '@/services/api';
 import type { Product } from '@/types';
+import { PRODUCTS_DATA } from '@/data/products';
 
 export const useProducts = (category?: string) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -8,24 +8,28 @@ export const useProducts = (category?: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    // Simulate async loading for consistency
+    const loadProducts = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await getProducts(category);
-        if (response.success) {
-          setProducts(response.data);
-        } else {
-          setError(response.message || 'Failed to fetch products');
+
+        // Filter by category if provided
+        let filteredProducts = PRODUCTS_DATA.filter(p => p.isActive);
+        if (category) {
+          filteredProducts = filteredProducts.filter(p => p.category === category);
         }
+
+        setProducts(filteredProducts);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch products');
+        setError(err instanceof Error ? err.message : 'Failed to load products');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    // Small delay to simulate loading
+    setTimeout(loadProducts, 100);
   }, [category]);
 
   return { products, loading, error };
@@ -37,17 +41,18 @@ export const useProduct = (slug: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      console.log('[useProduct] Fetching product with slug:', slug);
+    const loadProduct = () => {
+      console.log('[useProduct] Loading product with slug:', slug);
       try {
         setLoading(true);
         setError(null);
-        const response = await getProductBySlug(slug);
-        console.log('[useProduct] Response:', response);
-        if (response.success) {
-          setProduct(response.data);
+
+        const foundProduct = PRODUCTS_DATA.find(p => p.slug === slug);
+
+        if (foundProduct) {
+          setProduct(foundProduct);
         } else {
-          setError(response.message || 'Product not found');
+          setError('Product not found');
         }
       } catch (err) {
         console.error('[useProduct] Error:', err);
@@ -58,7 +63,8 @@ export const useProduct = (slug: string) => {
     };
 
     if (slug) {
-      fetchProduct();
+      // Small delay to simulate loading
+      setTimeout(loadProduct, 100);
     } else {
       console.warn('[useProduct] No slug provided');
       setLoading(false);
