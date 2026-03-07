@@ -192,6 +192,22 @@ npm run dev
 - Follow mobile-first responsive design
 - Maintain consistent spacing and colors
 
+### Page Layouts
+
+**Home Page Structure:**
+1. **Navbar** - Navigation bar with links:
+   - Home
+   - Products
+   - Cart
+   - Orders
+   - Admin (only visible for admin users)
+   - Profile
+2. **Banner** - Hero banner image (`/images/banner/2.jpg`)
+3. **Featured Products** - Grid of featured product cards
+4. **Why Choose Storee** - Benefits section (Free Delivery, Secure Payment, Easy Returns)
+5. **Reviews** - Customer testimonials/reviews section
+6. **Bottom Panel** - Footer with additional information
+
 ---
 
 ## API Endpoints

@@ -3,7 +3,7 @@ import { useProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/product/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { Truck, Shield, RotateCcw } from 'lucide-react';
+import { Truck, Shield, RotateCcw, Star } from 'lucide-react';
 
 export default function Home() {
   const { products, loading, error } = useProducts();
@@ -103,6 +103,62 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold mb-3" style={{ color: '#2C4C64' }}>Easy Returns</h3>
               <p className="leading-relaxed" style={{ color: '#3A5C74' }}>Hassle-free return policy. Shop with confidence.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews Section */}
+      <section className="py-20" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#2C4C64' }}>
+              What Our Customers Say
+            </h2>
+            <p className="text-lg" style={{ color: '#3A5C74' }}>Trusted by parents across India</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Review 1 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ borderLeft: '4px solid #D4A045' }}>
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" style={{ color: '#D4A045' }} />
+                ))}
+              </div>
+              <p className="text-lg mb-6 leading-relaxed" style={{ color: '#3A5C74' }}>
+                "The 7 Days Pack Kit has been a lifesaver for our family trips! My kids can now pack their own clothes for the week, and everything stays so organized. No more messy suitcases!"
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ backgroundColor: '#2C4C64' }}>
+                  P
+                </div>
+                <div>
+                  <p className="font-semibold" style={{ color: '#2C4C64' }}>Priya Sharma</p>
+                  <p className="text-sm" style={{ color: '#3A5C74' }}>Mumbai, Maharashtra</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Review 2 */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ borderLeft: '4px solid #D4A045' }}>
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" style={{ color: '#D4A045' }} />
+                ))}
+              </div>
+              <p className="text-lg mb-6 leading-relaxed" style={{ color: '#3A5C74' }}>
+                "Absolutely love the quality! The multipurpose pouches are perfect for organizing my daughter's art supplies, and the toiletry kit is a must-have for travel. Highly recommend!"
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ backgroundColor: '#2C4C64' }}>
+                  R
+                </div>
+                <div>
+                  <p className="font-semibold" style={{ color: '#2C4C64' }}>Rajesh Kumar</p>
+                  <p className="text-sm" style={{ color: '#3A5C74' }}>Bangalore, Karnataka</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
