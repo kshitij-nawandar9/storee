@@ -3,7 +3,7 @@ import { useProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/product/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { Truck, Shield, RotateCcw, Star } from 'lucide-react';
+import { Truck, Shield, RotateCcw, Star, Instagram } from 'lucide-react';
 
 export default function Home() {
   const { products, loading, error } = useProducts();
@@ -160,6 +160,74 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram Section */}
+      <section className="py-20" style={{ backgroundColor: '#FFF5F5' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Instagram className="w-10 h-10" style={{ color: '#D4A045' }} />
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#2C4C64' }}>
+                Follow Us on Instagram
+              </h2>
+            </div>
+            <p className="text-lg" style={{ color: '#3A5C74' }}>See our products in action</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Reel 1 */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <iframe
+                  src="https://www.instagram.com/reel/DVdCXpwiBU7/embed"
+                  width="100%"
+                  height="600"
+                  frameBorder="0"
+                  scrolling="no"
+                  allowTransparency={true}
+                  className="rounded-2xl shadow-lg"
+                  title="Instagram Reel 1"
+                />
+              </div>
+            </div>
+
+            {/* Reel 2 */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <iframe
+                  src="https://www.instagram.com/reel/DVaZ2p6iA8J/embed"
+                  width="100%"
+                  height="600"
+                  frameBorder="0"
+                  scrolling="no"
+                  allowTransparency={true}
+                  className="rounded-2xl shadow-lg"
+                  title="Instagram Reel 2"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="https://www.instagram.com/storee.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg px-8 py-4 inline-flex items-center gap-3 group rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
+              style={{
+                backgroundColor: '#2C4C64',
+                color: '#D4A045'
+              }}
+            >
+              <Instagram className="w-6 h-6" />
+              Follow @storee.in
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
