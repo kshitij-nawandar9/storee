@@ -2,13 +2,14 @@ import { Link } from 'react-router-dom';
 import { useCart } from '@/hooks/useCart';
 import CartItem from '@/components/cart/CartItem';
 import PriceDisplay from '@/components/product/PriceDisplay';
-import { CURRENCY_SYMBOL } from '@/utils/constants';
+import { CURRENCY_SYMBOL, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/utils/constants';
 import { ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 
 export default function Cart() {
   const { items, getTotal, clearCart } = useCart();
   const total = getTotal();
-  const shippingCost = 0; // Free shipping
+  const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_FEE;
   const finalTotal = total + shippingCost;
 
   if (items.length === 0) {
@@ -70,8 +71,17 @@ export default function Cart() {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Shipping</span>
-                  <span className="text-green-600 font-semibold">Free</span>
+                  {isFreeShipping ? (
+                    <span className="text-green-600 font-semibold">Free</span>
+                  ) : (
+                    <span>{CURRENCY_SYMBOL}{(SHIPPING_FEE / 100).toFixed(2)}</span>
+                  )}
                 </div>
+                {!isFreeShipping && (
+                  <p className="text-sm text-green-600">
+                    Add {CURRENCY_SYMBOL}{((FREE_SHIPPING_THRESHOLD - total) / 100).toFixed(2)} more for free delivery
+                  </p>
+                )}
                 <div className="border-t-2 border-gray-200 pt-4 flex justify-between font-bold text-xl text-gray-900">
                   <span>Total</span>
                   <span className="text-primary-600">{CURRENCY_SYMBOL}{(finalTotal / 100).toFixed(2)}</span>

@@ -410,7 +410,7 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'Dental Kit',
     slug: 'dental-kit',
     description: "A compact dental organiser designed to keep kids' oral care essentials in one place. Perfect for storing toothbrush, toothpaste, and hygiene products during travel or daily routines. Practical, organised, and easy to carry.",
-    basePrice: 0,
+    basePrice: 20000,
     category: 'Specialty Kits',
     stock: 35,
     isActive: true,
@@ -463,10 +463,10 @@ export const PRODUCTS_DATA: Product[] = [
     id: '313c09df-3e40-44ea-be6c-fb005850e3a0',
     name: 'Crossbody Bag',
     slug: 'crossbody-bag',
-    description: "A lightweight crossbody bag designed especially for kids' little adventures. Spacious enough for small essentials while staying comfortable and easy to carry. Available in fun prints kids will love. Coming Soon!",
-    basePrice: 0,
+    description: "A lightweight crossbody bag designed especially for kids' little adventures. Spacious enough for small essentials while staying comfortable and easy to carry. Available in fun prints kids will love.",
+    basePrice: 65000,
     category: 'Bags',
-    stock: 0,
+    stock: 50,
     isActive: true,
     features: [
       'Lightweight design',
@@ -475,16 +475,38 @@ export const PRODUCTS_DATA: Product[] = [
       'Fun and colorful prints',
       'Spacious for essentials'
     ],
-    images: []
+    images: [
+      {
+        id: 'cb1a0e3f-7d24-4a1b-9e6c-3f8b5a2d1c0e',
+        url: '/images/products/crossbody_bag/crossbody_bag_1.png',
+        altText: 'Crossbody Bag - Design 1',
+        order: 1,
+        isPrimary: true
+      },
+      {
+        id: 'a2b3c4d5-e6f7-4a8b-9c0d-1e2f3a4b5c6d',
+        url: '/images/products/crossbody_bag/crossbody_bag_2.png',
+        altText: 'Crossbody Bag - Design 2',
+        order: 2,
+        isPrimary: false
+      },
+      {
+        id: 'd7e8f9a0-b1c2-4d3e-8f4a-5b6c7d8e9f0a',
+        url: '/images/products/crossbody_bag/crossbody_bag_3.png',
+        altText: 'Crossbody Bag - Design 3',
+        order: 3,
+        isPrimary: false
+      }
+    ]
   },
   {
     id: '099cc195-d44c-4557-b7ff-1a0ceb1e7659',
     name: 'Medicine Kit',
     slug: 'medicine-kit',
-    description: "A travel-friendly medicine organiser designed to keep your child's medicines neatly arranged. Dedicated loops hold bottles securely to prevent spills, with enough space for strips, syrups, and essentials. Perfect for travel and everyday preparedness. Coming Soon!",
-    basePrice: 0,
+    description: "A travel-friendly medicine organiser designed to keep your child's medicines neatly arranged. Dedicated loops hold bottles securely to prevent spills, with enough space for strips, syrups, and essentials. Perfect for travel and everyday preparedness.",
+    basePrice: 45000,
     category: 'Specialty Kits',
-    stock: 0,
+    stock: 50,
     isActive: true,
     features: [
       'Secure bottle loops',
@@ -493,16 +515,94 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for travel',
       'Easy to carry'
     ],
-    images: []
+    images: [
+      {
+        id: 'f1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c',
+        url: '/images/products/medice_kit/medicine_kit_1.jpg',
+        altText: 'Medicine Kit - Design 1',
+        order: 1,
+        isPrimary: true
+      },
+      {
+        id: 'a3b4c5d6-e7f8-4a9b-8c0d-1e2f3a4b5c6d',
+        url: '/images/products/medice_kit/medicine_kit_2.jpg',
+        altText: 'Medicine Kit - Design 2',
+        order: 2,
+        isPrimary: false
+      },
+      {
+        id: 'b4c5d6e7-f8a9-4b0c-8d1e-2f3a4b5c6d7e',
+        url: '/images/products/medice_kit/medicine_kit_3.jpg',
+        altText: 'Medicine Kit - Design 3',
+        order: 3,
+        isPrimary: false
+      },
+      {
+        id: 'c5d6e7f8-a9b0-4c1d-8e2f-3a4b5c6d7e8f',
+        url: '/images/products/medice_kit/medicine_kit_4.jpg',
+        altText: 'Medicine Kit - Design 4',
+        order: 4,
+        isPrimary: false
+      },
+      {
+        id: 'd6e7f8a9-b0c1-4d2e-8f3a-4b5c6d7e8f9a',
+        url: '/images/products/medice_kit/medicine_kit_5.jpg',
+        altText: 'Medicine Kit - Design 5',
+        order: 5,
+        isPrimary: false
+      },
+      {
+        id: 'e7f8a9b0-c1d2-4e3f-8a4b-5c6d7e8f9a0b',
+        url: '/images/products/medice_kit/medicine_kit_6.jpg',
+        altText: 'Medicine Kit - Design 6',
+        order: 6,
+        isPrimary: false
+      },
+      {
+        id: 'f8a9b0c1-d2e3-4f4a-8b5c-6d7e8f9a0b1c',
+        url: '/images/products/medice_kit/medicine_kit_7.jpg',
+        altText: 'Medicine Kit - Design 7',
+        order: 7,
+        isPrimary: false
+      },
+      {
+        id: 'a9b0c1d2-e3f4-4a5b-8c6d-7e8f9a0b1c2d',
+        url: '/images/products/medice_kit/medicine_kit_8.jpg',
+        altText: 'Medicine Kit - Design 8',
+        order: 8,
+        isPrimary: false
+      },
+      {
+        id: 'b0c1d2e3-f4a5-4b6c-8d7e-8f9a0b1c2d3e',
+        url: '/images/products/medice_kit/medicine_kit_9.jpg',
+        altText: 'Medicine Kit - Design 9',
+        order: 9,
+        isPrimary: false
+      },
+      {
+        id: 'c1d2e3f4-a5b6-4c7d-8e8f-9a0b1c2d3e4f',
+        url: '/images/products/medice_kit/medicine_kit_10.jpg',
+        altText: 'Medicine Kit - Design 10',
+        order: 10,
+        isPrimary: false
+      },
+      {
+        id: 'd2e3f4a5-b6c7-4d8e-8f9a-0b1c2d3e4f5a',
+        url: '/images/products/medice_kit/medicine_kit_11.png',
+        altText: 'Medicine Kit - Design 11',
+        order: 11,
+        isPrimary: false
+      }
+    ]
   },
   {
     id: 'c17724c2-3608-47c6-9ee5-ee791d7baf21',
     name: 'Pencil Pouch',
     slug: 'pencil-pouch',
-    description: 'A clever pencil pouch that also works as a standing pencil organiser. With multiple compartments for pencils, crayons, and stationery, it keeps study time neat and organised. Spacious, functional, and fun for kids. Coming Soon!',
-    basePrice: 0,
+    description: 'A clever pencil pouch that also works as a standing pencil organiser. With multiple compartments for pencils, crayons, and stationery, it keeps study time neat and organised. Spacious, functional, and fun for kids.',
+    basePrice: 55000,
     category: 'Specialty Kits',
-    stock: 0,
+    stock: 50,
     isActive: true,
     features: [
       'Dual-function design',
@@ -511,6 +611,84 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for study time',
       'Fun and functional'
     ],
-    images: []
+    images: [
+      {
+        id: 'e3f4a5b6-c7d8-4e9f-8a0b-1c2d3e4f5a6b',
+        url: '/images/products/pencil_pouch/pencil_pouch_1.png',
+        altText: 'Pencil Pouch - Design 1',
+        order: 1,
+        isPrimary: true
+      },
+      {
+        id: 'f4a5b6c7-d8e9-4f0a-8b1c-2d3e4f5a6b7c',
+        url: '/images/products/pencil_pouch/pencil_pouch_2.png',
+        altText: 'Pencil Pouch - Design 2',
+        order: 2,
+        isPrimary: false
+      },
+      {
+        id: 'a5b6c7d8-e9f0-4a1b-8c2d-3e4f5a6b7c8d',
+        url: '/images/products/pencil_pouch/pencil_pouch_3.png',
+        altText: 'Pencil Pouch - Design 3',
+        order: 3,
+        isPrimary: false
+      },
+      {
+        id: 'b6c7d8e9-f0a1-4b2c-8d3e-4f5a6b7c8d9e',
+        url: '/images/products/pencil_pouch/pencil_pouch_4.png',
+        altText: 'Pencil Pouch - Design 4',
+        order: 4,
+        isPrimary: false
+      },
+      {
+        id: 'c7d8e9f0-a1b2-4c3d-8e4f-5a6b7c8d9e0f',
+        url: '/images/products/pencil_pouch/pencil_pouch_5.png',
+        altText: 'Pencil Pouch - Design 5',
+        order: 5,
+        isPrimary: false
+      },
+      {
+        id: 'd8e9f0a1-b2c3-4d4e-8f5a-6b7c8d9e0f1a',
+        url: '/images/products/pencil_pouch/pencil_pouch_6.png',
+        altText: 'Pencil Pouch - Design 6',
+        order: 6,
+        isPrimary: false
+      },
+      {
+        id: 'e9f0a1b2-c3d4-4e5f-8a6b-7c8d9e0f1a2b',
+        url: '/images/products/pencil_pouch/pencil_pouch_7.png',
+        altText: 'Pencil Pouch - Design 7',
+        order: 7,
+        isPrimary: false
+      },
+      {
+        id: 'f0a1b2c3-d4e5-4f6a-8b7c-8d9e0f1a2b3c',
+        url: '/images/products/pencil_pouch/pencil_pouch_8.png',
+        altText: 'Pencil Pouch - Design 8',
+        order: 8,
+        isPrimary: false
+      },
+      {
+        id: 'a1b2c3d4-e5f6-4a7b-8c8d-9e0f1a2b3c4d',
+        url: '/images/products/pencil_pouch/pencil_pouch_9.png',
+        altText: 'Pencil Pouch - Design 9',
+        order: 9,
+        isPrimary: false
+      },
+      {
+        id: 'b2c3d4e5-f6a7-4b8c-8d9e-0f1a2b3c4d5e',
+        url: '/images/products/pencil_pouch/pencil_pouch_10.png',
+        altText: 'Pencil Pouch - Design 10',
+        order: 10,
+        isPrimary: false
+      },
+      {
+        id: 'c3d4e5f6-a7b8-4c9d-8e0f-1a2b3c4d5e6f',
+        url: '/images/products/pencil_pouch/pencil_pouch_11.jpg',
+        altText: 'Pencil Pouch - Design 11',
+        order: 11,
+        isPrimary: false
+      }
+    ]
   }
 ];

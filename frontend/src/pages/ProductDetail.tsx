@@ -5,8 +5,8 @@ import QuantitySelector from '@/components/product/QuantitySelector';
 import { useCart } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
 import type { ProductVariant } from '@/types';
-import { FREE_SHIPPING_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
-import { CheckCircle, ChevronLeft, ChevronRight, Shield, ShoppingCart, Truck, X } from 'lucide-react';
+import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
+import { CheckCircle, ChevronLeft, ChevronRight, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -22,6 +22,8 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
@@ -89,15 +91,18 @@ export default function ProductDetail() {
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
 
+  const hasVariants = variantImages.length > 0;
+
   // Compute display image based on hover or selection
-  const displayImage = hoveredVariant?.image ||
-    currentVariant?.image ||
-    product.images?.find((img) => img.isPrimary)?.url ||
-    product.images?.find((img) => img.url)?.url ||
-    product.images?.[0]?.url ||
-    (typeof product.images?.[0] === 'string' ? product.images[0] : null) ||
-    displayImages[0] ||
-    '/placeholder.jpg';
+  const displayImage = hasVariants
+    ? (hoveredVariant?.image ||
+       currentVariant?.image ||
+       displayImages[0] ||
+       '/placeholder.jpg')
+    : (hoveredImageIndex !== null
+        ? displayImages[hoveredImageIndex]
+        : displayImages[selectedImageIndex]) ||
+      '/placeholder.jpg';
 
   return (
     <div className="min-h-screen py-12 bg-warm-50">
@@ -143,15 +148,35 @@ export default function ProductDetail() {
               {displayImages.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto pb-2">
                   {displayImages.map((img, index) => {
-                    const variant = product.variants?.[index];
-                    const isSelected = variant?.id === currentVariant?.id;
+                    const variant = hasVariants ? product.variants?.[index] : undefined;
+                    const isActive = hasVariants
+                      ? variant?.id === (hoveredVariant?.id || currentVariant?.id)
+                      : (hoveredImageIndex !== null ? index === hoveredImageIndex : index === selectedImageIndex);
                     return (
                       <button
                         key={index}
-                        onClick={() => variant && setSelectedVariant(variant)}
-                        onMouseEnter={() => variant && setHoveredVariant(variant)}
-                        onMouseLeave={() => setHoveredVariant(null)}
-                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${isSelected
+                        onClick={() => {
+                          if (hasVariants && variant) {
+                            setSelectedVariant(variant);
+                          } else {
+                            setSelectedImageIndex(index);
+                          }
+                        }}
+                        onMouseEnter={() => {
+                          if (hasVariants && variant) {
+                            setHoveredVariant(variant);
+                          } else {
+                            setHoveredImageIndex(index);
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          if (hasVariants) {
+                            setHoveredVariant(null);
+                          } else {
+                            setHoveredImageIndex(null);
+                          }
+                        }}
+                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${isActive
                           ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
                           : 'border-gray-200 hover:border-gray-400'
                           }`}
@@ -274,7 +299,11 @@ export default function ProductDetail() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Truck className="w-4 h-4 text-primary-600" />
-                  <span>Free Shipping</span>
+                  <span>Free Shipping above ₹1,000</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <RotateCcw className="w-4 h-4 text-primary-600" />
+                  <span>{RETURN_POLICY_MESSAGE}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <CheckCircle className="w-4 h-4 text-primary-600" />

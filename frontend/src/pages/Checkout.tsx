@@ -1,11 +1,11 @@
 import PriceDisplay from '@/components/product/PriceDisplay';
 import { useCart } from '@/hooks/useCart';
-import { createCODOrder, createRazorpayOrder, verifyPayment } from '@/services/api';
+import { createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
-import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, PAYMENT_METHODS } from '@/utils/constants';
+import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/utils/constants';
 import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
-import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Wallet, Save, Check } from 'lucide-react';
+import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +14,6 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { items, getTotal, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'cod'>('razorpay');
   const [formData, setFormData] = useState<{
     name: string;
     email: string;
@@ -39,7 +38,8 @@ export default function Checkout() {
   const [addressLabel, setAddressLabel] = useState('');
 
   const total = getTotal();
-  const shippingCost = 0;
+  const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_FEE;
   const finalTotal = total + shippingCost;
 
   // Load saved addresses on mount
@@ -138,101 +138,69 @@ export default function Checkout() {
     }
 
     try {
-      if (paymentMethod === PAYMENT_METHODS.COD) {
-        const response = await createCODOrder({
-          amount: finalTotal,
-          items: items,
-          customer: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-          },
-          address: formData.address,
-        });
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        toast.error('Failed to load payment gateway');
+        setLoading(false);
+        return;
+      }
 
-        if (response.success) {
-          toast.success('COD order placed successfully!');
-          clearCart();
-          // Use orderId (10-digit alphanumeric) or id (UUID) as fallback
-          const orderId = response.data?.orderId || response.data?.id;
-          if (orderId) {
-            navigate(`/orders/${orderId}`);
-          } else {
-            // Fallback to home if order ID is not available
-            console.error('Order ID not found in response:', response.data);
-            navigate('/');
-          }
-          // Note: setLoading(false) not needed here as navigation unmounts component
-        } else {
-          toast.error(response.message || 'Failed to place order');
-          setLoading(false);
-        }
-      } else {
-        const scriptLoaded = await loadRazorpayScript();
-        if (!scriptLoaded) {
-          toast.error('Failed to load payment gateway');
-          setLoading(false);
-          return;
-        }
+      const orderResponse = await createRazorpayOrder({
+        amount: finalTotal,
+        items: items,
+        customer: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+        },
+        address: formData.address,
+      });
 
-        const orderResponse = await createRazorpayOrder({
-          amount: finalTotal,
-          items: items,
-          customer: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-          },
-          address: formData.address,
-        });
+      if (!orderResponse.success) {
+        toast.error(orderResponse.message || 'Failed to create order');
+        setLoading(false);
+        return;
+      }
 
-        if (!orderResponse.success) {
-          toast.error(orderResponse.message || 'Failed to create order');
-          setLoading(false);
-          return;
-        }
+      const { order } = orderResponse.data;
 
-        const { order } = orderResponse.data;
+      initializeRazorpayCheckout(
+        order.razorpay_id,
+        order.amount,
+        order.key_id,
+        {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        async (razorpayResponse) => {
+          try {
+            const verifyResponse = await verifyPayment({
+              order_id: order.razorpay_id,
+              payment_id: razorpayResponse.razorpay_payment_id,
+              signature: razorpayResponse.razorpay_signature,
+            });
 
-        initializeRazorpayCheckout(
-          order.razorpay_id,
-          order.amount,
-          order.key_id, // Use key_id from backend response
-          {
-            name: formData.name,
-            email: formData.email,
-            contact: formData.phone,
-          },
-          async (razorpayResponse) => {
-            try {
-              const verifyResponse = await verifyPayment({
-                order_id: order.razorpay_id,
-                payment_id: razorpayResponse.razorpay_payment_id,
-                signature: razorpayResponse.razorpay_signature,
-              });
-
-              if (verifyResponse.success) {
-                toast.success('Order placed successfully!');
-                clearCart();
-                // Use our 10-digit order ID for navigation
-                const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
-                navigate(`/orders/${orderId}`);
-              } else {
-                toast.error(verifyResponse.message || 'Payment verification failed');
-              }
-            } catch (error) {
-              console.error('Payment verification error:', error);
-              toast.error('Payment verification failed');
-            } finally {
-              setLoading(false);
+            if (verifyResponse.success) {
+              toast.success('Order placed successfully!');
+              clearCart();
+              const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
+              navigate(`/orders/${orderId}`);
+            } else {
+              toast.error(verifyResponse.message || 'Payment verification failed');
             }
-          },
-          (error) => {
-            toast.error(error);
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast.error('Payment verification failed');
+          } finally {
             setLoading(false);
           }
-        );
-      }
+        },
+        (error) => {
+          toast.error(error);
+          setLoading(false);
+        }
+      );
     } catch (error) {
       console.error('Checkout error:', error);
       toast.error('Something went wrong. Please try again.');
@@ -509,57 +477,17 @@ export default function Checkout() {
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900">Payment Method</h2>
               </div>
-              <div className="space-y-4">
-                <label
-                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'razorpay'
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-orange-200 hover:border-orange-300 hover:bg-warm-50'
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="razorpay"
-                    checked={paymentMethod === 'razorpay'}
-                    onChange={() => setPaymentMethod('razorpay')}
-                    className="mt-1 mr-4 w-5 h-5 text-primary-600 focus:ring-primary-500"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <CreditCard className="w-5 h-5 text-primary-600" />
-                      <div className="font-bold text-gray-900">Online Payment</div>
-                    </div>
-                    <div className="text-sm text-gray-600 ml-8">
-                      Credit/Debit Card, UPI, Net Banking, Wallets
-                    </div>
+              <div className="flex items-start p-5 border-2 border-primary-500 bg-primary-50 rounded-xl">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <CreditCard className="w-5 h-5 text-primary-600" />
+                    <div className="font-bold text-gray-900">Online Payment</div>
                   </div>
-                  <Lock className="w-5 h-5 text-gray-400 ml-2" />
-                </label>
-
-                <label
-                  className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod'
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-orange-200 hover:border-orange-300 hover:bg-warm-50'
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="cod"
-                    checked={paymentMethod === 'cod'}
-                    onChange={() => setPaymentMethod('cod')}
-                    className="mt-1 mr-4 w-5 h-5 text-primary-600 focus:ring-primary-500"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Wallet className="w-5 h-5 text-primary-600" />
-                      <div className="font-bold text-gray-900">Cash on Delivery (COD)</div>
-                    </div>
-                    <div className="text-sm text-gray-600 ml-8">
-                      Pay when you receive your order
-                    </div>
+                  <div className="text-sm text-gray-600 ml-8">
+                    Credit/Debit Card, UPI, Net Banking, Wallets
                   </div>
-                </label>
+                </div>
+                <Lock className="w-5 h-5 text-gray-400 ml-2" />
               </div>
 
               {/* Free Delivery Banner */}
@@ -607,7 +535,11 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Shipping</span>
-                  <span className="text-green-600 font-semibold">Free</span>
+                  {isFreeShipping ? (
+                    <span className="text-green-600 font-semibold">Free</span>
+                  ) : (
+                    <span>{CURRENCY_SYMBOL}{(SHIPPING_FEE / 100).toFixed(2)}</span>
+                  )}
                 </div>
                 <div className="border-t-2 border-gray-200 pt-4 flex justify-between font-bold text-xl text-gray-900">
                   <span>Total</span>
@@ -627,7 +559,7 @@ export default function Checkout() {
                   </>
                 ) : (
                   <>
-                    {paymentMethod === 'cod' ? 'Place Order' : 'Proceed to Payment'}
+                    Proceed to Payment
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}

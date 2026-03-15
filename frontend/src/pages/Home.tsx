@@ -86,7 +86,7 @@ export default function Home() {
                 <Truck className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3" style={{ color: '#2C4C64' }}>Free Delivery</h3>
-              <p className="leading-relaxed" style={{ color: '#3A5C74' }}>Free Pan India Delivery on all orders. Fast and reliable shipping.</p>
+              <p className="leading-relaxed" style={{ color: '#3A5C74' }}>Free Pan India Delivery on orders above ₹1,000. Fast and reliable shipping.</p>
             </div>
 
             <div className="bg-white p-8 text-center group rounded-2xl shadow-md hover:shadow-xl transition-all duration-300" style={{ borderTop: '4px solid #D4A045' }}>
@@ -102,7 +102,7 @@ export default function Home() {
                 <RotateCcw className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3" style={{ color: '#2C4C64' }}>Easy Returns</h3>
-              <p className="leading-relaxed" style={{ color: '#3A5C74' }}>Hassle-free return policy. Shop with confidence.</p>
+              <p className="leading-relaxed" style={{ color: '#3A5C74' }}>Hassle-free 7-day return policy. Shop with confidence.</p>
             </div>
           </div>
         </div>

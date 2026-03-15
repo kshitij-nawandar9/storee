@@ -75,11 +75,31 @@ export default function Footer() {
           {/* Customer Service */}
           <div>
             <h4 className="font-bold text-lg mb-6">Customer Service</h4>
-            <ul className="space-y-3 text-gray-400">
-              <li className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
-              <li className="hover:text-white transition-colors cursor-pointer">Shipping Info</li>
-              <li className="hover:text-white transition-colors cursor-pointer">Returns & Refunds</li>
-              <li className="hover:text-white transition-colors cursor-pointer">FAQ</li>
+            <ul className="space-y-3">
+              <li>
+                <a href="mailto:thestoree.in@gmail.com" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+                  <span className="w-1 h-1 bg-primary-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <Link to="/terms" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+                  <span className="w-1 h-1 bg-primary-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Shipping Info
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+                  <span className="w-1 h-1 bg-primary-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Returns & Refunds
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+                  <span className="w-1 h-1 bg-primary-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
