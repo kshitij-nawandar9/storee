@@ -25,12 +25,10 @@ export default function PriceDisplay({ regularPrice, salePrice }: PriceDisplayPr
               {Math.round(((regularPrice - salePrice) / regularPrice) * 100)}% OFF
             </span>
           </div>
-          <p className="text-sm text-gray-600">Regular price</p>
         </div>
       ) : (
         <div>
           <span className="text-2xl font-bold">{formatPrice(regularPrice)}</span>
-          <p className="text-sm text-gray-600 mt-1">Regular price</p>
         </div>
       )}
     </div>
