@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid()) @db.Char(36)
+  googleId      String   @unique @map("google_id") @db.VarChar(255)
+  email         String   @unique @db.VarChar(255)
+  name          String   @db.VarChar(255)
+  picture       String?  @db.Text
+  emailVerified Boolean  @default(false) @map("email_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  orders        Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id          String         @id @default(uuid()) @db.Char(36)
+  name        String         @db.VarChar(255)
+  slug        String         @unique @db.VarChar(255)
+  description String?        @db.Text
+  basePrice   Int            @map("base_price")
+  category    String         @db.VarChar(100)
+  stock       Int?
+  isActive    Boolean        @default(true) @map("is_active")
+  features    Json?          @db.Json
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  deletedAt   DateTime?      @map("deleted_at")
+  images      ProductImage[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid()) @db.Char(36)
+  productId String   @map("product_id") @db.Char(36)
+  url       String   @db.Text
+  altText   String?  @map("alt_text") @db.VarChar(255)
+  order     Int      @default(0)
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model Order {
+  id              String    @id @default(uuid()) @db.Char(36)
+  orderId         String    @unique @map("order_id") @db.VarChar(20)
+  razorpayOrderId String?   @map("razorpay_order_id") @db.VarChar(255)
+  userId          String?   @map("user_id") @db.Char(36)
+  customerName    String    @map("customer_name") @db.VarChar(255)
+  customerEmail   String    @map("customer_email") @db.VarChar(255)
+  customerPhone   String    @map("customer_phone") @db.VarChar(20)
+  address         Json      @db.Json
+  items           Json      @db.Json
+  totalAmount     Int       @map("total_amount")
+  status          String    @default("pending") @db.VarChar(50)
+  paymentId       String?   @map("payment_id") @db.VarChar(255)
+  paymentMethod   String    @map("payment_method") @db.VarChar(50)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  user            User?     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([razorpayOrderId])
+  @@map("orders")
+}
