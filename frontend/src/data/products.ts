@@ -527,7 +527,7 @@ export const PRODUCTS_DATA: Product[] = [
     images: [
       { id: 'a1b2c311-0002-4001-8001-000000000001', url: '/images/products/kids_bag/Beach.png', altText: 'Kids Bag - Beach', order: 1, isPrimary: true },
       { id: 'a1b2c311-0002-4001-8001-000000000002', url: '/images/products/kids_bag/Bunny.png', altText: 'Kids Bag - Bunny', order: 2, isPrimary: false },
-      { id: 'a1b2c311-0002-4001-8001-000000000003', url: '/images/products/kids_bag/Jungle ASafari.png', altText: 'Kids Bag - Jungle Safari', order: 3, isPrimary: false },
+      { id: 'a1b2c311-0002-4001-8001-000000000003', url: '/images/products/kids_bag/Jungle Safari.png', altText: 'Kids Bag - Jungle Safari', order: 3, isPrimary: false },
       { id: 'a1b2c311-0002-4001-8001-000000000004', url: '/images/products/kids_bag/Lion.png', altText: 'Kids Bag - Lion', order: 4, isPrimary: false },
       { id: 'a1b2c311-0002-4001-8001-000000000005', url: '/images/products/kids_bag/Marine.png', altText: 'Kids Bag - Marine', order: 5, isPrimary: false },
       { id: 'a1b2c311-0002-4001-8001-000000000006', url: '/images/products/kids_bag/Rainbow.png', altText: 'Kids Bag - Rainbow', order: 6, isPrimary: false },
@@ -539,7 +539,7 @@ export const PRODUCTS_DATA: Product[] = [
     variants: [
       { id: 'kids-bag-beach', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/kids_bag/Beach.png', price: 120000, stock: 45, sku: 'KIDS-BAG-BEACH', isDefault: true, isActive: true },
       { id: 'kids-bag-bunny', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/kids_bag/Bunny.png', price: 120000, stock: 40, sku: 'KIDS-BAG-BUNNY', isDefault: false, isActive: true },
-      { id: 'kids-bag-jungle-safari', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/kids_bag/Jungle ASafari.png', price: 120000, stock: 35, sku: 'KIDS-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
+      { id: 'kids-bag-jungle-safari', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/kids_bag/Jungle Safari.png', price: 120000, stock: 35, sku: 'KIDS-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'kids-bag-lion', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/kids_bag/Lion.png', price: 120000, stock: 35, sku: 'KIDS-BAG-LION', isDefault: false, isActive: true },
       { id: 'kids-bag-marine', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/kids_bag/Marine.png', price: 120000, stock: 30, sku: 'KIDS-BAG-MARINE', isDefault: false, isActive: true },
       { id: 'kids-bag-rainbow', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/kids_bag/Rainbow.png', price: 120000, stock: 30, sku: 'KIDS-BAG-RAINBOW', isDefault: false, isActive: true },

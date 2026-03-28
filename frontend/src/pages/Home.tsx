@@ -133,7 +133,7 @@ export default function Home() {
               { category: 'Bags',              name: 'Bags',              sub: 'for little adventures',   image: '/images/products/kids_bag/Unicorn.png' },
               { category: 'Pouches',            name: 'Pouches',           sub: 'cute & clever',           image: '/images/products/accessories_kit/Beach.jpg' },
               { category: 'Travel Kits',        name: 'Travel Kits',       sub: 'pack like a pro',         image: '/images/products/foldable_travel_kit/Lion.jpg' },
-              { category: 'Travel Organizers',   name: 'Organizers',       sub: 'everything in its place', image: '/images/products/packing_cubes/Rainbow.jpg' },
+              { category: 'Travel Organizers',   name: 'Organizers',       sub: 'everything in its place', image: '/images/products/packing_cubes/Lion.jpg' },
               { category: 'Specialty Kits',      name: 'Specialty Kits',   sub: 'for every little need',   image: '/images/products/pencil_pouch/Marine.png' },
               { category: null,                  name: 'Shop All',          sub: 'see everything ✨',       image: '/images/products/toiletry_kit/Unicorn.png' },
             ].map(({ category, name, sub, image }, index) => (
