@@ -5,6 +5,7 @@ interface ColorSelectorProps {
   variants: ProductVariant[];
   selectedVariant: ProductVariant | null;
   onVariantSelect: (variant: ProductVariant) => void;
+  onVariantHover?: (variant: ProductVariant | null) => void;
   productName: string;
 }
 
@@ -12,11 +13,13 @@ export default function ColorSelector({
   variants,
   selectedVariant,
   onVariantSelect,
+  onVariantHover,
   productName,
 }: ColorSelectorProps) {
   const [selected, setSelected] = useState<ProductVariant | null>(
     selectedVariant || variants.find((v) => v.isDefault) || variants[0] || null
   );
+  const [hoveredName, setHoveredName] = useState<string | null>(null);
 
   useEffect(() => {
     if (selected) {
@@ -35,7 +38,7 @@ export default function ColorSelector({
     <div className="color-selector">
       <h3 className="text-lg font-semibold mb-3">
         Select Variant:{' '}
-        <span className="text-gray-600 font-normal">{selected?.colorName}</span>
+        <span className="text-gray-600 font-normal">{hoveredName || selected?.colorName}</span>
       </h3>
 
       <div className="flex flex-wrap gap-3">
@@ -46,6 +49,8 @@ export default function ColorSelector({
             <button
               key={variant.id}
               onClick={() => handleColorSelect(variant)}
+              onMouseEnter={() => { if (variant.isActive) { onVariantHover?.(variant); setHoveredName(variant.colorName); } }}
+              onMouseLeave={() => { onVariantHover?.(null); setHoveredName(null); }}
               disabled={!variant.isActive}
               className={`
                 relative color-option flex flex-col items-center p-3 border-2 rounded-lg transition-all

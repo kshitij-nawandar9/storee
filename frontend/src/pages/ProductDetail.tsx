@@ -22,6 +22,7 @@ export default function ProductDetail() {
   // All hooks must be called before any conditional returns
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
@@ -90,7 +91,7 @@ export default function ProductDetail() {
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
 
-  const displayImage = (currentVariant?.image || displayImages[0]) ?? '/placeholder.jpg';
+  const displayImage = (hoveredVariant?.image || currentVariant?.image || displayImages[0]) ?? '/placeholder.jpg';
 
   return (
     <div className="min-h-screen py-12 bg-warm-50">
@@ -158,6 +159,7 @@ export default function ProductDetail() {
                     variants={product.variants}
                     selectedVariant={selectedVariant}
                     onVariantSelect={setSelectedVariant}
+                    onVariantHover={setHoveredVariant}
                     productName={product.name}
                   />
                 </div>
