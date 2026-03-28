@@ -22,12 +22,10 @@ export default function ColorSelector({
   const [hoveredName, setHoveredName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (selected) {
-      onVariantSelect(selected);
-    }
+    if (selected) onVariantSelect(selected);
   }, [selected, onVariantSelect]);
 
-  const handleColorSelect = (variant: ProductVariant) => {
+  const handleSelect = (variant: ProductVariant) => {
     if (variant.isActive) {
       setSelected(variant);
       onVariantSelect(variant);
@@ -35,57 +33,53 @@ export default function ColorSelector({
   };
 
   return (
-    <div className="color-selector">
-      <h3 className="text-lg font-semibold mb-3">
-        Select Variant:{' '}
-        <span className="text-gray-600 font-normal">{hoveredName || selected?.colorName}</span>
-      </h3>
+    <div>
+      <div className="mb-3 flex items-baseline gap-2">
+        <p className="text-xs font-semibold" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>
+          Pick your print ✨
+        </p>
+        <span className="font-hand text-lg font-medium" style={{ color: '#C4756E' }}>
+          {hoveredName || selected?.colorName}
+        </span>
+      </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         {variants.map((variant) => {
           const isSelected = selected?.id === variant.id;
 
           return (
             <button
               key={variant.id}
-              onClick={() => handleColorSelect(variant)}
+              onClick={() => handleSelect(variant)}
               onMouseEnter={() => { if (variant.isActive) { onVariantHover?.(variant); setHoveredName(variant.colorName); } }}
               onMouseLeave={() => { onVariantHover?.(null); setHoveredName(null); }}
               disabled={!variant.isActive}
-              className={`
-                relative color-option flex flex-col items-center p-3 border-2 rounded-lg transition-all
-                ${isSelected
-                  ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
-                  : 'border-gray-200 hover:border-gray-400'
-                }
-                ${!variant.isActive ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-              `}
+              className="relative overflow-hidden rounded-xl transition-all duration-200"
+              style={{
+                width: '72px',
+                height: '72px',
+                border: isSelected ? '2.5px solid #C4756E' : '2px solid #F8EDDA',
+                opacity: variant.isActive ? 1 : 0.4,
+                cursor: variant.isActive ? 'pointer' : 'not-allowed',
+                boxShadow: isSelected ? '0 2px 10px -3px rgba(196,117,110,0.25)' : 'none',
+              }}
               title={variant.colorName}
             >
-              {/* Variant Image Preview */}
               {variant.image && (
                 <img
                   src={variant.image}
                   alt={`${productName} - ${variant.colorName}`}
-                  className="w-16 h-16 object-cover rounded mb-1"
+                  className="w-full h-full object-cover"
                 />
               )}
 
-              <span className="text-sm font-medium">{variant.colorName}</span>
-
               {isSelected && (
-                <div className="absolute top-1 right-1">
-                  <svg
-                    className="w-5 h-5 text-primary-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <div className="absolute inset-0 flex items-end justify-center" style={{ background: 'linear-gradient(to top, rgba(196,117,110,0.3) 0%, transparent 50%)' }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center mb-1" style={{ background: '#C4756E' }}>
+                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
                 </div>
               )}
             </button>

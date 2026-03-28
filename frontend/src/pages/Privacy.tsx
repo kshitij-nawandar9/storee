@@ -1,65 +1,94 @@
 export default function Privacy() {
+  const sections = [
+    {
+      title: 'Information We Collect',
+      content: 'When you sign in to Storee using Google OAuth, we collect your email address, name, and profile picture from your Google account. This information is used solely to create and manage your account on our platform.',
+    },
+    {
+      title: 'How We Use Your Information',
+      content: null,
+      list: [
+        'Create and manage your account',
+        'Process your orders',
+        'Communicate with you about your orders',
+        'Improve our services',
+      ],
+    },
+    {
+      title: 'Data Security',
+      content: 'We implement appropriate security measures to protect your personal information. Your data is stored securely and we do not share it with third parties except as necessary to process your orders.',
+    },
+    {
+      title: 'Your Rights',
+      content: 'You have the right to access, update, or delete your personal information at any time. You can also request that we stop processing your data.',
+    },
+    {
+      title: 'Google OAuth',
+      content: "When you sign in with Google, you're allowing Storee to access your basic profile information (name, email, picture). This is handled through Google's secure OAuth 2.0 protocol. We do not have access to your Google password.",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-sm p-8">
-          <h1 className="text-4xl font-bold mb-6">Privacy Policy</h1>
-          <p className="text-sm text-gray-600 mb-8">Last updated: March 7, 2026</p>
+    <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-14 pb-20">
 
-          <div className="space-y-6 text-gray-700">
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">1. Information We Collect</h2>
-              <p>
-                When you sign in to Storee using Google OAuth, we collect your email address, name, and profile picture
-                from your Google account. This information is used solely to create and manage your account on our platform.
-              </p>
-            </section>
+        {/* Header */}
+        <div className="text-center mb-12">
+          <span className="section-label mb-2 block">Legal</span>
+          <h1 className="section-title">Privacy Policy</h1>
+          <p className="text-xs mt-3" style={{ color: '#a09590' }}>Last updated: March 7, 2026</p>
+        </div>
 
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">2. How We Use Your Information</h2>
-              <p>We use your information to:</p>
-              <ul className="list-disc ml-6 mt-2 space-y-1">
-                <li>Create and manage your account</li>
-                <li>Process your orders</li>
-                <li>Communicate with you about your orders</li>
-                <li>Improve our services</li>
-              </ul>
-            </section>
+        {/* Sections */}
+        <div className="space-y-6">
 
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">3. Data Security</h2>
-              <p>
-                We implement appropriate security measures to protect your personal information. Your data is stored securely
-                and we do not share it with third parties except as necessary to process your orders.
-              </p>
+          {sections.map((section, i) => (
+            <section
+              key={section.title}
+              className="rounded-2xl px-6 py-5"
+              style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
+            >
+              <h2 className="font-serif text-base font-medium mb-2" style={{ color: '#2a2220' }}>
+                <span style={{ color: '#C4756E' }}>{i + 1}.</span> {section.title}
+              </h2>
+              {section.content && (
+                <p className="text-sm leading-relaxed" style={{ color: '#6b5f58' }}>
+                  {section.content}
+                </p>
+              )}
+              {section.list && (
+                <>
+                  <p className="text-sm mb-2.5" style={{ color: '#6b5f58' }}>We use your information to:</p>
+                  <ul className="space-y-2">
+                    {section.list.map((item, j) => (
+                      <li key={j} className="flex items-start gap-2.5 text-sm" style={{ color: '#6b5f58' }}>
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#C4756E' }} />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </section>
+          ))}
 
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">4. Your Rights</h2>
-              <p>
-                You have the right to access, update, or delete your personal information at any time.
-                You can also request that we stop processing your data.
-              </p>
-            </section>
+          {/* Contact */}
+          <section
+            className="rounded-2xl px-6 py-5"
+            style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
+          >
+            <h2 className="font-serif text-base font-medium mb-2" style={{ color: '#2a2220' }}>
+              <span style={{ color: '#C4756E' }}>6.</span> Contact Us
+            </h2>
+            <p className="text-sm leading-relaxed" style={{ color: '#6b5f58' }}>
+              Questions about your privacy? Reach out at{' '}
+              <a href="mailto:thestoree.in@gmail.com" className="font-medium transition-colors" style={{ color: '#C4756E' }}>
+                thestoree.in@gmail.com
+              </a>
+              {' '}— we're happy to help 🤍
+            </p>
+          </section>
 
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">5. Google OAuth</h2>
-              <p>
-                When you sign in with Google, you're allowing Storee to access your basic profile information (name, email, picture).
-                This is handled through Google's secure OAuth 2.0 protocol. We do not have access to your Google password.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold mb-3">6. Contact Us</h2>
-              <p>
-                If you have any questions about this Privacy Policy, please contact us at:{' '}
-                <a href="mailto:privacy@thestoree.in" className="text-primary-600 hover:underline">
-                  privacy@thestoree.in
-                </a>
-              </p>
-            </section>
-          </div>
         </div>
       </div>
     </div>

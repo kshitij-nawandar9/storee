@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
-import { ShoppingBag, Sparkles } from 'lucide-react';
+import { ShoppingBag, Sparkles, Heart } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -26,70 +26,103 @@ export default function ProductCard({ product }: ProductCardProps) {
     maximumFractionDigits: 0,
   }).format(displayPrice / 100);
 
+  const variantCount = product.variants?.length ?? 0;
+
   return (
-    <div className="card card-hover group flex flex-col">
+    <div
+      className="group flex flex-col rounded-2xl overflow-hidden card-tilt"
+      style={{
+        background: '#FFFDF9',
+        boxShadow: '0 2px 12px -3px rgba(59,50,48,0.06)',
+      }}
+    >
       <Link to={`/products/${product.slug}`} className="block flex-1">
 
-        {/* Image Container */}
-        <div className="relative overflow-hidden rounded-t-3xl bg-warm-50" style={{ aspectRatio: '4/5' }}>
+        {/* Image */}
+        <div className="relative overflow-hidden" style={{ aspectRatio: '4/5', background: '#F8EDDA' }}>
           <img
             src={primaryImage || '/placeholder.jpg'}
             alt={product.name}
             className="product-img w-full h-full object-cover"
           />
 
-          {/* Overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {/* Warm overlay on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(to top, rgba(196,117,110,0.12) 0%, transparent 40%)' }} />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-            {isComingSoon && (
-              <span className="badge-gold badge text-xs flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Coming Soon
-              </span>
-            )}
+          {/* ✨ Sparkle appears top-left on hover */}
+          <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-100 scale-75">
+            <span className="text-base drop-shadow-sm" style={{ filter: 'drop-shadow(0 0 4px rgba(201,169,110,0.4))' }}>✨</span>
           </div>
 
-          {/* Quick add — slides up on hover */}
+          {/* Coming Soon */}
+          {isComingSoon && (
+            <div className="absolute top-3 left-3">
+              <span className="badge badge-rose text-[0.6rem] flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5" /> Coming Soon
+              </span>
+            </div>
+          )}
+
+          {/* Variant count pill */}
+          {variantCount > 1 && (
+            <div className="absolute top-3 right-3">
+              <span
+                className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(253,246,236,0.88)', color: '#C4756E', backdropFilter: 'blur(4px)' }}
+              >
+                {variantCount} prints
+              </span>
+            </div>
+          )}
+
+          {/* Quick Add */}
           {!isComingSoon && (
-            <div className="absolute bottom-3 right-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
               <button
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   addItem(product, 1, defaultVariant ?? undefined);
-                  toast.success(`Added to cart`, {
-                    icon: '🛍️',
-                    style: { borderRadius: '12px', background: '#1c3243', color: '#fff' },
+                  toast((t) => (
+                    <span className="flex items-center gap-2 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <Heart className="w-4 h-4 heart-pop" style={{ color: '#C4756E', fill: '#C4756E' }} />
+                      <span>Added to your bag! 🎉</span>
+                    </span>
+                  ), {
+                    style: { borderRadius: '14px', background: '#FFFDF9', color: '#2a2220', border: '1px solid #F0E0C6', boxShadow: '0 8px 24px -6px rgba(59,50,48,0.12)' },
+                    duration: 2000,
                   });
                 }}
-                className="flex items-center gap-1.5 bg-white text-primary-700 px-3 py-2 rounded-full text-xs font-semibold shadow-card hover:bg-primary-600 hover:text-white transition-all duration-200"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 bounce-tap"
+                style={{
+                  background: '#C4756E',
+                  color: '#fff',
+                  boxShadow: '0 4px 16px -4px rgba(196,117,110,0.35)',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
-                Quick Add
+                Add to Bag
               </button>
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="p-4 pb-5">
-          <h3 className="font-sans font-semibold text-base text-primary-900 group-hover:text-primary-600 transition-colors duration-200 line-clamp-2 leading-snug mb-1">
+        <div className="px-3.5 pt-3 pb-4 sm:px-4 sm:pt-3.5 sm:pb-5">
+          <h3 className="font-serif font-medium text-[0.9rem] sm:text-base leading-snug mb-1.5 squiggle-underline line-clamp-1" style={{ color: '#2a2220' }}>
             {product.name}
           </h3>
-          <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-3">
-            {product.description}
-          </p>
 
           <div className="flex items-center justify-between">
-            <span className="font-bold text-lg text-primary-800">
+            <span className="font-semibold text-base sm:text-lg" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>
               {formattedPrice}
             </span>
             {isComingSoon ? (
-              <span className="text-xs text-gray-400 font-medium">Notify me</span>
+              <span className="text-[0.7rem] font-medium" style={{ color: '#b0aaa3' }}>Notify me ✨</span>
             ) : (
-              <span className="text-xs font-semibold text-gold-500 group-hover:text-primary-600 transition-colors">
-                Shop Now →
+              <span className="text-[0.7rem] sm:text-xs font-medium" style={{ color: '#C4756E' }}>
+                <span className="inline-flex items-center gap-0.5 arrow-nudge">View <span className="arrow-icon inline-block">&rarr;</span></span>
               </span>
             )}
           </div>

@@ -22,9 +22,7 @@ export default function Navbar() {
 
   const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
 
-  useEffect(() => {
-    setProfilePictureError(false);
-  }, [user?.picture]);
+  useEffect(() => { setProfilePictureError(false); }, [user?.picture]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -43,11 +41,8 @@ export default function Navbar() {
   }, [userMenuOpen]);
 
   const handleLogoError = () => {
-    if (currentLogoPath === LOGO_PATH) {
-      setCurrentLogoPath(FALLBACK_LOGO_PATH);
-    } else {
-      setLogoError(true);
-    }
+    if (currentLogoPath === LOGO_PATH) setCurrentLogoPath(FALLBACK_LOGO_PATH);
+    else setLogoError(true);
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -55,46 +50,55 @@ export default function Navbar() {
   const navLink = (to: string, label: string) => (
     <Link
       to={to}
-      className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 rounded-full
-        ${isActive(to)
-          ? 'text-primary-600 bg-primary-50'
-          : 'text-primary-800 hover:text-primary-600 hover:bg-warm-100'
-        }`}
+      className="relative px-3 py-1.5 text-sm font-medium transition-all duration-200 group/nav"
+      style={{
+        color: isActive(to) ? '#C4756E' : '#2D2A26',
+        fontFamily: "'DM Sans', sans-serif",
+      }}
     >
-      {label}
+      <span className="transition-transform duration-200 inline-block group-hover/nav:-translate-y-0.5">{label}</span>
+      {/* Active dot */}
       {isActive(to) && (
-        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-400" />
+        <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-[2px] rounded-full" style={{ background: '#C4756E' }} />
+      )}
+      {/* Hover underline — slides in */}
+      {!isActive(to) && (
+        <span
+          className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-[2px] rounded-full transition-all duration-200 w-0 group-hover/nav:w-4"
+          style={{ background: '#C4756E', opacity: 0.4 }}
+        />
       )}
     </Link>
   );
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300
-        ${scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-soft border-b border-warm-200'
-          : 'bg-white/90 backdrop-blur-sm border-b border-warm-100'
-        }`}
+      className="sticky top-0 z-50 transition-all duration-300"
+      style={{
+        background: scrolled ? 'rgba(253, 246, 236, 0.95)' : 'rgba(253, 246, 236, 0.85)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: scrolled ? '1px solid #F8EDDA' : '1px solid transparent',
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-18 py-3">
+        <div className="flex justify-between items-center py-3.5">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
             {!logoError ? (
               <img
                 src={currentLogoPath}
-                alt="Storee Logo"
-                className="h-11 w-auto transition-transform duration-300 group-hover:scale-105"
+                alt="Storee"
+                className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
                 onError={handleLogoError}
               />
             ) : (
-              <span className="text-2xl font-display font-bold text-gradient">Storee</span>
+              <span className="font-serif text-2xl font-medium" style={{ color: '#2D2A26' }}>Storee</span>
             )}
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-6">
             {navLink('/', 'Home')}
             {navLink('/products', 'Shop')}
             {isAuthenticated && navLink('/orders', 'Orders')}
@@ -107,13 +111,15 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative p-2.5 rounded-full text-primary-700 hover:text-primary-600 hover:bg-warm-100 transition-all duration-200 group"
+              className="relative p-2.5 rounded-full transition-all duration-200 group/cart"
               aria-label="Shopping cart"
+              style={{ color: '#2D2A26' }}
             >
-              <ShoppingBag className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+              <ShoppingBag className="w-5 h-5 transition-all duration-200 group-hover/cart:scale-110 group-hover/cart:-translate-y-0.5" style={{ transition: 'transform 0.2s cubic-bezier(0.22, 1, 0.36, 1)' }} />
               {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-white rounded-full"
-                  style={{ background: 'linear-gradient(135deg, #D4A045, #e8b558)' }}
+                <span
+                  className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 flex items-center justify-center text-[10px] font-bold text-white rounded-full"
+                  style={{ background: '#C4756E' }}
                 >
                   {itemCount > 9 ? '9+' : itemCount}
                 </span>
@@ -125,54 +131,46 @@ export default function Navbar() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full border border-warm-200 hover:border-primary-200 hover:bg-warm-50 transition-all duration-200"
+                  className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full transition-all duration-200"
+                  style={{ border: '1.5px solid #F8EDDA' }}
                 >
                   {user?.picture && !profilePictureError ? (
                     <img
                       src={user.picture}
                       alt={user.name}
-                      className="w-7 h-7 rounded-full ring-2 ring-gold-200"
+                      className="w-7 h-7 rounded-full"
+                      style={{ border: '2px solid #F8EDDA' }}
                       onError={() => setProfilePictureError(true)}
                     />
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center">
-                      <User className="w-4 h-4 text-primary-600" />
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: '#F8EDDA' }}>
+                      <User className="w-4 h-4" style={{ color: '#6b635b' }} />
                     </div>
                   )}
-                  <ChevronDown className={`w-3.5 h-3.5 text-primary-500 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#8a827a' }} />
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-card border border-warm-200 py-2 z-50 animate-slide-down">
-                    <div className="px-4 py-3 border-b border-warm-100">
-                      <p className="text-sm font-semibold text-primary-900 truncate">{user?.name}</p>
-                      <p className="text-xs text-gray-400 truncate mt-0.5">{user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-52 rounded-2xl py-2 z-50 animate-slide-down" style={{ background: '#FFFDF9', boxShadow: '0 8px 32px -6px rgba(45,42,38,0.14)', border: '1px solid #F8EDDA' }}>
+                    <div className="px-4 py-3" style={{ borderBottom: '1px solid #F8EDDA' }}>
+                      <p className="text-sm font-semibold truncate" style={{ color: '#2D2A26' }}>{user?.name}</p>
+                      <p className="text-xs truncate mt-0.5" style={{ color: '#8a827a' }}>{user?.email}</p>
                     </div>
-                    <Link
-                      to="/orders"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-700 hover:bg-warm-50 transition-colors"
-                    >
-                      <Package className="w-4 h-4 text-gold-400" />
-                      My Orders
+                    <Link to="/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors" style={{ color: '#4a443e' }}>
+                      <Package className="w-4 h-4" style={{ color: '#C4756E' }} /> My Orders
                     </Link>
                     {isAdmin && (
-                      <Link
-                        to="/admin/orders"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-700 hover:bg-warm-50 transition-colors"
-                      >
-                        <Package className="w-4 h-4 text-gold-400" />
-                        Admin Orders
+                      <Link to="/admin/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors" style={{ color: '#4a443e' }}>
+                        <Package className="w-4 h-4" style={{ color: '#C4756E' }} /> Admin Orders
                       </Link>
                     )}
-                    <div className="border-t border-warm-100 mt-1 pt-1">
+                    <div style={{ borderTop: '1px solid #F8EDDA', marginTop: '4px', paddingTop: '4px' }}>
                       <button
                         onClick={() => { logout(); setUserMenuOpen(false); }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-blush-500 hover:bg-blush-50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors"
+                        style={{ color: '#C4756E' }}
                       >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
+                        <LogOut className="w-4 h-4" /> Sign Out
                       </button>
                     </div>
                   </div>
@@ -181,10 +179,9 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/signin"
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200 hover:shadow-gold hover:-translate-y-0.5"
-                style={{ background: 'linear-gradient(135deg, #2C4C64, #3a6d96)' }}
+                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
+                style={{ background: '#3d2b2b', color: '#FDF6EC' }}
               >
-                <User className="w-4 h-4" />
                 Sign In
               </Link>
             )}
@@ -192,7 +189,8 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-full text-primary-700 hover:bg-warm-100 transition-colors"
+              className="md:hidden p-2 rounded-full transition-colors"
+              style={{ color: '#2D2A26' }}
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -202,7 +200,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden pb-4 border-t border-warm-100 animate-slide-down">
+          <div className="md:hidden pb-4 animate-slide-down" style={{ borderTop: '1px solid #F8EDDA' }}>
             <div className="flex flex-col gap-1 pt-3">
               {[
                 { to: '/', label: 'Home' },
@@ -214,11 +212,11 @@ export default function Navbar() {
                   key={to}
                   to={to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-2xl text-sm font-medium transition-colors
-                    ${isActive(to)
-                      ? 'bg-primary-50 text-primary-600'
-                      : 'text-primary-800 hover:bg-warm-100'
-                    }`}
+                  className="px-4 py-3 rounded-xl text-sm font-medium transition-colors"
+                  style={{
+                    color: isActive(to) ? '#C4756E' : '#2D2A26',
+                    background: isActive(to) ? 'rgba(196, 117, 110, 0.06)' : 'transparent',
+                  }}
                 >
                   {label}
                 </Link>
@@ -226,17 +224,13 @@ export default function Navbar() {
               {isAuthenticated ? (
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  className="text-left px-4 py-3 rounded-2xl text-sm font-medium text-blush-500 hover:bg-blush-50 transition-colors flex items-center gap-2"
+                  className="text-left px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2"
+                  style={{ color: '#C4756E' }}
                 >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
+                  <LogOut className="w-4 h-4" /> Sign Out
                 </button>
               ) : (
-                <Link
-                  to="/signin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 rounded-2xl text-sm font-semibold text-primary-600 hover:bg-warm-100 transition-colors"
-                >
+                <Link to="/signin" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-xl text-sm font-semibold" style={{ color: '#C4756E' }}>
                   Sign In
                 </Link>
               )}

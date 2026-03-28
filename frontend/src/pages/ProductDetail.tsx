@@ -14,147 +14,103 @@ import { useParams } from 'react-router-dom';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
-  console.log('[ProductDetail] Component mounted. Slug from URL:', slug);
   const { product, loading, error } = useProduct(slug || '');
-  console.log('[ProductDetail] State:', { loading, error, hasProduct: !!product, productName: product?.name });
   const { addItem } = useCart();
 
-  // All hooks must be called before any conditional returns
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
-  // Get default variant or first variant (calculate before conditional returns)
   const defaultVariant = product?.variants?.find((v) => v.isDefault) || product?.variants?.[0];
   const currentVariant = selectedVariant || defaultVariant;
 
-  // Debug: Log render state
   useEffect(() => {
-    console.log('[ProductDetail] Render state changed:', { slug, loading, error, hasProduct: !!product });
-  }, [slug, loading, error, product]);
-
-  // Initialize selected variant on mount
-  useEffect(() => {
-    if (!selectedVariant && defaultVariant) {
-      setSelectedVariant(defaultVariant);
-    }
+    if (!selectedVariant && defaultVariant) setSelectedVariant(defaultVariant);
   }, [selectedVariant, defaultVariant]);
 
-  // Update modal image index when variant changes
   useEffect(() => {
     if (currentVariant && product?.variants && product.variants.length > 0) {
       const index = product.variants.findIndex((v) => v.id === currentVariant.id);
-      if (index >= 0) {
-        setModalImageIndex(index);
-      }
+      if (index >= 0) setModalImageIndex(index);
     }
   }, [currentVariant, product?.variants]);
 
   const handleAddToCart = () => {
-    if (!product) {
-      toast.error('Product not found');
-      return;
-    }
-
+    if (!product) return;
     addItem(product, quantity, currentVariant ?? undefined);
-    const printLabel = currentVariant ? ` (${currentVariant.colorName})` : '';
-    toast.success(`Added ${quantity} ${product.name}${printLabel} to cart`, {
-      icon: '🛍️',
-      style: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-      },
+    const printLabel = currentVariant ? ` in ${currentVariant.colorName}` : '';
+    toast.success(`${product.name}${printLabel} is in your bag! 🎉`, {
+      icon: '🤍',
+      style: { borderRadius: '14px', background: '#FFFDF9', color: '#2a2220', border: '1px solid #F0E0C6', fontFamily: "'DM Sans', sans-serif", boxShadow: '0 8px 24px -6px rgba(59,50,48,0.12)' },
     });
   };
 
-  // Conditional returns must come AFTER all hooks
   if (loading) return <LoadingSpinner />;
-  if (error) {
-    console.error('ProductDetail error:', error);
-    return <ErrorMessage message={error} />;
-  }
-  if (!product) {
-    console.error('ProductDetail: Product not found for slug:', slug);
-    return <ErrorMessage message="Product not found" />;
-  }
+  if (error) return <ErrorMessage message={error} />;
+  if (!product) return <ErrorMessage message="Product not found" />;
 
-  console.log('ProductDetail: Product loaded:', product.name, 'Variants:', product.variants?.length);
-
-  // Check if product is coming soon (no images or zero stock)
   const isComingSoon = !product.images || product.images.length === 0 || product.stock === 0;
-
-  // Get all variant images for gallery
   const variantImages = product.variants?.map((v) => v.image).filter(Boolean) || [];
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
-
   const displayImage = (hoveredVariant?.image || currentVariant?.image || displayImages[0]) ?? '/placeholder.jpg';
 
   return (
-    <div className="min-h-screen py-12 bg-warm-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Left: Product Images */}
+    <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14">
+
+          {/* ── LEFT: Image ── */}
           <div className="animate-fade-in">
-            <div className="card p-4">
-              {/* Main Image - Updates on hover/selection */}
-              <div
-                className="relative mb-4 overflow-hidden rounded-xl bg-gray-100 group cursor-pointer min-h-[400px] flex items-center justify-center"
-                onClick={() => {
-                  if (displayImages.length > 0) {
-                    // Find the index of the current display image
-                    const currentIndex = displayImages.findIndex((img) => img === displayImage);
-                    setModalImageIndex(currentIndex >= 0 ? currentIndex : 0);
-                    setIsImageModalOpen(true);
-                  }
-                }}
-              >
-                {displayImage ? (
-                  <img
-                    src={displayImage}
-                    alt={product.name}
-                    className="w-full h-auto object-cover transition-all duration-300"
-                    key={displayImage}
-                    onError={(e) => {
-                      console.error('Image failed to load:', displayImage);
-                      (e.target as HTMLImageElement).src = '/placeholder.jpg';
-                    }}
-                  />
-                ) : (
-                  <div className="text-gray-400">No image available</div>
-                )}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
-                  <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium bg-black/50 px-4 py-2 rounded-lg">
-                    Click to enlarge
-                  </span>
-                </div>
-              </div>
+            <div
+              className="relative overflow-hidden rounded-2xl cursor-pointer group"
+              style={{ background: '#F8EDDA' }}
+              onClick={() => {
+                if (displayImages.length > 0) {
+                  const idx = displayImages.findIndex((img) => img === displayImage);
+                  setModalImageIndex(idx >= 0 ? idx : 0);
+                  setIsImageModalOpen(true);
+                }
+              }}
+            >
+              {displayImage ? (
+                <img
+                  src={displayImage}
+                  alt={product.name}
+                  className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  key={displayImage}
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.jpg'; }}
+                />
+              ) : (
+                <div className="aspect-square flex items-center justify-center" style={{ color: '#b0aaa3' }}>No image available</div>
+              )}
             </div>
           </div>
 
-          {/* Right: Product Info */}
+          {/* ── RIGHT: Info ── */}
           <div className="animate-slide-up">
-            <div className="card p-8">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            <div className="sticky top-24">
+
+              {/* Product name */}
+              <h1 className="font-serif font-medium leading-[1.15] mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#2a2220' }}>
                 {product.name}
               </h1>
 
               {/* Price */}
-              <div className="mb-6">
+              <div className="mb-5">
                 <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} />
               </div>
 
               {/* Description */}
-              <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+              <p className="text-sm leading-relaxed mb-7" style={{ color: '#6b635b' }}>
                 {product.description}
               </p>
 
-              {/* Print Selector */}
+              {/* Variant Selector */}
               {product.variants && product.variants.length > 0 && (
-                <div className="mb-8">
+                <div className="mb-7">
                   <ColorSelector
                     variants={product.variants}
                     selectedVariant={selectedVariant}
@@ -165,180 +121,143 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {/* Quantity Selector */}
-              <div className="mb-8">
-                <QuantitySelector
-                  quantity={quantity}
-                  maxQuantity={999}
-                  onQuantityChange={setQuantity}
-                />
+              {/* Quantity */}
+              <div className="mb-7">
+                <QuantitySelector quantity={quantity} maxQuantity={999} onQuantityChange={setQuantity} />
               </div>
 
-              {/* Add to Cart Button */}
+              {/* Add to Cart */}
               <button
                 onClick={handleAddToCart}
                 disabled={isComingSoon}
-                className={`w-full text-lg py-4 flex items-center justify-center gap-2 mb-6 ${
-                  isComingSoon
-                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                    : 'btn-primary'
+                className={`w-full text-sm py-3.5 flex items-center justify-center gap-2 mb-7 font-semibold rounded-full transition-all duration-200 bounce-tap ${
+                  isComingSoon ? 'cursor-not-allowed' : ''
                 }`}
+                style={{
+                  background: isComingSoon ? '#d1cdc8' : '#C4756E',
+                  color: isComingSoon ? '#8a827a' : '#fff',
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
               >
                 {isComingSoon ? (
-                  <>
-                    <span className="text-xl">🚀</span>
-                    Coming Soon
-                  </>
+                  'Coming Soon — Stay Tuned! ✨'
                 ) : (
                   <>
-                    <ShoppingCart className="w-5 h-5" />
-                    Add to Cart
+                    <ShoppingCart className="w-4 h-4" />
+                    Add to Bag
                   </>
                 )}
               </button>
 
+              {/* Trust badges — horizontal */}
+              <div className="flex flex-wrap gap-x-5 gap-y-2 mb-7 pb-7" style={{ borderBottom: '1px solid #F8EDDA' }}>
+                {[
+                  { icon: Truck, label: FREE_SHIPPING_MESSAGE },
+                  { icon: Shield, label: 'Secure Payment' },
+                  { icon: RotateCcw, label: RETURN_POLICY_MESSAGE },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} className="flex items-center gap-1.5 text-xs" style={{ color: '#8a827a' }}>
+                    <Icon className="w-3.5 h-3.5" style={{ color: '#C4756E' }} />
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+
               {/* Features */}
               {product.features && product.features.length > 0 && (
-                <div className="mb-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                  <h3 className="font-bold text-xl mb-6 text-gray-900">Product Features</h3>
-                  <div className="space-y-4">
-                    {product.features.map((feature, index) => {
-                      // Map feature titles to their full descriptions
-                      const featureDescriptions: Record<string, string> = {
-                        'Multipurpose Storage': 'Designed with versatility in mind, their practical sizes and portable form make them suitable for storing a variety of essentials, helping you stay organized and clutter-free',
-                        'Water-Resistant Protection': 'Made using water-resistant fabric, they provide reliable protection against spills and moisture, keeping your essentials safe and dry whether you\'re at home or on the move',
-                        'Durable & Easy to Wash': 'Crafted from high-quality, durable materials, these pouches are designed to withstand everyday use. They are easy to clean and maintain, ensuring long-lasting performance with minimal effort',
-                        'Perfect for Travel': 'Compact, lightweight, and functional, these pouches are ideal for travel and daily use. Easy to slip into a handbag, backpack, or suitcase, they ensure hassle-free organization wherever you go',
-                        'Stylish & Functional': 'Featuring trendy designs, they seamlessly blend style with utility, adding a fashionable touch to your everyday essentials',
-                      };
-
-                      const description = featureDescriptions[feature] || feature;
-
-                      return (
-                        <div key={index} className="bg-white p-4 rounded-xl border border-orange-100 shadow-warm">
-                          <div className="flex items-start gap-3">
-                            <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <h4 className="font-semibold text-gray-900 mb-1">{feature}</h4>
-                              <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                <div>
+                  <h3 className="font-serif text-base font-medium mb-4" style={{ color: '#2a2220' }}>Why you'll love it 🌸</h3>
+                  <div className="space-y-2.5">
+                    {product.features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-2.5">
+                        <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#8BA88A' }} />
+                        <span className="text-sm leading-relaxed" style={{ color: '#4a443e' }}>{feature}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Free Delivery Banner */}
-              <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
+              {/* Shipping info */}
+              <div className="mt-7 p-4 rounded-xl" style={{ background: 'rgba(139,168,138,0.06)', border: '1px solid rgba(139,168,138,0.12)' }}>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Truck className="w-5 h-5 text-white" />
-                  </div>
+                  <Truck className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#8BA88A' }} />
                   <div>
-                    <div className="flex items-center gap-2 text-green-700 mb-1">
-                      <span className="font-bold">{FREE_SHIPPING_MESSAGE}</span>
-                    </div>
-                    <div className="text-sm text-green-600">{SHIPPING_INFO}</div>
+                    <p className="text-xs font-semibold" style={{ color: '#2a2220' }}>{FREE_SHIPPING_MESSAGE}</p>
+                    <p className="text-xs mt-0.5" style={{ color: '#6b635b' }}>{SHIPPING_INFO}</p>
+                    <p className="font-hand text-sm mt-1" style={{ color: '#8BA88A' }}>your mailbox will thank you</p>
                   </div>
                 </div>
               </div>
 
-              {/* Trust Badges */}
-              <div className="mt-6 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Shield className="w-4 h-4 text-primary-600" />
-                  <span>Secure Payment</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Truck className="w-4 h-4 text-primary-600" />
-                  <span>Free Shipping above ₹1,000</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <RotateCcw className="w-4 h-4 text-primary-600" />
-                  <span>{RETURN_POLICY_MESSAGE}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span>Quality Assured</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Image Modal */}
+      {/* ── Image Modal ── */}
       {isImageModalOpen && displayImages.length > 0 && (
         <div
-          className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in"
+          style={{ background: 'rgba(45,42,38,0.95)' }}
           onClick={() => setIsImageModalOpen(false)}
         >
           <div
-            className="relative max-w-5xl max-h-screen bg-white rounded-2xl p-6 shadow-2xl"
+            className="relative max-w-4xl max-h-screen rounded-2xl p-5"
+            style={{ background: '#FFFDF9' }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setIsImageModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-800 hover:text-gray-600 p-2 rounded-full bg-white/90 hover:bg-white transition-all shadow-lg z-10"
-              aria-label="Close image gallery"
+              className="absolute top-3 right-3 p-2 rounded-full z-10 transition-colors"
+              style={{ background: '#F8EDDA', color: '#2a2220' }}
+              aria-label="Close"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
 
             <div className="relative">
               <img
                 src={displayImages[modalImageIndex]}
                 alt={product.name}
-                className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
+                className="max-w-full max-h-[78vh] object-contain mx-auto rounded-xl"
               />
 
               {displayImages.length > 1 && (
                 <>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModalImageIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
-                    }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all"
-                    aria-label="Previous image"
+                    onClick={(e) => { e.stopPropagation(); setModalImageIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length); }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                    style={{ background: 'rgba(253,246,236,0.9)', color: '#2a2220', boxShadow: '0 2px 8px -2px rgba(0,0,0,0.1)' }}
+                    aria-label="Previous"
                   >
-                    <ChevronLeft className="w-6 h-6 text-gray-800" />
+                    <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModalImageIndex((prev) => (prev + 1) % displayImages.length);
-                    }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all"
-                    aria-label="Next image"
+                    onClick={(e) => { e.stopPropagation(); setModalImageIndex((prev) => (prev + 1) % displayImages.length); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                    style={{ background: 'rgba(253,246,236,0.9)', color: '#2a2220', boxShadow: '0 2px 8px -2px rgba(0,0,0,0.1)' }}
+                    aria-label="Next"
                   >
-                    <ChevronRight className="w-6 h-6 text-gray-800" />
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 </>
               )}
             </div>
 
             {displayImages.length > 1 && (
-              <div className="flex gap-3 mt-6 justify-center overflow-x-auto pb-2">
+              <div className="flex gap-2 mt-4 justify-center overflow-x-auto pb-1">
                 {displayImages.map((img, index) => (
                   <button
                     key={index}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModalImageIndex(index);
+                    onClick={(e) => { e.stopPropagation(); setModalImageIndex(index); }}
+                    className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden transition-all"
+                    style={{
+                      border: modalImageIndex === index ? '2px solid #C4756E' : '2px solid #F8EDDA',
+                      opacity: modalImageIndex === index ? 1 : 0.6,
                     }}
-                    className={`w-20 h-20 flex-shrink-0 p-1 border-2 rounded-lg transition-all ${modalImageIndex === index
-                      ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
-                      : 'border-gray-300 hover:border-gray-400'
-                      }`}
                   >
-                    <img
-                      src={img}
-                      alt=""
-                      className="w-full h-full object-cover rounded"
-                    />
+                    <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

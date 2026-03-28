@@ -3,29 +3,24 @@ import { useProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/product/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { Truck, Shield, RotateCcw, Star, Instagram, Sparkles, ArrowRight, Package } from 'lucide-react';
-
-const trustItems = [
-  { icon: Truck,     headline: 'Free Shipping',        sub: 'On orders above ₹1,000' },
-  { icon: RotateCcw, headline: '7-Day Replacement',    sub: 'Hassle-free, no questions' },
-  { icon: Shield,    headline: 'Secure Payments',      sub: '100% safe & encrypted' },
-  { icon: Package,   headline: 'Quality Assured',      sub: 'Tested & trusted products' },
-];
+import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
 
 const reviews = [
   {
     name: 'Priya Sharma',
-    location: 'Mumbai, Maharashtra',
-    text: '"The 7 Days Pack Kit has been a lifesaver for our family trips! My kids can now pack their own clothes for the week, and everything stays so organised."',
+    location: 'Mumbai',
+    text: 'The 7 Days Pack Kit has been a lifesaver for our family trips! My kids can now pack their own clothes for the week. Total game-changer.',
     initial: 'P',
     rating: 5,
+    product: '7 Days Pack Kit',
   },
   {
     name: 'Rajesh Kumar',
-    location: 'Bangalore, Karnataka',
-    text: '"Absolutely love the quality! The multipurpose pouches are perfect for organising my daughter\'s art supplies. Highly recommend to every parent!"',
+    location: 'Bangalore',
+    text: 'My daughter refuses to use anything else for her art supplies now. The quality is incredible — and the lion print? She\'s obsessed.',
     initial: 'R',
     rating: 5,
+    product: 'Multipurpose Pouch',
   },
 ];
 
@@ -33,26 +28,28 @@ export default function Home() {
   const { products, loading, error } = useProducts();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
 
-      {/* ── MARQUEE STRIP ─────────────────────────── */}
-      <div className="overflow-hidden py-3.5" style={{ background: 'linear-gradient(135deg, #9b6b7a, #c4748a, #9b6b7a)' }}>
+      {/* ── MARQUEE ── */}
+      <div className="overflow-hidden py-2.5" style={{ background: '#C4756E' }}>
         <div className="marquee-track select-none">
           {[...Array(2)].map((_, pass) => (
             <div key={pass} className="flex items-center">
               {[
-                '✨ New Arrivals',
-                '🌈 Cute Prints',
-                '🚚 Free Shipping above ₹1,000',
-                '🎀 Gifts They\'ll Love',
-                '💧 Water-Resistant',
-                '🌸 Limited Editions',
-                '⭐ 5-Star Quality',
-                '🛍️ Shop Now',
+                '✨ New prints just dropped',
+                '🎀 Cute enough to gift',
+                '🚚 Free shipping above ₹1,000',
+                '🌊 Water-resistant magic',
+                '🤍 Loved by 2,000+ families',
+                '🇮🇳 Made in India with love',
               ].map((item) => (
-                <span key={item} className="flex items-center gap-3 px-6 text-sm font-semibold tracking-wide whitespace-nowrap" style={{ color: '#fdf4f4' }}>
+                <span
+                  key={item}
+                  className="flex items-center gap-5 px-7 text-xs font-medium tracking-wide whitespace-nowrap"
+                  style={{ color: '#fff', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.04em' }}
+                >
                   {item}
-                  <span style={{ color: '#fdf4f4', opacity: 0.4 }}>◆</span>
+                  <span style={{ color: 'rgba(255,255,255,0.25)' }}>&diams;</span>
                 </span>
               ))}
             </div>
@@ -60,27 +57,56 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── HERO ──────────────────────────────────── */}
-      <section className="w-full">
+      {/* ── HERO — image + text overlay ── */}
+      <section className="relative w-full">
         <img
           src="/images/banner/1.jpeg"
-          alt="Storee — Home to Your Belongings"
+          alt="Storee — Carry beautifully"
           className="w-full h-auto object-cover block"
         />
+        {/* Minimal text — just bottom edge */}
+        <div className="absolute bottom-0 left-0 right-0" style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.6) 0%, rgba(42,34,32,0.2) 60%, transparent 100%)', padding: '5rem 0 0' }}>
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-4 sm:pb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="font-hand text-base sm:text-lg" style={{ color: 'rgba(255,255,255,0.85)' }}>carry beautifully ✨</p>
+              <p className="font-serif font-medium text-base sm:text-xl" style={{ color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+                Cute bags &amp; pouches for little adventurers
+              </p>
+            </div>
+            <Link
+              to="/products"
+              className="flex-shrink-0 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 bounce-tap arrow-nudge"
+              style={{ background: '#C4756E', color: '#fff', boxShadow: '0 4px 12px -4px rgba(196,117,110,0.4)' }}
+            >
+              Shop Now <ArrowRight className="w-3.5 h-3.5 arrow-icon" />
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* ── TRUST BAR ─────────────────────────────── */}
-      <section className="bg-white border-y border-warm-200">
-        <div className="max-w-6xl mx-auto px-4 py-2">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {trustItems.map(({ icon: Icon, headline, sub }) => (
-              <div key={headline} className="flex flex-col items-center text-center gap-2 py-1">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(212,160,69,0.10)' }}>
-                  <Icon className="w-5 h-5" style={{ color: '#D4A045' }} />
+      {/* ── TRUST STRIP — hoverable items ── */}
+      <section style={{ background: '#FFFDF9', borderBottom: '1px solid #F0E0C6' }}>
+        <div className="max-w-5xl mx-auto px-4 py-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { icon: Truck,     label: 'Free Shipping', sub: 'above ₹1,000' },
+              { icon: RotateCcw, label: '7-Day Returns', sub: 'no drama, promise' },
+              { icon: Shield,    label: 'Secure Payments', sub: '100% safe' },
+              { icon: Heart,     label: 'Made with Love', sub: 'in India 🇮🇳' },
+            ].map(({ icon: Icon, label, sub }) => (
+              <div
+                key={label}
+                className="flex items-center gap-3 justify-center py-2.5 px-3 rounded-xl transition-all duration-200 cursor-default group"
+                style={{ background: 'transparent' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(196,117,110,0.04)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+              >
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ background: 'rgba(196,117,110,0.1)' }}>
+                  <Icon className="w-4 h-4" style={{ color: '#C4756E' }} />
                 </div>
                 <div>
-                  <p className="text-sm font-700 font-semibold leading-snug" style={{ color: '#1c3243' }}>{headline}</p>
-                  <p className="text-xs font-medium leading-snug mt-0.5" style={{ color: '#7a8fa0' }}>{sub}</p>
+                  <p className="text-xs font-semibold leading-tight" style={{ color: '#2a2220' }}>{label}</p>
+                  <p className="text-[0.65rem] font-medium leading-tight mt-0.5" style={{ color: '#a09590' }}>{sub}</p>
                 </div>
               </div>
             ))}
@@ -88,22 +114,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURED PRODUCTS ─────────────────────── */}
-      <section className="pt-16 pb-14 bg-warm-pattern">
+      {/* ── FEATURED PRODUCTS ── */}
+      <section className="pt-16 pb-16 relative bg-warm-pattern">
+        {/* Floating doodles */}
+        <div className="absolute top-12 right-8 pointer-events-none hidden lg:block float-gentle" style={{ opacity: 0.07 }}>
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none"><path d="M24 4l4.5 13.8H43l-11.7 8.5 4.5 13.8L24 31.6l-11.8 8.5 4.5-13.8L5 17.8h14.5z" stroke="#C4756E" strokeWidth="1.5" fill="none"/></svg>
+        </div>
+        <div className="absolute bottom-20 left-6 pointer-events-none hidden lg:block float-gentle-delay" style={{ opacity: 0.05 }}>
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M16 4C16 4 20 10 26 12C20 14 16 20 16 20C16 20 12 14 6 12C12 10 16 4 16 4Z" stroke="#C9A96E" strokeWidth="1.5" fill="none"/></svg>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">
             <div>
-              <p className="section-label mb-2 flex items-center gap-2">
-                <Sparkles className="w-3 h-3" /> Handpicked for you
-              </p>
-              <h2 className="section-title">Our Favourites ✨</h2>
-              <p className="text-gray-500 mt-2 text-sm max-w-md leading-relaxed">
-                Cute, practical, and made to carry everything you love.
+              <span className="section-label mb-2 block">Handpicked for you</span>
+              <h2 className="section-title">Cute picks ✨</h2>
+              <p className="mt-2 text-sm max-w-md leading-relaxed" style={{ color: '#8a7e78' }}>
+                Our best-sellers, picked by real families. Cute prints, clever pockets, smiles guaranteed.
               </p>
             </div>
-            <Link to="/products" className="btn-outline text-sm px-5 py-2.5 self-start sm:self-auto flex-shrink-0">
-              View All <ArrowRight className="w-3.5 h-3.5" />
+            <Link to="/products" className="btn-outline text-xs px-5 py-2.5 self-start sm:self-auto flex-shrink-0 arrow-nudge">
+              See all goodies <ArrowRight className="w-3.5 h-3.5 arrow-icon" />
             </Link>
           </div>
 
@@ -119,88 +151,93 @@ export default function Home() {
               ))}
             </div>
           )}
-
-          {!loading && !error && products.length === 0 && (
-            <p className="text-center text-gray-400 py-12">No products available at the moment.</p>
-          )}
         </div>
       </section>
 
-      {/* ── WHY STOREE ────────────────────────────── */}
-      <section className="py-14 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <p className="section-label mb-2">The Storee Difference</p>
-            <h2 className="section-title">Why you'll love us 🤍</h2>
+      {/* ── WHY STOREE ── */}
+      <section className="py-16" style={{ background: '#FFFDF9' }}>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="section-label mb-2 block">Why us?</span>
+            <h2 className="section-title">Small details, big difference 🤍</h2>
+            <p className="font-hand text-lg mt-2" style={{ color: '#C4756E', opacity: 0.7 }}>(the kind you'll notice on day 50, not just day 1)</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
-                emoji: '🚚',
-                title: 'Free Delivery',
-                desc: 'Free Pan India delivery on all orders above ₹1,000. Fast, reliable, right to your door.',
-                bg: '#f0fdf4',
+                emoji: '🌈',
+                title: 'Prints that spark joy',
+                desc: 'Lions, unicorns, rainbows — every print is designed to make kids smile and parents say "okay, that\'s actually cute."',
+                accent: '#C4756E',
+                bg: 'rgba(196,117,110,0.05)',
               },
               {
-                emoji: '🔒',
-                title: 'Secure Payment',
-                desc: 'Every transaction is fully protected. Shop with complete peace of mind, always.',
-                bg: '#eff6ff',
+                emoji: '🧸',
+                title: 'Tough enough for tiny humans',
+                desc: 'Water-resistant, machine-washable, and built to survive juice spills, mud, and the occasional tantrum throw.',
+                accent: '#8BA88A',
+                bg: 'rgba(139,168,138,0.06)',
               },
               {
-                emoji: '🔄',
-                title: 'Easy Replacements',
-                desc: 'Got an issue? We offer hassle-free replacements with a simple unboxing video.',
-                bg: '#fff1f2',
+                emoji: '🎒',
+                title: 'A pocket for everything',
+                desc: 'We know the struggle of "where did I put it?" — that\'s why every pouch has smart compartments that actually make sense.',
+                accent: '#C9A96E',
+                bg: 'rgba(201,169,110,0.06)',
               },
-            ].map(({ emoji, title, desc, bg }) => (
+            ].map(({ emoji, title, desc, accent, bg }) => (
               <div
                 key={title}
-                className="group p-7 rounded-3xl border border-warm-200 hover:border-primary-200 hover:shadow-card transition-all duration-300"
-                style={{ backgroundColor: bg }}
+                className="p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 group"
+                style={{ background: bg, boxShadow: '0 2px 12px -3px rgba(59,50,48,0.04)' }}
               >
-                <div className="text-4xl mb-4">{emoji}</div>
-                <h3 className="font-bold text-lg text-primary-900 mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                <div className="text-2xl mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 inline-block">{emoji}</div>
+                <h3 className="font-serif text-lg font-medium mb-2" style={{ color: '#2a2220' }}>{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#6b5f58' }}>{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── REVIEWS ───────────────────────────────── */}
-      <section className="py-14 bg-warm-pattern">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── REVIEWS ── */}
+      <section className="py-16 bg-warm-pattern">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="section-label mb-2">Happy Customers</p>
-            <h2 className="section-title">Loved across India 🇮🇳</h2>
+            <span className="section-label mb-2 block">Real talk</span>
+            <h2 className="section-title">Don't take our word for it 🤍</h2>
+            <p className="font-hand text-lg mt-1" style={{ color: '#C9A96E', opacity: 0.7 }}>(okay maybe take theirs)</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {reviews.map((r) => (
               <div
                 key={r.name}
-                className="bg-white rounded-3xl p-7 border border-warm-200 hover:shadow-card transition-all duration-300 hover:-translate-y-1"
+                className="rounded-2xl p-7 transition-all duration-300 hover:-translate-y-0.5"
+                style={{ background: '#FFFDF9', boxShadow: '0 2px 16px -4px rgba(59,50,48,0.06)' }}
               >
-                <div className="flex gap-0.5 mb-4">
+                <div className="flex gap-0.5 mb-3">
                   {Array.from({ length: r.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#D4A045' }} />
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: '#C9A96E' }} />
                   ))}
                 </div>
-                <p className="text-primary-800 text-base leading-relaxed mb-5 font-medium">
-                  {r.text}
+                <p className="text-sm leading-relaxed mb-2" style={{ color: '#3b3230' }}>
+                  &ldquo;{r.text}&rdquo;
+                </p>
+                <p className="text-xs font-medium mb-5" style={{ color: '#C4756E' }}>
+                  Bought: {r.product}
                 </p>
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg, #2C4C64, #3a6d96)' }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-serif text-sm flex-shrink-0"
+                    style={{ background: 'linear-gradient(135deg, #C4756E, #d4918b)' }}
                   >
                     {r.initial}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm text-primary-900">{r.name}</p>
-                    <p className="text-xs text-gray-400">{r.location}</p>
+                    <p className="text-sm font-semibold" style={{ color: '#2a2220' }}>{r.name}</p>
+                    <p className="text-xs" style={{ color: '#a09590' }}>{r.location}</p>
                   </div>
                 </div>
               </div>
@@ -209,15 +246,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INSTAGRAM ─────────────────────────────── */}
-      <section className="py-14 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── INSTAGRAM ── */}
+      <section className="py-16" style={{ background: '#FFFDF9' }}>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="section-label mb-2 flex items-center justify-center gap-2">
-              <Instagram className="w-3 h-3" /> Follow along
-            </p>
+            <span className="section-label mb-2 flex items-center justify-center gap-2">
+              <Instagram className="w-3 h-3" /> Join the fam
+            </span>
             <h2 className="section-title">@thestoree.in</h2>
-            <p className="text-sm text-gray-400 mt-2">See how people style their Storee finds</p>
+            <p className="text-sm mt-2" style={{ color: '#8a7e78' }}>See the cuteness in action 🌸</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto">
@@ -225,7 +262,7 @@ export default function Home() {
               'https://www.instagram.com/reel/DVdCXpwiBU7/embed',
               'https://www.instagram.com/reel/DVaZ2p6iA8J/embed',
             ].map((src, i) => (
-              <div key={i} className="rounded-3xl overflow-hidden border border-warm-200" style={{ boxShadow: '0 4px 24px -6px rgba(44,76,100,0.12)' }}>
+              <div key={i} className="rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 20px -4px rgba(59,50,48,0.08)' }}>
                 <iframe src={src} width="100%" height="520" frameBorder="0" scrolling="no" allowTransparency={true} title={`Reel ${i + 1}`} />
               </div>
             ))}
@@ -236,25 +273,35 @@ export default function Home() {
               href="https://www.instagram.com/thestoree.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline inline-flex items-center gap-2"
+              className="btn-outline inline-flex items-center gap-2 text-sm arrow-nudge"
             >
               <Instagram className="w-4 h-4" />
-              Follow us on Instagram
+              Follow the cuteness <span className="arrow-icon">&rarr;</span>
             </a>
           </div>
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ────────────────────────────── */}
-      <section className="py-14 bg-warm-pattern border-t border-warm-200">
-        <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="section-title mb-4">Find your perfect pouch 🛍️</h2>
-          <p className="text-gray-500 text-sm mb-8 leading-relaxed max-w-md mx-auto">
-            Cute prints, durable quality, and thoughtful designs — everything you need to carry your world in style.
+      {/* ── BOTTOM CTA ── */}
+      <section className="relative py-16 overflow-hidden" style={{ background: 'linear-gradient(135deg, #C4756E 0%, #d4918b 50%, #C4756E 100%)' }}>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-10 -right-10 w-80 h-80 rounded-full opacity-[0.08]" style={{ background: 'radial-gradient(circle, #fff 0%, transparent 70%)' }} />
+          <div className="absolute -bottom-10 -left-10 w-60 h-60 rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, #fff 0%, transparent 70%)' }} />
+        </div>
+        <div className="max-w-2xl mx-auto px-4 text-center relative">
+          <p className="font-hand text-2xl mb-3" style={{ color: 'rgba(255,255,255,0.8)' }}>psst... your perfect pouch is waiting 🎀</p>
+          <h2 className="font-serif font-medium leading-tight mb-5" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#fff' }}>
+            Ready to find yours?
+          </h2>
+          <p className="text-sm mb-8 leading-relaxed max-w-sm mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            The kind of bag that makes strangers ask "where did you get that?"
           </p>
-          <Link to="/products" className="btn-gold px-10 py-4 text-base inline-flex items-center gap-2 group">
-            Shop the Collection
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 bounce-tap arrow-nudge"
+            style={{ background: '#fff', color: '#C4756E', boxShadow: '0 4px 20px -4px rgba(0,0,0,0.15)' }}
+          >
+            Shop the Collection <ArrowRight className="w-4 h-4 arrow-icon" />
           </Link>
         </div>
       </section>
