@@ -1,4 +1,4 @@
-import { CheckCircle, Home, Package, ShoppingBag, Truck } from 'lucide-react';
+import { CheckCircle, Home, Package, ShoppingBag } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 export default function OrderConfirmation() {

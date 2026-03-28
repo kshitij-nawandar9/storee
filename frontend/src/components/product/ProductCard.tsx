@@ -83,7 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                   e.preventDefault();
                   e.stopPropagation();
                   addItem(product, 1, defaultVariant ?? undefined);
-                  toast((t) => (
+                  toast(() => (
                     <span className="flex items-center gap-2 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                       <Heart className="w-4 h-4 heart-pop" style={{ color: '#C4756E', fill: '#C4756E' }} />
                       <span>Added to your bag! 🎉</span>

@@ -202,7 +202,7 @@ export default function Home() {
                 accent: '#C9A96E',
                 bg: 'rgba(201,169,110,0.06)',
               },
-            ].map(({ emoji, title, desc, accent, bg }) => (
+            ].map(({ emoji, title, desc, bg }) => (
               <div
                 key={title}
                 className="p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 group"
