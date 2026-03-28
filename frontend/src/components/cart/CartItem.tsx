@@ -10,33 +10,42 @@ interface CartItemProps {
 
 export default function CartItem({ item }: CartItemProps) {
   const { removeItem, updateQuantity } = useCart();
-  const { product, quantity } = item;
+  const { product, quantity, variant } = item;
 
   const handleQuantityChange = (newQuantity: number) => {
-    updateQuantity(product.id, newQuantity);
+    updateQuantity(product.id, newQuantity, variant?.id);
   };
 
   const handleRemove = () => {
-    removeItem(product.id);
+    removeItem(product.id, variant?.id);
   };
 
-  const primaryImage =
-    product.images?.find((img) => img.isPrimary) || product.images?.[0];
+  const displayImage =
+    variant?.image ||
+    product.images?.find((img) => img.isPrimary)?.url ||
+    product.images?.[0]?.url;
+
+  const displayPrice = (variant?.price ?? product.basePrice) * quantity;
 
   return (
     <div className="flex gap-6 p-6 hover:bg-gray-50 transition-colors">
       {/* Product Image */}
       <div className="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
         <img
-          src={primaryImage?.url || '/placeholder.jpg'}
-          alt={product.name}
+          src={displayImage || '/placeholder.jpg'}
+          alt={variant ? `${product.name} - ${variant.colorName}` : product.name}
           className="w-full h-full object-cover"
         />
       </div>
 
       {/* Product Info */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-bold text-lg mb-2 text-gray-900">{product.name}</h3>
+        <h3 className="font-bold text-lg mb-1 text-gray-900">{product.name}</h3>
+        {variant && (
+          <p className="text-sm text-primary-600 font-medium mb-1">
+            Print: {variant.colorName}
+          </p>
+        )}
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">{product.description}</p>
 
         {/* Quantity Selector */}
@@ -49,7 +58,7 @@ export default function CartItem({ item }: CartItemProps) {
 
       {/* Price and Remove */}
       <div className="flex flex-col items-end justify-between min-w-[120px]">
-        <PriceDisplay regularPrice={product.basePrice * quantity} />
+        <PriceDisplay regularPrice={displayPrice} />
         <button
           onClick={handleRemove}
           className="text-red-600 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all duration-200 group"

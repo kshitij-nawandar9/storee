@@ -1,5 +1,6 @@
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ColorSelector from '@/components/product/ColorSelector';
 import PriceDisplay from '@/components/product/PriceDisplay';
 import QuantitySelector from '@/components/product/QuantitySelector';
 import { useCart } from '@/hooks/useCart';
@@ -21,9 +22,6 @@ export default function ProductDetail() {
   // All hooks must be called before any conditional returns
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
@@ -59,8 +57,9 @@ export default function ProductDetail() {
       return;
     }
 
-    addItem(product, quantity);
-    toast.success(`Added ${quantity} ${product.name} to cart`, {
+    addItem(product, quantity, currentVariant ?? undefined);
+    const printLabel = currentVariant ? ` (${currentVariant.colorName})` : '';
+    toast.success(`Added ${quantity} ${product.name}${printLabel} to cart`, {
       icon: '🛍️',
       style: {
         borderRadius: '10px',
@@ -91,18 +90,7 @@ export default function ProductDetail() {
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
 
-  const hasVariants = variantImages.length > 0;
-
-  // Compute display image based on hover or selection
-  const displayImage = hasVariants
-    ? (hoveredVariant?.image ||
-       currentVariant?.image ||
-       displayImages[0] ||
-       '/placeholder.jpg')
-    : (hoveredImageIndex !== null
-        ? displayImages[hoveredImageIndex]
-        : displayImages[selectedImageIndex]) ||
-      '/placeholder.jpg';
+  const displayImage = (currentVariant?.image || displayImages[0]) ?? '/placeholder.jpg';
 
   return (
     <div className="min-h-screen py-12 bg-warm-50">
@@ -143,54 +131,6 @@ export default function ProductDetail() {
                   </span>
                 </div>
               </div>
-
-              {/* Thumbnail Gallery */}
-              {displayImages.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                  {displayImages.map((img, index) => {
-                    const variant = hasVariants ? product.variants?.[index] : undefined;
-                    const isActive = hasVariants
-                      ? variant?.id === (hoveredVariant?.id || currentVariant?.id)
-                      : (hoveredImageIndex !== null ? index === hoveredImageIndex : index === selectedImageIndex);
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          if (hasVariants && variant) {
-                            setSelectedVariant(variant);
-                          } else {
-                            setSelectedImageIndex(index);
-                          }
-                        }}
-                        onMouseEnter={() => {
-                          if (hasVariants && variant) {
-                            setHoveredVariant(variant);
-                          } else {
-                            setHoveredImageIndex(index);
-                          }
-                        }}
-                        onMouseLeave={() => {
-                          if (hasVariants) {
-                            setHoveredVariant(null);
-                          } else {
-                            setHoveredImageIndex(null);
-                          }
-                        }}
-                        className={`flex-shrink-0 p-1 border-2 rounded-lg transition-all overflow-hidden ${isActive
-                          ? 'border-primary-500 ring-2 ring-primary-200 shadow-md'
-                          : 'border-gray-200 hover:border-gray-400'
-                          }`}
-                      >
-                        <img
-                          src={img}
-                          alt={`${product.name} ${index + 1}`}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
             </div>
           </div>
 
@@ -210,6 +150,18 @@ export default function ProductDetail() {
               <p className="text-gray-700 mb-8 text-lg leading-relaxed">
                 {product.description}
               </p>
+
+              {/* Print Selector */}
+              {product.variants && product.variants.length > 0 && (
+                <div className="mb-8">
+                  <ColorSelector
+                    variants={product.variants}
+                    selectedVariant={selectedVariant}
+                    onVariantSelect={setSelectedVariant}
+                    productName={product.name}
+                  />
+                </div>
+              )}
 
               {/* Quantity Selector */}
               <div className="mb-8">

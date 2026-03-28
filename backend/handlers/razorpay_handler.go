@@ -61,9 +61,11 @@ type VerifyPaymentRequest struct {
 func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	var req CreateOrderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid request data", err)
+		log.Printf("CreateOrder validation error: %v | Body: amount=%v, customer=%+v, address=%+v", err, req.Amount, req.Customer, req.Address)
+		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid request data: "+err.Error(), err)
 		return
 	}
+	log.Printf("CreateOrder request: amount=%d, items=%d, customer=%s <%s>", req.Amount, len(req.Items), req.Customer.Name, req.Customer.Email)
 
 	// Generate unique 10-digit alphanumeric order ID
 	// Retry if there's a collision (extremely rare with 36^10 possibilities)

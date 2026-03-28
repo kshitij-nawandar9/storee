@@ -1,30 +1,35 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Product, CartItem } from '@/types';
+import type { Product, ProductVariant, CartItem } from '@/types';
+
+// Unique key combining product + variant (or just product if no variant)
+function cartKey(productId: string, variantId?: string): string {
+  return variantId ? `${productId}::${variantId}` : productId;
+}
 
 interface CartStore {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addItem: (product: Product, quantity?: number, variant?: ProductVariant) => void;
+  removeItem: (productId: string, variantId?: string) => void;
+  updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
-  getItem: (productId: string) => CartItem | undefined;
+  getItem: (productId: string, variantId?: string) => CartItem | undefined;
 }
 
 export const useCart = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      addItem: (product, quantity = 1) => {
+      addItem: (product, quantity = 1, variant?) => {
         const items = get().items;
+        const key = cartKey(product.id, variant?.id);
         const existingItemIndex = items.findIndex(
-          (item) => item.product.id === product.id
+          (item) => cartKey(item.product.id, item.variant?.id) === key
         );
 
         if (existingItemIndex >= 0) {
-          // Update existing item quantity
           const updatedItems = [...items];
           updatedItems[existingItemIndex] = {
             ...updatedItems[existingItemIndex],
@@ -32,46 +37,56 @@ export const useCart = create<CartStore>()(
           };
           set({ items: updatedItems });
         } else {
-          // Add new item
           set({
             items: [
               ...items,
               {
                 product,
                 quantity,
+                variant,
               },
             ],
           });
         }
       },
-      removeItem: (productId) => {
+      removeItem: (productId, variantId?) => {
+        const key = cartKey(productId, variantId);
         set({
-          items: get().items.filter((item) => item.product.id !== productId),
+          items: get().items.filter(
+            (item) => cartKey(item.product.id, item.variant?.id) !== key
+          ),
         });
       },
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (productId, quantity, variantId?) => {
         if (quantity <= 0) {
-          get().removeItem(productId);
+          get().removeItem(productId, variantId);
           return;
         }
+        const key = cartKey(productId, variantId);
         set({
           items: get().items.map((item) =>
-            item.product.id === productId ? { ...item, quantity } : item
+            cartKey(item.product.id, item.variant?.id) === key
+              ? { ...item, quantity }
+              : item
           ),
         });
       },
       clearCart: () => set({ items: [] }),
       getTotal: () => {
         return get().items.reduce(
-          (total, item) => total + item.product.basePrice * item.quantity,
+          (total, item) =>
+            total + (item.variant?.price ?? item.product.basePrice) * item.quantity,
           0
         );
       },
       getItemCount: () => {
         return get().items.reduce((count, item) => count + item.quantity, 0);
       },
-      getItem: (productId) => {
-        return get().items.find((item) => item.product.id === productId);
+      getItem: (productId, variantId?) => {
+        const key = cartKey(productId, variantId);
+        return get().items.find(
+          (item) => cartKey(item.product.id, item.variant?.id) === key
+        );
       },
     }),
     {

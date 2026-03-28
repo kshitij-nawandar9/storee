@@ -13,6 +13,7 @@ import SignIn from '@/pages/SignIn';
 import AdminOrders from '@/pages/AdminOrders';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-grow">

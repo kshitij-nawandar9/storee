@@ -229,15 +229,19 @@ export default function OrderHistory() {
                   <div className="space-y-2">
                     {Array.isArray(order.items) && order.items.length > 0 ? (
                       order.items.map((item: any, index: number) => {
-                        // Handle both CartItem structure (with product object) and flat structure
                         const itemName = item.product?.name || item.name || item.productId || 'Unknown Product';
-                        const itemPrice = item.product?.basePrice || item.price || 0;
+                        const printName = item.variant?.colorName;
+                        const itemPrice = item.variant?.price ?? item.product?.basePrice ?? item.price ?? 0;
                         const itemQuantity = item.quantity || 1;
-                        
+
                         return (
                           <div key={index} className="flex justify-between text-sm py-1">
                             <span className="text-gray-700">
-                              {itemName} × {itemQuantity}
+                              {itemName}
+                              {printName && (
+                                <span className="text-primary-600 font-medium"> · {printName}</span>
+                              )}
+                              {' '}× {itemQuantity}
                             </span>
                             <span className="font-medium text-gray-900">
                               {formatAmount(itemPrice * itemQuantity)}

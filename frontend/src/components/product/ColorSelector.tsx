@@ -34,7 +34,7 @@ export default function ColorSelector({
   return (
     <div className="color-selector">
       <h3 className="text-lg font-semibold mb-3">
-        Select Color:{' '}
+        Select Variant:{' '}
         <span className="text-gray-600 font-normal">{selected?.colorName}</span>
       </h3>
 
@@ -57,12 +57,6 @@ export default function ColorSelector({
               `}
               title={variant.colorName}
             >
-              {/* Color Swatch */}
-              <div
-                className="w-12 h-12 rounded-full border-2 border-gray-300 mb-2"
-                style={{ backgroundColor: variant.colorCode }}
-              />
-
               {/* Variant Image Preview */}
               {variant.image && (
                 <img
