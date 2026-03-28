@@ -28,9 +28,9 @@ export default function CartItem({ item }: CartItemProps) {
   const displayPrice = (variant?.price ?? product.basePrice) * quantity;
 
   return (
-    <div className="flex gap-6 p-6 hover:bg-gray-50 transition-colors">
-      {/* Product Image */}
-      <div className="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
+    <div className="flex gap-4 sm:gap-5 p-4 sm:p-5">
+      {/* Image */}
+      <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden" style={{ background: '#F8EDDA' }}>
         <img
           src={displayImage || '/placeholder.jpg'}
           alt={variant ? `${product.name} - ${variant.colorName}` : product.name}
@@ -38,33 +38,25 @@ export default function CartItem({ item }: CartItemProps) {
         />
       </div>
 
-      {/* Product Info */}
+      {/* Info */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-bold text-lg mb-1 text-gray-900">{product.name}</h3>
+        <h3 className="font-serif font-medium text-sm sm:text-base mb-0.5" style={{ color: '#2a2220' }}>{product.name}</h3>
         {variant && (
-          <p className="text-sm text-primary-600 font-medium mb-1">
-            Print: {variant.colorName}
-          </p>
+          <p className="text-xs font-medium mb-2" style={{ color: '#C4756E' }}>{variant.colorName}</p>
         )}
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-
-        {/* Quantity Selector */}
-        <QuantitySelector
-          quantity={quantity}
-          maxQuantity={999}
-          onQuantityChange={handleQuantityChange}
-        />
+        <QuantitySelector quantity={quantity} maxQuantity={999} onQuantityChange={handleQuantityChange} />
       </div>
 
-      {/* Price and Remove */}
-      <div className="flex flex-col items-end justify-between min-w-[120px]">
+      {/* Price + Remove */}
+      <div className="flex flex-col items-end justify-between">
         <PriceDisplay regularPrice={displayPrice} />
         <button
           onClick={handleRemove}
-          className="text-red-600 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-all duration-200 group"
+          className="p-1.5 rounded-lg transition-all duration-200"
+          style={{ color: '#C4756E' }}
           aria-label="Remove item"
         >
-          <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <Trash2 className="w-4 h-4" />
         </button>
       </div>
     </div>

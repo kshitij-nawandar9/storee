@@ -2,349 +2,240 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getAdminOrders, approveOrder } from '@/services/api';
-import { Package, ShoppingBag, CheckCircle, Filter, MapPin } from 'lucide-react';
+import { Package, ShoppingBag, CheckCircle, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'kshitij.nawandar@razorpay.com'];
 
-interface OrderItem {
-  productId?: string;
-  name?: string;
-  quantity: number;
-  price?: number;
-  product?: {
-    id: string;
-    name: string;
-    basePrice: number;
-  };
-}
+interface OrderItem { productId?: string; name?: string; quantity: number; price?: number; product?: { id: string; name: string; basePrice: number }; }
+interface Address { line1: string; line2?: string; city: string; state: string; pincode: string; }
+interface Order { id: string; orderId: string; customerName: string; customerEmail: string; customerPhone: string; address: Address | string; items: OrderItem[] | string; totalAmount: number; status: string; paymentMethod: string; createdAt: string; }
 
-interface Address {
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  pincode: string;
-}
-
-interface Order {
-  id: string;
-  orderId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  address: Address | string;
-  items: OrderItem[] | string;
-  totalAmount: number;
-  status: string;
-  paymentMethod: string;
-  createdAt: string;
-}
-
-const statusColors: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  approved: 'bg-green-100 text-green-800',
-  paid: 'bg-blue-100 text-blue-800',
-  processing: 'bg-purple-100 text-purple-800',
-  shipped: 'bg-indigo-100 text-indigo-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
+const statusStyles: Record<string, { bg: string; color: string }> = {
+  pending:    { bg: 'rgba(201,169,110,0.1)', color: '#8a6e38' },
+  approved:   { bg: 'rgba(139,168,138,0.12)', color: '#547254' },
+  paid:       { bg: 'rgba(139,168,138,0.1)', color: '#547254' },
+  processing: { bg: 'rgba(196,117,110,0.1)', color: '#a85d56' },
+  shipped:    { bg: 'rgba(139,168,138,0.15)', color: '#547254' },
+  delivered:  { bg: 'rgba(139,168,138,0.15)', color: '#4a7c3a' },
+  cancelled:  { bg: 'rgba(196,117,110,0.1)', color: '#a85d56' },
 };
-
-const statusLabels: Record<string, string> = {
-  pending: 'Pending',
-  approved: 'Approved',
-  paid: 'Paid',
-  processing: 'Processing',
-  shipped: 'Shipped',
-  delivered: 'Delivered',
-  cancelled: 'Cancelled',
-};
+const statusLabels: Record<string, string> = { pending: 'Pending', approved: 'Approved', paid: 'Paid', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
 
 export default function AdminOrders() {
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ page: 1, limit: 50, total: 0, pages: 1 });
   const navigate = useNavigate();
-
   const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
 
   useEffect(() => {
     if (authLoading) return;
-
-    if (!isAuthenticated || !isAdmin) {
-      navigate('/signin');
-      return;
-    }
-
+    if (!isAuthenticated || !isAdmin) { navigate('/signin'); return; }
     fetchOrders();
   }, [isAuthenticated, authLoading, isAdmin, statusFilter, page, navigate]);
 
   const fetchOrders = async () => {
     try {
-      setLoading(true);
-      setError(null);
-
-      const response = await getAdminOrders({
-        status: statusFilter || undefined,
-        page,
-        limit: 50,
-      });
-
-      if (!response.success) {
-        throw new Error(response.message || 'Failed to fetch orders');
-      }
-
+      setLoading(true); setError(null);
+      const response = await getAdminOrders({ status: statusFilter || undefined, page, limit: 50 });
+      if (!response.success) throw new Error(response.message || 'Failed to fetch orders');
       const parsedOrders = (response.data.orders || []).map((order: any) => {
         let items = order.items;
-        if (typeof items === 'string') {
-          try {
-            items = JSON.parse(items);
-          } catch {
-            items = [];
-          }
-        }
-
+        if (typeof items === 'string') { try { items = JSON.parse(items); } catch { items = []; } }
         let address = order.address;
-        if (typeof address === 'string') {
-          try {
-            address = JSON.parse(address);
-          } catch {
-            address = { line1: '', city: '', state: '', pincode: '' };
-          }
-        }
-
-        return {
-          ...order,
-          items: Array.isArray(items) ? items : [],
-          address,
-        };
+        if (typeof address === 'string') { try { address = JSON.parse(address); } catch { address = { line1: '', city: '', state: '', pincode: '' }; } }
+        return { ...order, items: Array.isArray(items) ? items : [], address };
       });
-
-      setOrders(parsedOrders);
-      setPagination(response.data.pagination);
+      setOrders(parsedOrders); setPagination(response.data.pagination);
     } catch (err: any) {
-      console.error('Error fetching orders:', err);
-      setError(err.message || 'Failed to fetch orders');
-      toast.error(err.message || 'Failed to fetch orders');
-    } finally {
-      setLoading(false);
-    }
+      setError(err.message); toast.error(err.message || 'Failed to fetch orders');
+    } finally { setLoading(false); }
   };
 
   const handleApprove = async (orderId: string) => {
     try {
       const response = await approveOrder(orderId);
-      if (response.success) {
-        toast.success('Order approved successfully');
-        fetchOrders();
-      } else {
-        throw new Error(response.message || 'Failed to approve order');
-      }
-    } catch (err: any) {
-      console.error('Error approving order:', err);
-      toast.error(err.message || 'Failed to approve order');
-    }
+      if (response.success) { toast.success('Order approved'); fetchOrders(); }
+      else throw new Error(response.message);
+    } catch (err: any) { toast.error(err.message || 'Failed to approve'); }
   };
 
-  const formatAmount = (amount: number) => {
-    return `₹${(amount / 100).toFixed(2)}`;
-  };
+  const formatAmount = (a: number) => `₹${(a / 100).toFixed(2)}`;
+  const formatDate = (s: string) => new Date(s).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  if (authLoading || loading) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#FDF6EC' }}>
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-10 w-10 mx-auto" style={{ borderBottom: '2px solid #C4756E' }} />
+        <p className="mt-3 text-sm" style={{ color: '#8a7e78' }}>Loading orders...</p>
+      </div>
+    </div>
+  );
 
-  if (authLoading || loading) {
-    return (
-          <div className="min-h-screen flex items-center justify-center bg-warm-50">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading orders...</p>
-            </div>
-          </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-          <div className="min-h-screen flex items-center justify-center bg-warm-50">
-            <div className="text-center">
-              <p className="text-gray-600">Access denied. Admin privileges required.</p>
-            </div>
-          </div>
-    );
-  }
+  if (!isAdmin) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#FDF6EC' }}>
+      <p className="text-sm" style={{ color: '#8a7e78' }}>Access denied. Admin privileges required.</p>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen py-12 bg-warm-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-20">
+
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-gradient">Admin Orders</h1>
-          <p className="text-gray-600">Manage and approve customer orders</p>
+          <span className="section-label mb-1 block">Admin</span>
+          <h1 className="font-serif text-2xl font-medium" style={{ color: '#2a2220' }}>Manage Orders</h1>
         </div>
 
-        {/* Filters */}
-        <div className="mb-6 card p-4">
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-500" />
-              <label className="text-sm font-medium text-gray-700">Filter by Status:</label>
-            </div>
-            <select
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setPage(1);
-              }}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option value="">All Orders</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="paid">Paid</option>
-              <option value="processing">Processing</option>
-              <option value="shipped">Shipped</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
+        {/* Filter pills */}
+        <div className="mb-6 flex flex-wrap gap-2">
+          {[{ val: '', label: 'All' }, ...Object.entries(statusLabels).map(([val, label]) => ({ val, label }))].map(({ val, label }) => {
+            const isActive = statusFilter === val;
+            return (
+              <button
+                key={val}
+                onClick={() => { setStatusFilter(val); setPage(1); }}
+                className="transition-all duration-200"
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: '9999px',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  fontFamily: "'DM Sans', sans-serif",
+                  background: isActive ? '#3d2b2b' : 'transparent',
+                  color: isActive ? '#FDF6EC' : '#6b635b',
+                  border: isActive ? '1.5px solid #3d2b2b' : '1.5px solid #F0E0C6',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'rgba(196,117,110,0.06)';
+                    e.currentTarget.style.borderColor = '#C4756E';
+                    e.currentTarget.style.color = '#C4756E';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.borderColor = '#F0E0C6';
+                    e.currentTarget.style.color = '#6b635b';
+                  }
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            {error}
-          </div>
+          <div className="mb-6 p-4 rounded-xl text-sm" style={{ background: 'rgba(196,117,110,0.06)', color: '#a85d56' }}>{error}</div>
         )}
 
-        {/* Orders List */}
         {orders.length === 0 ? (
-          <div className="card p-12 text-center">
-            <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">No orders found</p>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'rgba(196,117,110,0.06)' }}>
+              <Package className="w-7 h-7" style={{ color: '#C4756E' }} />
+            </div>
+            <p className="text-sm" style={{ color: '#8a7e78' }}>No orders found</p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {orders.map((order) => (
-              <div key={order.id} className="card p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold">Order #{order.orderId}</h3>
-                    <p className="text-sm text-gray-600">{order.customerName}</p>
-                    <p className="text-sm text-gray-500">{order.customerEmail}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status] || statusColors.pending}`}>
+          <div className="space-y-4">
+            {orders.map((order) => {
+              const st = statusStyles[order.status] || statusStyles.pending;
+              const addr = typeof order.address === 'object' ? order.address : null;
+              return (
+                <div key={order.id} className="rounded-2xl p-5 sm:p-6" style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}>
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="font-serif text-base font-medium" style={{ color: '#2a2220' }}>#{order.orderId}</h3>
+                      <p className="text-xs mt-0.5" style={{ color: '#6b5f58' }}>{order.customerName} · {order.customerEmail}</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#a09590' }}>{formatDate(order.createdAt)}</p>
+                    </div>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: st.bg, color: st.color }}>
                       {statusLabels[order.status] || order.status}
                     </span>
-                    <p className="text-sm text-gray-600 mt-2">{formatDate(order.createdAt)}</p>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                  {/* Items */}
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <ShoppingBag className="w-4 h-4" />
-                      Items ({Array.isArray(order.items) ? order.items.length : 0})
-                    </h4>
-                    <div className="space-y-2">
-                      {Array.isArray(order.items) && order.items.length > 0 ? (
-                        order.items.map((item: any, index: number) => {
-                          const itemName = item.product?.name || item.name || item.productId || 'Unknown Product';
-                          const itemPrice = item.product?.basePrice || item.price || 0;
-                          const itemQuantity = item.quantity || 1;
-                          
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid #F0E0C6' }}>
+                    {/* Items */}
+                    <div>
+                      <p className="text-xs font-semibold mb-2 flex items-center gap-1.5" style={{ color: '#6b5f58' }}>
+                        <ShoppingBag className="w-3 h-3" /> Items ({Array.isArray(order.items) ? order.items.length : 0})
+                      </p>
+                      <div className="space-y-1">
+                        {Array.isArray(order.items) && order.items.length > 0 ? order.items.map((item: any, i: number) => {
+                          const name = item.product?.name || item.name || 'Product';
+                          const price = item.product?.basePrice || item.price || 0;
                           return (
-                            <div key={index} className="flex justify-between text-sm py-1">
-                              <span className="text-gray-700">
-                                {itemName} × {itemQuantity}
-                              </span>
-                              <span className="font-medium text-gray-900">
-                                {formatAmount(itemPrice * itemQuantity)}
-                              </span>
+                            <div key={i} className="flex justify-between text-xs" style={{ color: '#4a443e' }}>
+                              <span>{name} × {item.quantity || 1}</span>
+                              <span className="font-medium">{formatAmount(price * (item.quantity || 1))}</span>
                             </div>
                           );
-                        })
-                      ) : (
-                        <p className="text-sm text-gray-500">No items found</p>
-                      )}
+                        }) : <p className="text-xs" style={{ color: '#a09590' }}>No items</p>}
+                      </div>
+                    </div>
+                    {/* Address */}
+                    <div>
+                      <p className="text-xs font-semibold mb-1 flex items-center gap-1.5" style={{ color: '#6b5f58' }}>
+                        <MapPin className="w-3 h-3" /> Address
+                      </p>
+                      {addr ? (
+                        <p className="text-xs" style={{ color: '#8a7e78' }}>
+                          {addr.line1}{addr.line2 && `, ${addr.line2}`}<br />{addr.city}, {addr.state} {addr.pincode}
+                        </p>
+                      ) : <p className="text-xs" style={{ color: '#a09590' }}>Not available</p>}
                     </div>
                   </div>
 
-                  {/* Address */}
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      Delivery Address
-                    </h4>
-                    {typeof order.address === 'object' && order.address ? (
-                      <div className="text-sm text-gray-700">
-                        <p>{order.address.line1}</p>
-                        {order.address.line2 && <p>{order.address.line2}</p>}
-                        <p>
-                          {order.address.city}, {order.address.state} {order.address.pincode}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500">Address not available</p>
-                    )}
+                  {/* Footer */}
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-xs" style={{ color: '#a09590' }}>{order.paymentMethod.toUpperCase()} · {order.customerPhone}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold text-base" style={{ color: '#C4756E' }}>{formatAmount(order.totalAmount)}</span>
+                      {(order.status === 'pending' || order.status === 'paid') && (
+                        <button
+                          onClick={() => handleApprove(order.orderId)}
+                          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-200"
+                          style={{ background: 'rgba(139,168,138,0.12)', color: '#547254' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = '#8BA88A'; e.currentTarget.style.color = '#fff'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(139,168,138,0.12)'; e.currentTarget.style.color = '#547254'; }}
+                        >
+                          <CheckCircle className="w-3.5 h-3.5" /> Approve
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                <div className="border-t pt-4 flex justify-between items-center">
-                  <div>
-                    <p className="text-sm text-gray-600">Payment Method: <span className="font-medium">{order.paymentMethod.toUpperCase()}</span></p>
-                    <p className="text-sm text-gray-600">Phone: {order.customerPhone}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-primary-600">{formatAmount(order.totalAmount)}</p>
-                    {(order.status === 'pending' || order.status === 'paid') && (
-                      <button
-                        onClick={() => handleApprove(order.orderId)}
-                        className="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-                      >
-                        <CheckCircle className="w-4 h-4" />
-                        Approve Order
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
         {/* Pagination */}
         {pagination.pages > 1 && (
-          <div className="mt-8 flex justify-center gap-2">
+          <div className="mt-8 flex justify-center items-center gap-3">
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-                    className="px-4 py-2 border border-orange-200 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-warm-50 transition-colors"
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2 text-gray-700">
-              Page {pagination.page} of {pagination.pages}
-            </span>
+              className="text-xs font-medium px-4 py-2 rounded-full transition-all disabled:opacity-40"
+              style={{ border: '1.5px solid #F0E0C6', color: '#6b5f58' }}
+            >Previous</button>
+            <span className="text-xs" style={{ color: '#a09590' }}>Page {pagination.page} of {pagination.pages}</span>
             <button
               onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
               disabled={page === pagination.pages}
-                    className="px-4 py-2 border border-orange-200 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-warm-50 transition-colors"
-            >
-              Next
-            </button>
+              className="text-xs font-medium px-4 py-2 rounded-full transition-all disabled:opacity-40"
+              style={{ border: '1.5px solid #F0E0C6', color: '#6b5f58' }}
+            >Next</button>
           </div>
         )}
       </div>

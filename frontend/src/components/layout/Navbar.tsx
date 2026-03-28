@@ -73,7 +73,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="sticky top-0 z-50 transition-all duration-300"
+      className="sticky top-0 z-50 transition-all duration-300 overflow-visible"
       style={{
         background: scrolled ? 'rgba(253, 246, 236, 0.95)' : 'rgba(253, 246, 236, 0.85)',
         backdropFilter: 'blur(12px)',
@@ -111,11 +111,11 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative p-2.5 rounded-full transition-all duration-200 group/cart"
+              className="relative p-3 rounded-full transition-all duration-200 group/cart overflow-visible"
               aria-label="Shopping cart"
               style={{ color: '#2D2A26' }}
             >
-              <ShoppingBag className="w-5 h-5 transition-all duration-200 group-hover/cart:scale-110 group-hover/cart:-translate-y-0.5" style={{ transition: 'transform 0.2s cubic-bezier(0.22, 1, 0.36, 1)' }} />
+              <ShoppingBag className="w-[18px] h-[18px]" />
               {itemCount > 0 && (
                 <span
                   className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 flex items-center justify-center text-[10px] font-bold text-white rounded-full"

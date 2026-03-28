@@ -2,101 +2,68 @@ import { CheckCircle, Home, Package, ShoppingBag, Truck } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 export default function OrderConfirmation() {
-    const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
+  if (!id) return <Navigate to="/" replace />;
 
-    // For now, we'll use the order ID from URL
-    // In a full implementation, you'd fetch order details from API
-    // For now, just show a confirmation message
+  return (
+    <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-14">
+        <div className="rounded-2xl p-8 sm:p-10 text-center" style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.06)' }}>
 
-    if (!id) {
-        return <Navigate to="/" replace />;
-    }
+          {/* Success icon */}
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(139,168,138,0.12)' }}>
+            <CheckCircle className="w-8 h-8" style={{ color: '#8BA88A' }} />
+          </div>
 
-    return (
-        <div className="min-h-screen py-12 bg-gray-50">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="card p-8 text-center">
-                    {/* Success Icon */}
-                    <div className="flex justify-center mb-6">
-                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-                            <CheckCircle className="w-12 h-12 text-green-600" />
-                        </div>
-                    </div>
+          <h1 className="font-serif text-2xl font-medium mb-2" style={{ color: '#2a2220' }}>
+            Order placed! 🎉
+          </h1>
+          <p className="text-sm mb-6" style={{ color: '#8a7e78' }}>
+            Thank you for your order. We'll start preparing it right away.
+          </p>
 
-                    {/* Success Message */}
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                        Order Placed Successfully!
-                    </h1>
-                    <p className="text-lg text-gray-600 mb-2">
-                        Thank you for your order. We've received your order and will begin processing it shortly.
-                    </p>
+          {/* Order ID */}
+          <div className="rounded-xl px-5 py-3 mb-8 inline-block" style={{ background: '#FDF6EC' }}>
+            <p className="text-xs mb-0.5" style={{ color: '#a09590' }}>Order ID</p>
+            <p className="font-mono text-sm font-semibold" style={{ color: '#2a2220' }}>{id}</p>
+          </div>
 
-                    {/* Order ID */}
-                    <div className="bg-gray-50 rounded-lg p-4 mb-6 mt-6">
-                        <p className="text-sm text-gray-600 mb-1">Order ID</p>
-                        <p className="text-xl font-mono font-semibold text-gray-900">{id}</p>
-                    </div>
-
-                    {/* What's Next */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 text-left">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <Package className="w-5 h-5 text-blue-600" />
-                            What's Next?
-                        </h2>
-                        <div className="space-y-3 text-gray-700">
-                            <div className="flex items-start gap-3">
-                                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold mt-0.5">
-                                    1
-                                </div>
-                                <div>
-                                    <p className="font-medium">Order Confirmation</p>
-                                    <p className="text-sm text-gray-600">You'll receive an email confirmation shortly with your order details.</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold mt-0.5">
-                                    2
-                                </div>
-                                <div>
-                                    <p className="font-medium">Processing</p>
-                                    <p className="text-sm text-gray-600">We'll prepare your order and keep you updated on its status.</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold mt-0.5">
-                                    3
-                                </div>
-                                <div>
-                                    <p className="font-medium">Shipping</p>
-                                    <p className="text-sm text-gray-600">
-                                        <Truck className="w-4 h-4 inline-block mr-1" />
-                                        Your order will be shipped within 2-3 business days with free shipping.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            to="/products"
-                            className="btn-primary flex items-center justify-center gap-2 py-3 px-6"
-                        >
-                            <ShoppingBag className="w-5 h-5" />
-                            Continue Shopping
-                        </Link>
-                        <Link
-                            to="/"
-                            className="btn-secondary flex items-center justify-center gap-2 py-3 px-6"
-                        >
-                            <Home className="w-5 h-5" />
-                            Back to Home
-                        </Link>
-                    </div>
+          {/* What's next */}
+          <div className="rounded-xl p-5 mb-8 text-left" style={{ background: 'rgba(139,168,138,0.05)', border: '1px solid rgba(139,168,138,0.1)' }}>
+            <h2 className="font-serif text-base font-medium mb-4 flex items-center gap-2" style={{ color: '#2a2220' }}>
+              <Package className="w-4 h-4" style={{ color: '#8BA88A' }} />
+              What's next?
+            </h2>
+            <div className="space-y-3">
+              {[
+                { step: '1', title: 'Confirmation', desc: 'You\'ll receive an email with your order details.' },
+                { step: '2', title: 'Processing', desc: 'We\'ll prepare your order and keep you updated.' },
+                { step: '3', title: 'Shipping', desc: 'Delivered within 5–7 business days with tracking.' },
+              ].map(({ step, title, desc }) => (
+                <div key={step} className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-[0.6rem] font-bold" style={{ background: '#8BA88A', color: '#fff' }}>
+                    {step}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: '#2a2220' }}>{title}</p>
+                    <p className="text-xs" style={{ color: '#6b5f58' }}>{desc}</p>
+                  </div>
                 </div>
+              ))}
             </div>
-        </div>
-    );
-}
+          </div>
 
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/products" className="btn-primary inline-flex items-center justify-center gap-2 text-sm">
+              <ShoppingBag className="w-4 h-4" /> Continue Shopping
+            </Link>
+            <Link to="/" className="btn-outline inline-flex items-center justify-center gap-2 text-sm">
+              <Home className="w-4 h-4" /> Back to Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

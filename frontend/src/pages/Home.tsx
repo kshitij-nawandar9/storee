@@ -54,7 +54,7 @@ export default function Home() {
       {/* ── HERO — image + text overlay ── */}
       <section className="relative w-full">
         <img
-          src="/images/banner/1.jpeg"
+          src="/images/banner/4.jpeg"
           alt="Storee — Carry beautifully"
           className="w-full h-auto object-cover block"
         />
@@ -64,7 +64,7 @@ export default function Home() {
             <div>
               <p className="font-hand text-base sm:text-lg" style={{ color: 'rgba(255,255,255,0.85)' }}>carry beautifully ✨</p>
               <p className="font-serif font-medium text-base sm:text-xl" style={{ color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-                Cute bags &amp; pouches for little adventurers
+                 Cute bags &amp; pouches for little adventurers
               </p>
             </div>
             <Link
