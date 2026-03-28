@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/product/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -7,7 +8,24 @@ import { Grid3x3, ArrowRight } from 'lucide-react';
 
 export default function Products() {
   const { products, loading, error } = useProducts();
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
+
+  // Sync URL param → state on navigation
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat) setActiveCategory(cat);
+  }, [searchParams]);
+
+  // Update URL when category changes via pill click
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    if (cat === 'All') {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category: cat });
+    }
+  };
 
   const categories = useMemo(() => {
     const cats = new Set(products.map((p) => p.category));
@@ -41,7 +59,7 @@ export default function Products() {
               return (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                   className="transition-all duration-200"
                   style={{
                     padding: '8px 20px',
@@ -116,7 +134,7 @@ export default function Products() {
               <p className="text-base font-serif font-medium mb-2" style={{ color: '#2a2220' }}>This shelf is empty!</p>
               <p className="text-sm mb-5" style={{ color: '#8a7e78' }}>But the other ones are packed with goodies.</p>
               <button
-                onClick={() => setActiveCategory('All')}
+                onClick={() => handleCategoryChange('All')}
                 className="btn-outline text-xs inline-flex items-center gap-2"
               >
                 View all <ArrowRight className="w-3.5 h-3.5" />

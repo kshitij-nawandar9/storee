@@ -1,8 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useProducts } from '@/hooks/useProducts';
-import ProductCard from '@/components/product/ProductCard';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-import ErrorMessage from '@/components/common/ErrorMessage';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
 
 const reviews = [
@@ -25,8 +21,6 @@ const reviews = [
 ];
 
 export default function Home() {
-  const { products, loading, error } = useProducts();
-
   return (
     <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
 
@@ -114,7 +108,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURED PRODUCTS ── */}
+      {/* ── SHOP BY CATEGORY ── */}
       <section className="pt-16 pb-16 relative bg-warm-pattern">
         {/* Floating doodles */}
         <div className="absolute top-12 right-8 pointer-events-none hidden lg:block float-gentle" style={{ opacity: 0.07 }}>
@@ -126,31 +120,53 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">
-            <div>
-              <span className="section-label mb-2 block">Handpicked for you</span>
-              <h2 className="section-title">Cute picks ✨</h2>
-              <p className="mt-2 text-sm max-w-md leading-relaxed" style={{ color: '#8a7e78' }}>
-                Our best-sellers, picked by real families. Cute prints, clever pockets, smiles guaranteed.
-              </p>
-            </div>
-            <Link to="/products" className="btn-outline text-xs px-5 py-2.5 self-start sm:self-auto flex-shrink-0 arrow-nudge">
-              See all goodies <ArrowRight className="w-3.5 h-3.5 arrow-icon" />
-            </Link>
+          <div className="text-center mb-10">
+            <span className="section-label mb-2 block">Handpicked for you</span>
+            <h2 className="section-title">Pick your fave ✨</h2>
+            <p className="mt-2 text-sm max-w-md mx-auto leading-relaxed" style={{ color: '#8a7e78' }}>
+              Find your perfect match — browse by what you're looking for.
+            </p>
           </div>
 
-          {loading && <LoadingSpinner />}
-          {error && <ErrorMessage message={error} />}
-
-          {!loading && !error && products.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
-              {products.slice(0, 8).map((product, index) => (
-                <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.06}s` }}>
-                  <ProductCard product={product} />
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {[
+              { category: 'Bags',              name: 'Bags',              sub: 'for little adventures',   image: '/images/products/kids_bag/Unicorn.png' },
+              { category: 'Pouches',            name: 'Pouches',           sub: 'cute & clever',           image: '/images/products/accessories_kit/Beach.jpg' },
+              { category: 'Travel Kits',        name: 'Travel Kits',       sub: 'pack like a pro',         image: '/images/products/foldable_travel_kit/Lion.jpg' },
+              { category: 'Travel Organizers',   name: 'Organizers',       sub: 'everything in its place', image: '/images/products/packing_cubes/Rainbow.jpg' },
+              { category: 'Specialty Kits',      name: 'Specialty Kits',   sub: 'for every little need',   image: '/images/products/pencil_pouch/Marine.png' },
+              { category: null,                  name: 'Shop All',          sub: 'see everything ✨',       image: '/images/products/toiletry_kit/Unicorn.png' },
+            ].map(({ category, name, sub, image }, index) => (
+              <Link
+                key={name}
+                to={category ? `/products?category=${encodeURIComponent(category)}` : '/products'}
+                className="group relative rounded-2xl overflow-hidden card-tilt animate-fade-in"
+                style={{ aspectRatio: '4/5', animationDelay: `${index * 0.07}s` }}
+              >
+                <img
+                  src={image}
+                  alt={name}
+                  className="w-full h-full object-cover product-img"
+                />
+                {/* Gradient overlay */}
+                <div
+                  className="absolute inset-0 transition-opacity duration-300"
+                  style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.5) 0%, rgba(42,34,32,0.05) 45%, transparent 100%)' }}
+                />
+                {/* Text */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <p className="font-hand text-xs sm:text-sm" style={{ color: 'rgba(253,246,236,0.7)' }}>{sub}</p>
+                  <h3 className="font-serif font-medium text-base sm:text-lg" style={{ color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,0.1)' }}>
+                    {name}
+                  </h3>
+                  <span className="inline-flex items-center gap-1 mt-1.5 text-[0.65rem] sm:text-xs font-medium arrow-nudge" style={{ color: 'rgba(253,246,236,0.6)' }}>
+                    Browse <ArrowRight className="w-3 h-3 arrow-icon" />
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
+              </Link>
+            ))}
+          </div>
+
         </div>
       </section>
 
