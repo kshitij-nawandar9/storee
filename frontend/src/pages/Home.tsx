@@ -229,7 +229,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-7 sm:mb-10">
             <span className="section-label mb-1.5 sm:mb-2 block">Real talk</span>
-            <h2 className="section-title">Don't take our word for it 🤍</h2>
+            <h2 className="font-serif font-medium" style={{ fontSize: 'clamp(1.25rem, 4vw, 2.5rem)', color: '#2a2220', lineHeight: 1.15 }}>Don't take our word for it 🤍</h2>
             <p className="font-hand text-base sm:text-lg mt-1" style={{ color: '#C9A96E', opacity: 0.7 }}>(okay maybe take theirs)</p>
           </div>
 
