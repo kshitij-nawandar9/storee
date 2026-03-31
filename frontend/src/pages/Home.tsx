@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
+import SaleBanner from '@/components/home/SaleBanner';
 
 const reviews = [
   {
@@ -81,6 +82,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── SALE BANNER WITH COUNTDOWN ── */}
+      <SaleBanner />
 
       {/* ── TRUST STRIP — scrolling marquee on mobile, grid on desktop ── */}
       <section style={{ background: '#FFFDF9', borderBottom: '1px solid #F0E0C6' }}>
