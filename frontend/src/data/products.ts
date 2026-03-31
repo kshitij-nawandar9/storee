@@ -17,6 +17,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Durable and easy to clean',
       'Ideal for travel and daily use'
     ],
+    size: '35 x 25 x 10 cm',
     images: [
       { id: '0258a103-35f5-4c2f-b8a2-4bab2d4fcbcb', url: '/images/products/accessories_kit/Beach.jpg', altText: 'Accessory Pouch - Beach', order: 1, isPrimary: true },
       { id: 'beffbc52-76f3-4d43-b21f-495a1839d59e', url: '/images/products/accessories_kit/Rainbow.jpg', altText: 'Accessory Pouch - Rainbow', order: 2, isPrimary: false },
@@ -54,6 +55,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Compact and travel-friendly',
       'Easy to clean'
     ],
+    size: '23.75 x 20 cm',
     images: [
       { id: '62d10a12-7bbe-4713-b9f1-18e76b76e47b', url: '/images/products/toiletry_kit/Aqua.jpg', altText: 'Toiletry Kit - Aqua', order: 1, isPrimary: true },
       { id: 'b0fb2d40-ddc4-4419-b7c7-bb272805a5d2', url: '/images/products/toiletry_kit/Rainbow.jpg', altText: 'Toiletry Kit - Rainbow', order: 2, isPrimary: false },
@@ -95,6 +97,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Lightweight and portable',
       'Durable construction'
     ],
+    size: '35 x 25 x 10 cm',
     images: [
       { id: '7f063ffa-2e41-4211-9437-6132ec9a2281', url: '/images/products/foldable_travel_kit/Rainbow.jpg', altText: 'Foldable Travel Kit - Rainbow', order: 1, isPrimary: true },
       { id: 'd0ccb2b3-9275-4c78-8f5e-c1877a2f0fa2', url: '/images/products/foldable_travel_kit/Beach.jpg', altText: 'Foldable Travel Kit - Beach', order: 2, isPrimary: false },
@@ -134,6 +137,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Ideal for school trips and travel',
       'Easy to pack and unpack'
     ],
+    size: 'Box pouch: 40 x 30 x 13.75 cm, Daily pouch: 38.75 x 27.5 cm',
     images: [
       { id: '6f4c2498-d8f5-42ef-bfaa-8cd4169b1739', url: '/images/products/pack_a_week_kit/Rainbow.jpg', altText: '7 Days Pack Kit - Rainbow', order: 1, isPrimary: true },
       { id: '0492fc28-909a-484d-a30c-94aacd843d62', url: '/images/products/pack_a_week_kit/Aqua.jpg', altText: '7 Days Pack Kit - Aqua', order: 2, isPrimary: false },
@@ -165,6 +169,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for suitcase organization',
       'Easy to identify contents'
     ],
+    size: '40x30x13.75 / 35x27.5x12.5 / 27.5x20x11.25 / 20x15x8.75 cm',
     images: [
       { id: 'c219c498-a9cc-4120-907d-ee90b7f34de6', url: '/images/products/packing_cubes/Lion.jpg', altText: 'Packing Cubes - Lion', order: 1, isPrimary: true },
       { id: '91b9a691-f83f-4efe-930f-335069828d73', url: '/images/products/packing_cubes/Rainbow.jpg', altText: 'Packing Cubes - Rainbow', order: 2, isPrimary: false },
@@ -206,6 +211,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Easy to pack and store',
       'Spacious design'
     ],
+    size: '35 x 23.75 cm',
     images: [
       { id: 'bf55f39d-8410-4075-8720-834927d6cf33', url: '/images/products/shoe_pouch/Aqua.jpg', altText: 'Shoe Pouch - Aqua', order: 1, isPrimary: true },
       { id: '2c5a4ee9-95f4-447e-99e6-a6810bcdaacb', url: '/images/products/shoe_pouch/Beach.jpg', altText: 'Shoe Pouch - Beach', order: 2, isPrimary: false },
@@ -247,6 +253,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for home and travel',
       'Durable construction'
     ],
+    size: '33.75x25 / 23.75x17.5 / 22.5x15 cm',
     images: [
       { id: 'e07f0114-5a54-459d-b44d-bfdf8a45c22e', url: '/images/products/multipurpose_pouch/Beach.jpg', altText: 'Multipurpose Pouch - Beach', order: 1, isPrimary: true },
       { id: 'f41a10ce-dc0a-42ef-922e-9cc7ce779a23', url: '/images/products/multipurpose_pouch/Lion.jpg', altText: 'Multipurpose Pouch - Lion', order: 2, isPrimary: false },
@@ -293,6 +300,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Quick access to essentials',
       'Lightweight and portable'
     ],
+    size: '51.25 x 22.5 cm',
     images: [
       { id: '9f130f80-9803-464b-be3c-50d1307257f5', url: '/images/products/on_the_go_foldable_pouch/Lion.jpg', altText: 'On-the-Go Foldable Pouch - Lion', order: 1, isPrimary: true },
       { id: 'a1b2c308-0001-4001-8001-000000000001', url: '/images/products/on_the_go_foldable_pouch/Jungle Safari.png', altText: 'On-the-Go Foldable Pouch - Jungle Safari', order: 2, isPrimary: false },
@@ -326,6 +334,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Easy to clean',
       'Keeps oral care items organized'
     ],
+    size: '20 x 12 cm',
     images: [
       { id: '7a0cceb3-4946-4f25-8700-c94cad3ff28a', url: '/images/products/dental_kit/Rainbow.png', altText: 'Dental Kit - Rainbow', order: 1, isPrimary: true },
       { id: '28c50891-d36c-4787-9375-12ebf64b1a34', url: '/images/products/dental_kit/Lion.png', altText: 'Dental Kit - Lion', order: 2, isPrimary: false },
@@ -357,6 +366,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Fun and colorful prints',
       'Spacious for essentials'
     ],
+    size: '26 x 19 x 6 cm',
     images: [
       { id: 'cb1a0e3f-7d24-4a1b-9e6c-3f8b5a2d1c0e', url: '/images/products/crossbody_bag/Aqua.png', altText: 'Crossbody Bag - Aqua', order: 1, isPrimary: true },
       { id: 'a2b3c4d5-e6f7-4a8b-9c0d-1e2f3a4b5c6d', url: '/images/products/crossbody_bag/Beach.png', altText: 'Crossbody Bag - Beach', order: 2, isPrimary: false },
@@ -398,6 +408,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for travel',
       'Easy to carry'
     ],
+    size: '13.5 x 16 x 9 cm',
     images: [
       { id: 'f1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c', url: '/images/products/medicine_kit/Rainbow.jpg', altText: 'Medicine Kit - Rainbow', order: 1, isPrimary: true },
       { id: 'a3b4c5d6-e7f8-4a9b-8c0d-1e2f3a4b5c6d', url: '/images/products/medicine_kit/Marine.jpg', altText: 'Medicine Kit - Marine', order: 2, isPrimary: false },
@@ -440,6 +451,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for study time',
       'Fun and functional'
     ],
+    size: '21 x 10 x 7.5 cm',
     images: [
       { id: 'e3f4a5b6-c7d8-4e9f-8a0b-1c2d3e4f5a6b', url: '/images/products/pencil_pouch/Marine.png', altText: 'Pencil Pouch - Marine', order: 1, isPrimary: true },
       { id: 'f4a5b6c7-d8e9-4f0a-8b1c-2d3e4f5a6b7c', url: '/images/products/pencil_pouch/Unicorn_open.png', altText: 'Pencil Pouch - Unicorn (open)', order: 2, isPrimary: false },
@@ -483,6 +495,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Perfect for overnight trips',
       'Comfortable carry handles'
     ],
+    size: '35 x 18 x 23 cm',
     images: [
       { id: 'a1b2c310-0002-4001-8001-000000000001', url: '/images/products/duffle_bag/Aqua.png', altText: 'Duffle Bag - Aqua', order: 1, isPrimary: true },
       { id: 'a1b2c310-0002-4001-8001-000000000002', url: '/images/products/duffle_bag/Beach.png', altText: 'Duffle Bag - Beach', order: 2, isPrimary: false },
@@ -524,6 +537,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Smart compartments',
       'Perfect for school and outings'
     ],
+    size: '33 x 26 x 12 cm',
     images: [
       { id: 'a1b2c311-0002-4001-8001-000000000001', url: '/images/products/kids_bag/Beach.png', altText: 'Kids Bag - Beach', order: 1, isPrimary: true },
       { id: 'a1b2c311-0002-4001-8001-000000000002', url: '/images/products/kids_bag/Bunny.png', altText: 'Kids Bag - Bunny', order: 2, isPrimary: false },
@@ -565,6 +579,7 @@ export const PRODUCTS_DATA: Product[] = [
       'Playful prints',
       'Perfect for snacks and small toys'
     ],
+    size: '28 x 26 x 11 cm',
     images: [
       { id: 'a1b2c312-0002-4001-8001-000000000001', url: '/images/products/toddlers_bag/Aqua.png', altText: 'Toddlers Bag - Aqua', order: 1, isPrimary: true },
       { id: 'a1b2c312-0002-4001-8001-000000000002', url: '/images/products/toddlers_bag/Beach.png', altText: 'Toddlers Bag - Beach', order: 2, isPrimary: false },

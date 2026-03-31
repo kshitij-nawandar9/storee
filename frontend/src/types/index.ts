@@ -29,6 +29,7 @@ export interface Product {
   images: ProductImage[];
   variants?: ProductVariant[]; // Optional - not needed for now
   features?: string[];
+  size?: string;
   stock?: number; // Stock for product without variants
   isActive: boolean;
 }

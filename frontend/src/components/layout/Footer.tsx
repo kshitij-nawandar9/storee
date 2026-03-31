@@ -1,17 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Mail, Phone } from 'lucide-react';
-import { useState } from 'react';
-import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
 
 export default function Footer() {
-  const [logoError, setLogoError] = useState(false);
-  const [currentLogoPath, setCurrentLogoPath] = useState(LOGO_PATH);
-
-  const handleLogoError = () => {
-    if (currentLogoPath === LOGO_PATH) setCurrentLogoPath(FALLBACK_LOGO_PATH);
-    else setLogoError(true);
-  };
-
   return (
     <footer style={{ background: 'linear-gradient(160deg, #2a2220 0%, #3d2b2b 60%, #332624 100%)' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
@@ -19,16 +9,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-1">
-            {!logoError ? (
-              <img
-                src={currentLogoPath}
-                alt="Storee"
-                className="h-9 w-auto mb-4 brightness-200"
-                onError={handleLogoError}
-              />
-            ) : (
-              <h3 className="font-serif text-xl font-medium mb-4" style={{ color: '#FDF6EC' }}>Storee</h3>
-            )}
+            <h3 className="font-serif text-xl font-medium mb-4" style={{ color: '#FDF6EC' }}>Storee</h3>
             <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(253,246,236,0.45)' }}>
               Cute bags and pouches that make everyday adventures a little more colourful. Made in India with a whole lot of love.
             </p>

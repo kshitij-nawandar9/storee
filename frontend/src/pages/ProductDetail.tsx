@@ -7,7 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
 import type { ProductVariant } from '@/types';
 import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO, getSalePrice } from '@/utils/constants';
-import { CheckCircle, ChevronLeft, ChevronRight, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight, Ruler, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -104,9 +104,17 @@ export default function ProductDetail() {
               </div>
 
               {/* Description */}
-              <p className="text-sm leading-relaxed mb-7" style={{ color: '#6b635b' }}>
+              <p className="text-sm leading-relaxed mb-5" style={{ color: '#6b635b' }}>
                 {product.description}
               </p>
+
+              {/* Size */}
+              {product.size && (
+                <div className="flex items-center gap-2 mb-7 text-sm" style={{ color: '#4a443e' }}>
+                  <Ruler className="w-4 h-4 flex-shrink-0" style={{ color: '#C4756E' }} />
+                  <span><strong>Size:</strong> {product.size}</span>
+                </div>
+              )}
 
               {/* Variant Selector */}
               {product.variants && product.variants.length > 0 && (
