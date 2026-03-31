@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { Package, Calendar, MapPin, ShoppingBag } from 'lucide-react';
+import { Package, Calendar, MapPin, ShoppingBag, Pen } from 'lucide-react';
 import { api } from '@/services/api';
 
 interface OrderItem {
@@ -127,9 +127,16 @@ export default function OrderHistory() {
                         const print = item.variant?.colorName;
                         const price = item.variant?.price ?? item.product?.basePrice ?? item.price ?? 0;
                         return (
-                          <div key={i} className="flex justify-between text-sm" style={{ color: '#4a443e' }}>
-                            <span>{name}{print && <span style={{ color: '#C4756E' }}> · {print}</span>} × {item.quantity || 1}</span>
-                            <span className="font-medium">{formatAmount(price * (item.quantity || 1))}</span>
+                          <div key={i} className="text-sm" style={{ color: '#4a443e' }}>
+                            <div className="flex justify-between">
+                              <span>{name}{print && <span style={{ color: '#C4756E' }}> · {print}</span>} × {item.quantity || 1}</span>
+                              <span className="font-medium">{formatAmount(price * (item.quantity || 1))}</span>
+                            </div>
+                            {item.customText && (
+                              <p className="flex items-center gap-1 mt-0.5 text-xs" style={{ color: '#8a6e38' }}>
+                                <Pen className="w-3 h-3" /> Customisation: "{item.customText}"
+                              </p>
+                            )}
                           </div>
                         );
                       }) : <p className="text-xs" style={{ color: '#a09590' }}>No item details</p>}
