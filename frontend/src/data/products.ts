@@ -7,7 +7,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'accessory-pouch',
     description: 'A smart organiser for small accessories like hair clips, rubber bands, and tiny essentials. Designed with thoughtful compartments to keep everything neatly sorted and easy to find. Perfect for everyday use and travel.',
     basePrice: 100000,
-    category: 'Pouches',
+    category: 'Specialty Kits',
     stock: 50,
     isActive: true,
     features: [
@@ -237,7 +237,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'multipurpose-pouch',
     description: 'A versatile pouch set designed to organise everything from toys and stationery to travel essentials. With multiple sizes and spacious compartments, it keeps everyday items sorted and easy to access. A practical organiser for home and travel.',
     basePrice: 100000,
-    category: 'Pouches',
+    category: 'Travel Organizers',
     stock: 40,
     isActive: true,
     features: [
@@ -283,7 +283,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'on-the-go-foldable-pouch',
     description: 'A smart foldable pouch that opens into organised compartments for quick access to essentials. Perfect for travel, school bags, or day trips when you need everything in one place. Compact when folded, spacious when opened.',
     basePrice: 90000,
-    category: 'Pouches',
+    category: 'Travel Organizers',
     stock: 30,
     isActive: true,
     features: [

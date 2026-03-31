@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
-import ProductCard from '@/components/product/ProductCard';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { Grid3x3, ArrowRight } from 'lucide-react';
@@ -112,15 +111,47 @@ export default function Products() {
               </p>
 
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-                {filtered.map((product, index) => (
-                  <div
-                    key={product.id}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${index * 0.04}s` }}
-                  >
-                    <ProductCard product={product} />
-                  </div>
-                ))}
+                {filtered.map((product, index) => {
+                  const variants = product.variants?.filter((v) => v.isActive) ?? [];
+                  const variant = variants[index % variants.length] ?? variants[0];
+                  const displayPrice = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    maximumFractionDigits: 0,
+                  }).format((variant?.price ?? product.basePrice) / 100);
+                  const variantCount = variants.length;
+
+                  return (
+                    <Link
+                      key={product.id}
+                      to={`/products/${product.slug}`}
+                      className="group flex flex-col rounded-2xl overflow-hidden card-tilt animate-fade-in"
+                      style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.06)', animationDelay: `${index * 0.04}s` }}
+                    >
+                      <div className="relative overflow-hidden" style={{ aspectRatio: '4/5', background: '#F8EDDA' }}>
+                        <img
+                          src={variant?.image || '/placeholder.jpg'}
+                          alt={`${product.name}${variant ? ` - ${variant.colorName}` : ''}`}
+                          className="product-img w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(to top, rgba(196,117,110,0.12) 0%, transparent 40%)' }} />
+                      </div>
+                      <div className="px-3.5 pt-3 pb-4 sm:px-4 sm:pt-3.5 sm:pb-5">
+                        <h3 className="font-serif font-medium text-[0.9rem] sm:text-base leading-snug mb-1.5 line-clamp-1" style={{ color: '#2a2220' }}>
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-base sm:text-lg" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>
+                            {displayPrice}
+                          </span>
+                          <span className="text-[0.7rem] sm:text-xs font-medium" style={{ color: '#C4756E' }}>
+                            <span className="inline-flex items-center gap-0.5 arrow-nudge">View <span className="arrow-icon inline-block">&rarr;</span></span>
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </>
           )}

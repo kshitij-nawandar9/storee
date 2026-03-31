@@ -150,18 +150,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             {[
-              { category: 'Bags',              name: 'Bags',              sub: 'for little adventures',   image: '/images/products/kids_bag/Beach.png' },
-              { category: 'Pouches',            name: 'Pouches',           sub: 'cute & clever',           image: '/images/products/accessories_kit/Beach.jpg' },
-              { category: 'Travel Kits',        name: 'Travel Kits',       sub: 'pack like a pro',         image: '/images/products/foldable_travel_kit/Lion.jpg' },
-              { category: 'Travel Organizers',   name: 'Organizers',       sub: 'everything in its place', image: '/images/products/packing_cubes/Lion.jpg' },
-              { category: 'Specialty Kits',      name: 'Specialty Kits',   sub: 'for every little need',   image: '/images/products/pencil_pouch/Marine.png' },
-              { category: null,                  name: 'Shop All',          sub: 'see everything ✨',       image: '/images/products/toiletry_kit/Unicorn.png' },
-            ].map(({ category, name, sub, image }, index) => (
+              { name: 'Bags', sub: 'for little adventures', category: 'Bags', image: '/images/products/kids_bag/Beach.png' },
+              { name: 'Organizing & Travel Kit', sub: 'pack like a pro', category: 'Travel Kits', image: '/images/products/foldable_travel_kit/Rainbow.jpg' },
+              { name: 'Organizing & Travel Pouch', sub: 'everything in its place', category: 'Travel Organizers', image: '/images/products/packing_cubes/Lion.jpg' },
+              { name: 'Specialty Kits & Pouches', sub: 'for every little need', category: 'Specialty Kits', image: '/images/products/pencil_pouch/Marine.png' },
+            ].map(({ name, sub, category, image }, index) => (
               <Link
                 key={name}
-                to={category ? `/products?category=${encodeURIComponent(category)}` : '/products'}
+                to={`/products?category=${encodeURIComponent(category)}`}
                 className="group relative rounded-xl sm:rounded-2xl overflow-hidden card-tilt animate-fade-in"
                 style={{ aspectRatio: '3/4', animationDelay: `${index * 0.07}s` }}
               >
