@@ -42,26 +42,30 @@ export default function CartItem({ item }: CartItemProps) {
         />
       </div>
 
-      {/* Info */}
+      {/* Info + Price */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-serif font-medium text-sm sm:text-base mb-0.5" style={{ color: '#2a2220' }}>{product.name}</h3>
-        {variant && (
-          <p className="text-xs font-medium mb-2" style={{ color: '#C4756E' }}>{variant.colorName}</p>
-        )}
-        <QuantitySelector quantity={quantity} maxQuantity={999} onQuantityChange={handleQuantityChange} />
-      </div>
-
-      {/* Price + Remove */}
-      <div className="flex flex-col items-end justify-between">
-        <PriceDisplay regularPrice={displayPrice} salePrice={saleTotalPrice} size="sm" />
-        <button
-          onClick={handleRemove}
-          className="p-1.5 rounded-lg transition-all duration-200"
-          style={{ color: '#C4756E' }}
-          aria-label="Remove item"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex justify-between items-start gap-2">
+          <div className="min-w-0">
+            <h3 className="font-serif font-medium text-sm sm:text-base mb-0.5" style={{ color: '#2a2220' }}>{product.name}</h3>
+            {variant && (
+              <p className="text-xs font-medium" style={{ color: '#C4756E' }}>{variant.colorName}</p>
+            )}
+          </div>
+          <button
+            onClick={handleRemove}
+            className="p-1.5 rounded-lg transition-all duration-200 flex-shrink-0"
+            style={{ color: '#C4756E' }}
+            aria-label="Remove item"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="mt-2">
+          <PriceDisplay regularPrice={displayPrice} salePrice={saleTotalPrice} size="sm" />
+        </div>
+        <div className="mt-2">
+          <QuantitySelector quantity={quantity} maxQuantity={999} onQuantityChange={handleQuantityChange} />
+        </div>
       </div>
     </div>
   );
