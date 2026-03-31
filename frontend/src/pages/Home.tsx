@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
 import SaleBanner from '@/components/home/SaleBanner';
+import { LAUNCH_SALE_DISCOUNT } from '@/utils/constants';
 
 const reviews = [
   {
@@ -31,7 +32,7 @@ export default function Home() {
           {[...Array(2)].map((_, pass) => (
             <div key={pass} className="flex items-center">
               {[
-                '🎉 LAUNCH SALE — 30% OFF everything!',
+                `🎉 LAUNCH SALE — ${Math.round(LAUNCH_SALE_DISCOUNT * 100)}% OFF everything!`,
                 '✨ New prints just dropped',
                 '🎀 Cute enough to gift',
                 '🚚 Free shipping above ₹1,000',
