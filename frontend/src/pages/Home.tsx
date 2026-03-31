@@ -89,7 +89,7 @@ export default function Home() {
               <div key={pass} className="flex items-center">
                 {[
                   { icon: Truck,     label: 'Free Shipping above ₹1,000' },
-                  { icon: RotateCcw, label: '7-Day Returns' },
+                  { icon: RotateCcw, label: '7-Day Replacement' },
                   { icon: Shield,    label: 'Secure Payments' },
                   { icon: Heart,     label: 'Made with Love in India' },
                 ].map(({ icon: Icon, label }) => (
@@ -108,7 +108,7 @@ export default function Home() {
           <div className="grid grid-cols-4 gap-3">
             {[
               { icon: Truck,     label: 'Free Shipping', sub: 'above ₹1,000' },
-              { icon: RotateCcw, label: '7-Day Returns', sub: 'no drama, promise' },
+              { icon: RotateCcw, label: '7-Day Replacement', sub: 'no drama, promise' },
               { icon: Shield,    label: 'Secure Payments', sub: '100% safe' },
               { icon: Heart,     label: 'Made with Love', sub: 'in India 🇮🇳' },
             ].map(({ icon: Icon, label, sub }) => (

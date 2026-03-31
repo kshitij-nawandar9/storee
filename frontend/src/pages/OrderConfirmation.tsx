@@ -38,7 +38,7 @@ export default function OrderConfirmation() {
               {[
                 { step: '1', title: 'Confirmation', desc: 'You\'ll receive an email with your order details.' },
                 { step: '2', title: 'Processing', desc: 'We\'ll prepare your order and keep you updated.' },
-                { step: '3', title: 'Shipping', desc: 'Delivered within 5–7 business days with tracking.' },
+                { step: '3', title: 'Shipping', desc: 'Dispatched within 5–7 working days. Delivery time depends on your location.' },
               ].map(({ step, title, desc }) => (
                 <div key={step} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-[0.6rem] font-bold" style={{ background: '#8BA88A', color: '#fff' }}>

@@ -67,7 +67,7 @@ export default function Terms() {
             <ul className="space-y-2.5">
               {[
                 <>Free shipping on all orders above <strong>₹1,000</strong></>,
-                <>Orders are typically delivered within <strong>5–7 business days</strong></>,
+                <>Orders are dispatched within <strong>5–7 working days</strong>. Delivery time depends on your location.</>,
                 'Once shipped, you will receive tracking details to stay updated',
               ].map((item, j) => (
                 <li key={j} className="flex items-start gap-2.5 text-sm" style={{ color: '#6b5f58' }}>
