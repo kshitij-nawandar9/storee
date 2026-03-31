@@ -9,7 +9,7 @@ export const SHIPPING_INFO = 'Orders will be dispatched in 5-7 working days. Del
 export const RETURN_POLICY_MESSAGE = 'Hassle-free 7-day replacement policy';
 
 // Launch sale – set to 0 to disable
-export const LAUNCH_SALE_DISCOUNT = 0.30; // 30%
+export const LAUNCH_SALE_DISCOUNT = 0.25; // 25%
 export const LAUNCH_SALE_END_DATE = '2026-04-30T23:59:59+05:30';
 
 /** Return the sale price (in paise) after the launch discount, or undefined if no sale is active. */
