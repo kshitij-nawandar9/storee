@@ -7,7 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
 import type { ProductVariant } from '@/types';
 import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO, getSalePrice } from '@/utils/constants';
-import { CheckCircle, ChevronLeft, ChevronRight, Ruler, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
+import { CheckCircle, ChevronLeft, ChevronRight, Pen, Ruler, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -22,6 +22,8 @@ export default function ProductDetail() {
   const [hoveredVariant, setHoveredVariant] = useState<ProductVariant | null>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [customiseEnabled, setCustomiseEnabled] = useState(false);
+  const [customText, setCustomText] = useState('');
 
   const defaultVariant = product?.variants?.find((v) => v.isDefault) || product?.variants?.[0];
   const currentVariant = selectedVariant || defaultVariant;
@@ -39,7 +41,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addItem(product, quantity, currentVariant ?? undefined);
+    addItem(product, quantity, currentVariant ?? undefined, customiseEnabled && customText.trim() ? customText.trim() : undefined);
     const printLabel = currentVariant ? ` in ${currentVariant.colorName}` : '';
     toast.success(`${product.name}${printLabel} is in your bag! 🎉`, {
       icon: '🤍',
@@ -134,6 +136,55 @@ export default function ProductDetail() {
               {/* Quantity */}
               <div className="mb-7">
                 <QuantitySelector quantity={quantity} maxQuantity={999} onQuantityChange={setQuantity} />
+              </div>
+
+              {/* Free Customisation */}
+              <div className="mb-7">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Pen className="w-4 h-4" style={{ color: '#C4756E' }} />
+                    <span className="text-sm font-medium" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>Free Customisation</span>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={customiseEnabled}
+                    onClick={() => {
+                      setCustomiseEnabled(!customiseEnabled);
+                      if (customiseEnabled) setCustomText('');
+                    }}
+                    className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200"
+                    style={{ background: customiseEnabled ? '#C4756E' : '#d1cdc8' }}
+                  >
+                    <span
+                      className="inline-block h-4 w-4 rounded-full bg-white transition-transform duration-200"
+                      style={{ transform: customiseEnabled ? 'translateX(1.375rem)' : 'translateX(0.25rem)' }}
+                    />
+                  </button>
+                </div>
+                {customiseEnabled && (
+                  <div className="mt-3 animate-fade-in">
+                    <input
+                      type="text"
+                      maxLength={10}
+                      value={customText}
+                      onChange={(e) => setCustomText(e.target.value)}
+                      placeholder="Enter text (max 10 chars)"
+                      className="w-full text-sm py-2.5 px-4 rounded-xl outline-none transition-all duration-200"
+                      style={{
+                        background: '#FFFDF9',
+                        border: '1.5px solid #F0E0C6',
+                        color: '#2a2220',
+                        fontFamily: "'DM Sans', sans-serif",
+                      }}
+                      onFocus={(e) => { e.currentTarget.style.borderColor = '#C4756E'; }}
+                      onBlur={(e) => { e.currentTarget.style.borderColor = '#F0E0C6'; }}
+                    />
+                    <p className="text-xs mt-1.5 text-right" style={{ color: '#b0aaa3' }}>
+                      {customText.length}/10
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Add to Cart */}

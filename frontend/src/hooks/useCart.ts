@@ -10,7 +10,7 @@ function cartKey(productId: string, variantId?: string): string {
 
 interface CartStore {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number, variant?: ProductVariant) => void;
+  addItem: (product: Product, quantity?: number, variant?: ProductVariant, customText?: string) => void;
   removeItem: (productId: string, variantId?: string) => void;
   updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
   clearCart: () => void;
@@ -23,11 +23,11 @@ export const useCart = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      addItem: (product, quantity = 1, variant?) => {
+      addItem: (product, quantity = 1, variant?, customText?) => {
         const items = get().items;
         const key = cartKey(product.id, variant?.id);
         const existingItemIndex = items.findIndex(
-          (item) => cartKey(item.product.id, item.variant?.id) === key
+          (item) => cartKey(item.product.id, item.variant?.id) === key && item.customText === (customText || undefined)
         );
 
         if (existingItemIndex >= 0) {
@@ -45,6 +45,7 @@ export const useCart = create<CartStore>()(
                 product,
                 quantity,
                 variant,
+                ...(customText ? { customText } : {}),
               },
             ],
           });

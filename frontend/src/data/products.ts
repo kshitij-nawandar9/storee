@@ -7,7 +7,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'accessory-pouch',
     description: 'A smart organiser for small accessories like hair clips, rubber bands, and tiny essentials. Designed with thoughtful compartments to keep everything neatly sorted and easy to find. Perfect for everyday use and travel.',
     basePrice: 100000,
-    category: 'Specialty Kits',
+    category: 'Speciality Kits',
     stock: 50,
     isActive: true,
     features: [
@@ -45,7 +45,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'toiletry-kit',
     description: "Keep kids' toiletries organised with this compact and travel-friendly pouch. Designed with a clear front for quick visibility, it's perfect for storing creams, hygiene products, and daily essentials. Lightweight, practical, and easy to clean.",
     basePrice: 45000,
-    category: 'Travel Kits',
+    category: 'Organisers and Pouches',
     stock: 40,
     isActive: true,
     features: [
@@ -87,7 +87,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'foldable-travel-kit',
     description: "A compact foldable travel organiser designed to keep kids' essentials neatly sorted. With multiple compartments and a space-saving design, it's perfect for travel, sleepovers, and everyday organisation. Lightweight, practical, and easy to carry.",
     basePrice: 90000,
-    category: 'Travel Kits',
+    category: 'Organisers and Pouches',
     stock: 35,
     isActive: true,
     features: [
@@ -127,7 +127,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: '7-days-pack-kit',
     description: 'Plan outfits and essentials effortlessly with our 7 Days Pack Kit. Seven separate pouches help organise each day of the week, all stored inside one larger pouch for easy packing. Ideal for travel, school trips, and organised routines.',
     basePrice: 260000,
-    category: 'Travel Kits',
+    category: 'Organisers and Pouches',
     stock: 30,
     isActive: true,
     features: [
@@ -146,10 +146,10 @@ export const PRODUCTS_DATA: Product[] = [
       { id: '84cf01a0-2629-4886-88b6-38ac11f36a1b', url: '/images/products/pack_a_week_kit/Lion.jpg', altText: '7 Days Pack Kit - Lion', order: 5, isPrimary: false },
     ],
     variants: [
-      { id: '7-days-pack-kit-rainbow', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/pack_a_week_kit/Rainbow.jpg', price: 260000, stock: 50, sku: '7-DAYS-PACK-KIT-RAINBOW', isDefault: true, isActive: true },
+      { id: '7-days-pack-kit-rainbow', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/pack_a_week_kit/Rainbow.jpg', price: 260000, stock: 50, sku: '7-DAYS-PACK-KIT-RAINBOW', isDefault: false, isActive: true },
       { id: '7-days-pack-kit-aqua', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/pack_a_week_kit/Aqua.jpg', price: 260000, stock: 45, sku: '7-DAYS-PACK-KIT-AQUA', isDefault: false, isActive: true },
       { id: '7-days-pack-kit-beach', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/pack_a_week_kit/Beach.jpg', price: 260000, stock: 40, sku: '7-DAYS-PACK-KIT-BEACH', isDefault: false, isActive: true },
-      { id: '7-days-pack-kit-bunny', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/pack_a_week_kit/Bunny.jpg', price: 260000, stock: 35, sku: '7-DAYS-PACK-KIT-BUNNY', isDefault: false, isActive: true },
+      { id: '7-days-pack-kit-bunny', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/pack_a_week_kit/Bunny.jpg', price: 260000, stock: 35, sku: '7-DAYS-PACK-KIT-BUNNY', isDefault: true, isActive: true },
       { id: '7-days-pack-kit-lion', productId: 'e8a475ce-3166-461f-b544-e02dfd2f1504', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/pack_a_week_kit/Lion.jpg', price: 260000, stock: 30, sku: '7-DAYS-PACK-KIT-LION', isDefault: false, isActive: true },
     ]
   },
@@ -159,7 +159,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'packing-cubes',
     description: "A set of four packing cubes designed to organise clothes, accessories, and essentials inside your suitcase. These lightweight travel organisers maximise space while keeping everything neat and easy to find. Perfect for family travel and kids' packing.",
     basePrice: 250000,
-    category: 'Travel Organizers',
+    category: 'Organisers and Pouches',
     stock: 45,
     isActive: true,
     features: [
@@ -201,7 +201,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'shoe-pouch',
     description: 'A protective shoe pouch designed to keep footwear separate from clothes while travelling. Spacious, easy to pack, and perfect for keeping luggage clean and organised. A must-have travel organiser for kids and families.',
     basePrice: 50000,
-    category: 'Travel Organizers',
+    category: 'Speciality Kits',
     stock: 50,
     isActive: true,
     features: [
@@ -225,7 +225,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c306-0001-4001-8001-000000000005', url: '/images/products/shoe_pouch/Unicorn.png', altText: 'Shoe Pouch - Unicorn', order: 10, isPrimary: false },
     ],
     variants: [
-      { id: 'shoe-pouch-aqua', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/shoe_pouch/Aqua.jpg', price: 50000, stock: 50, sku: 'SHOE-POUCH-AQUA', isDefault: true, isActive: true },
+      { id: 'shoe-pouch-aqua', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/shoe_pouch/Aqua.jpg', price: 50000, stock: 50, sku: 'SHOE-POUCH-AQUA', isDefault: false, isActive: true },
       { id: 'shoe-pouch-beach', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/shoe_pouch/Beach.jpg', price: 50000, stock: 45, sku: 'SHOE-POUCH-BEACH', isDefault: false, isActive: true },
       { id: 'shoe-pouch-bunny', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/shoe_pouch/Bunny.jpg', price: 50000, stock: 40, sku: 'SHOE-POUCH-BUNNY', isDefault: false, isActive: true },
       { id: 'shoe-pouch-rainbow', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/shoe_pouch/Rainbow.jpg', price: 50000, stock: 35, sku: 'SHOE-POUCH-RAINBOW', isDefault: false, isActive: true },
@@ -233,7 +233,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'shoe-pouch-jungle-safari', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/shoe_pouch/Jungle Safari.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'shoe-pouch-marine', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/shoe_pouch/Marine.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-MARINE', isDefault: false, isActive: true },
       { id: 'shoe-pouch-space', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/shoe_pouch/Space.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-SPACE', isDefault: false, isActive: true },
-      { id: 'shoe-pouch-sports', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/shoe_pouch/Sports.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-SPORTS', isDefault: false, isActive: true },
+      { id: 'shoe-pouch-sports', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/shoe_pouch/Sports.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-SPORTS', isDefault: true, isActive: true },
       { id: 'shoe-pouch-unicorn', productId: 'b9c7c7f2-94fc-4b39-bc06-8d9db1a7341c', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/shoe_pouch/Unicorn.png', price: 50000, stock: 30, sku: 'SHOE-POUCH-UNICORN', isDefault: false, isActive: true },
     ]
   },
@@ -243,7 +243,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'multipurpose-pouch',
     description: 'A versatile pouch set designed to organise everything from toys and stationery to travel essentials. With multiple sizes and spacious compartments, it keeps everyday items sorted and easy to access. A practical organiser for home and travel.',
     basePrice: 100000,
-    category: 'Travel Organizers',
+    category: 'Organisers and Pouches',
     stock: 40,
     isActive: true,
     features: [
@@ -272,12 +272,12 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c307-0001-4001-8001-000000000010', url: '/images/products/multipurpose_pouch/Space_set.png', altText: 'Multipurpose Pouch - Space (set)', order: 15, isPrimary: false },
     ],
     variants: [
-      { id: 'multipurpose-pouch-beach', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/multipurpose_pouch/Beach.jpg', price: 100000, stock: 50, sku: 'MULTIPURPOSE-POUCH-BEACH', isDefault: true, isActive: true },
+      { id: 'multipurpose-pouch-beach', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/multipurpose_pouch/Beach.jpg', price: 100000, stock: 50, sku: 'MULTIPURPOSE-POUCH-BEACH', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-lion', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/multipurpose_pouch/Lion.jpg', price: 100000, stock: 45, sku: 'MULTIPURPOSE-POUCH-LION', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-bunny', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/multipurpose_pouch/Bunny.jpg', price: 100000, stock: 40, sku: 'MULTIPURPOSE-POUCH-BUNNY', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-aqua', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/multipurpose_pouch/Aqua.jpg', price: 100000, stock: 35, sku: 'MULTIPURPOSE-POUCH-AQUA', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-rainbow', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/multipurpose_pouch/Rainbow.jpg', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-RAINBOW', isDefault: false, isActive: true },
-      { id: 'multipurpose-pouch-jungle-safari', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/multipurpose_pouch/Jungle Safari.png', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-JUNGLE-SAFARI', isDefault: false, isActive: true },
+      { id: 'multipurpose-pouch-jungle-safari', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/multipurpose_pouch/Jungle Safari.png', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-JUNGLE-SAFARI', isDefault: true, isActive: true },
       { id: 'multipurpose-pouch-marine', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/multipurpose_pouch/Marine.png', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-MARINE', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-space', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/multipurpose_pouch/Space.png', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-SPACE', isDefault: false, isActive: true },
       { id: 'multipurpose-pouch-sports', productId: 'ead82f2c-ea92-4a92-9702-f7e464262639', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/multipurpose_pouch/Sports.png', price: 100000, stock: 30, sku: 'MULTIPURPOSE-POUCH-SPORTS', isDefault: false, isActive: true },
@@ -290,7 +290,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'on-the-go-foldable-pouch',
     description: 'A smart foldable pouch that opens into organised compartments for quick access to essentials. Perfect for travel, school bags, or day trips when you need everything in one place. Compact when folded, spacious when opened.',
     basePrice: 90000,
-    category: 'Travel Organizers',
+    category: 'Organisers and Pouches',
     stock: 30,
     isActive: true,
     features: [
@@ -310,10 +310,10 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c308-0001-4001-8001-000000000005', url: '/images/products/on_the_go_foldable_pouch/Unicorn.png', altText: 'On-the-Go Foldable Pouch - Unicorn', order: 6, isPrimary: false },
     ],
     variants: [
-      { id: 'on-the-go-foldable-pouch-lion', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/on_the_go_foldable_pouch/Lion.jpg', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-LION', isDefault: true, isActive: true },
+      { id: 'on-the-go-foldable-pouch-lion', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/on_the_go_foldable_pouch/Lion.jpg', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-LION', isDefault: false, isActive: true },
       { id: 'on-the-go-foldable-pouch-jungle-safari', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/on_the_go_foldable_pouch/Jungle Safari.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'on-the-go-foldable-pouch-marine', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/on_the_go_foldable_pouch/Marine.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-MARINE', isDefault: false, isActive: true },
-      { id: 'on-the-go-foldable-pouch-space', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/on_the_go_foldable_pouch/Space.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-SPACE', isDefault: false, isActive: true },
+      { id: 'on-the-go-foldable-pouch-space', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/on_the_go_foldable_pouch/Space.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-SPACE', isDefault: true, isActive: true },
       { id: 'on-the-go-foldable-pouch-sports', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/on_the_go_foldable_pouch/Sports.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-SPORTS', isDefault: false, isActive: true },
       { id: 'on-the-go-foldable-pouch-unicorn', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/on_the_go_foldable_pouch/Unicorn.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-UNICORN', isDefault: false, isActive: true },
     ]
@@ -324,7 +324,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'dental-kit',
     description: "A compact dental organiser designed to keep kids' oral care essentials in one place. Perfect for storing toothbrush, toothpaste, and hygiene products during travel or daily routines. Practical, organised, and easy to carry.",
     basePrice: 20000,
-    category: 'Specialty Kits',
+    category: 'Speciality Kits',
     stock: 35,
     isActive: true,
     features: [
@@ -343,9 +343,9 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'd8659310-1749-4fcb-8713-2e2f01e954ff', url: '/images/products/dental_kit/Bunny.png', altText: 'Dental Kit - Bunny', order: 5, isPrimary: false },
     ],
     variants: [
-      { id: 'dental-kit-rainbow', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/dental_kit/Rainbow.png', price: 20000, stock: 35, sku: 'DENTAL-KIT-RAINBOW', isDefault: true, isActive: true },
+      { id: 'dental-kit-rainbow', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/dental_kit/Rainbow.png', price: 20000, stock: 35, sku: 'DENTAL-KIT-RAINBOW', isDefault: false, isActive: true },
       { id: 'dental-kit-lion', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/dental_kit/Lion.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-LION', isDefault: false, isActive: true },
-      { id: 'dental-kit-marine', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/dental_kit/Marine.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-MARINE', isDefault: false, isActive: true },
+      { id: 'dental-kit-marine', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/dental_kit/Marine.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-MARINE', isDefault: true, isActive: true },
       { id: 'dental-kit-beach', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/dental_kit/Beach.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-BEACH', isDefault: false, isActive: true },
       { id: 'dental-kit-bunny', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/dental_kit/Bunny.png', price: 20000, stock: 25, sku: 'DENTAL-KIT-BUNNY', isDefault: false, isActive: true },
     ]
@@ -380,11 +380,11 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c309-0001-4001-8001-000000000007', url: '/images/products/crossbody_bag/Unicorn.png', altText: 'Crossbody Bag - Unicorn', order: 10, isPrimary: false },
     ],
     variants: [
-      { id: 'crossbody-bag-aqua', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/crossbody_bag/Aqua.png', price: 65000, stock: 50, sku: 'CROSSBODY-BAG-AQUA', isDefault: true, isActive: true },
+      { id: 'crossbody-bag-aqua', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/crossbody_bag/Aqua.png', price: 65000, stock: 50, sku: 'CROSSBODY-BAG-AQUA', isDefault: false, isActive: true },
       { id: 'crossbody-bag-beach', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/crossbody_bag/Beach.png', price: 65000, stock: 45, sku: 'CROSSBODY-BAG-BEACH', isDefault: false, isActive: true },
       { id: 'crossbody-bag-bunny', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/crossbody_bag/Bunny.png', price: 65000, stock: 40, sku: 'CROSSBODY-BAG-BUNNY', isDefault: false, isActive: true },
       { id: 'crossbody-bag-rainbow', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/crossbody_bag/Rainbow.png', price: 65000, stock: 35, sku: 'CROSSBODY-BAG-RAINBOW', isDefault: false, isActive: true },
-      { id: 'crossbody-bag-lion', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/crossbody_bag/Lion.png', price: 65000, stock: 30, sku: 'CROSSBODY-BAG-LION', isDefault: false, isActive: true },
+      { id: 'crossbody-bag-lion', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/crossbody_bag/Lion.png', price: 65000, stock: 30, sku: 'CROSSBODY-BAG-LION', isDefault: true, isActive: true },
       { id: 'crossbody-bag-jungle-safari', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/crossbody_bag/Jungle Safari.png', price: 65000, stock: 30, sku: 'CROSSBODY-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'crossbody-bag-marine', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/crossbody_bag/Marine.png', price: 65000, stock: 30, sku: 'CROSSBODY-BAG-MARINE', isDefault: false, isActive: true },
       { id: 'crossbody-bag-space', productId: '313c09df-3e40-44ea-be6c-fb005850e3a0', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/crossbody_bag/Space.png', price: 65000, stock: 30, sku: 'CROSSBODY-BAG-SPACE', isDefault: false, isActive: true },
@@ -398,7 +398,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'medicine-kit',
     description: "A travel-friendly medicine organiser designed to keep your child's medicines neatly arranged. Dedicated loops hold bottles securely to prevent spills, with enough space for strips, syrups, and essentials. Perfect for travel and everyday preparedness.",
     basePrice: 45000,
-    category: 'Specialty Kits',
+    category: 'Speciality Kits',
     stock: 50,
     isActive: true,
     features: [
@@ -423,7 +423,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'd2e3f4a5-b6c7-4d8e-8f9a-0b1c2d3e4f5a', url: '/images/products/medicine_kit/Space_open.png', altText: 'Medicine Kit - Space (open)', order: 11, isPrimary: false },
     ],
     variants: [
-      { id: 'medicine-kit-rainbow', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/medicine_kit/Rainbow.jpg', price: 45000, stock: 50, sku: 'MEDICINE-KIT-RAINBOW', isDefault: true, isActive: true },
+      { id: 'medicine-kit-rainbow', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/medicine_kit/Rainbow.jpg', price: 45000, stock: 50, sku: 'MEDICINE-KIT-RAINBOW', isDefault: false, isActive: true },
       { id: 'medicine-kit-marine', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/medicine_kit/Marine.jpg', price: 45000, stock: 45, sku: 'MEDICINE-KIT-MARINE', isDefault: false, isActive: true },
       { id: 'medicine-kit-beach', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/medicine_kit/Beach.jpg', price: 45000, stock: 40, sku: 'MEDICINE-KIT-BEACH', isDefault: false, isActive: true },
       { id: 'medicine-kit-sports', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/medicine_kit/Sports.jpg', price: 45000, stock: 40, sku: 'MEDICINE-KIT-SPORTS', isDefault: false, isActive: true },
@@ -432,7 +432,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'medicine-kit-lion', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/medicine_kit/Lion.jpg', price: 45000, stock: 30, sku: 'MEDICINE-KIT-LION', isDefault: false, isActive: true },
       { id: 'medicine-kit-aqua', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/medicine_kit/Aqua.jpg', price: 45000, stock: 30, sku: 'MEDICINE-KIT-AQUA', isDefault: false, isActive: true },
       { id: 'medicine-kit-jungle-safari', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/medicine_kit/Jungle Safari.jpg', price: 45000, stock: 30, sku: 'MEDICINE-KIT-JUNGLE-SAFARI', isDefault: false, isActive: true },
-      { id: 'medicine-kit-unicorn', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/medicine_kit/Unicorn.jpg', price: 45000, stock: 30, sku: 'MEDICINE-KIT-UNICORN', isDefault: false, isActive: true },
+      { id: 'medicine-kit-unicorn', productId: '099cc195-d44c-4557-b7ff-1a0ceb1e7659', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/medicine_kit/Unicorn.jpg', price: 45000, stock: 30, sku: 'MEDICINE-KIT-UNICORN', isDefault: true, isActive: true },
     ]
   },
   {
@@ -441,7 +441,7 @@ export const PRODUCTS_DATA: Product[] = [
     slug: 'pencil-pouch',
     description: 'A clever pencil pouch that also works as a standing pencil organiser. With multiple compartments for pencils, crayons, and stationery, it keeps study time neat and organised. Spacious, functional, and fun for kids.',
     basePrice: 55000,
-    category: 'Specialty Kits',
+    category: 'Speciality Kits',
     stock: 50,
     isActive: true,
     features: [
@@ -466,9 +466,9 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'c3d4e5f6-a7b8-4c9d-8e0f-1a2b3c4d5e6f', url: '/images/products/pencil_pouch/Unicorn.jpg', altText: 'Pencil Pouch - Unicorn', order: 11, isPrimary: false },
     ],
     variants: [
-      { id: 'pencil-pouch-marine', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/pencil_pouch/Marine.png', price: 55000, stock: 50, sku: 'PENCIL-POUCH-MARINE', isDefault: true, isActive: true },
+      { id: 'pencil-pouch-marine', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/pencil_pouch/Marine.png', price: 55000, stock: 50, sku: 'PENCIL-POUCH-MARINE', isDefault: false, isActive: true },
       { id: 'pencil-pouch-beach', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/pencil_pouch/Beach.png', price: 55000, stock: 45, sku: 'PENCIL-POUCH-BEACH', isDefault: false, isActive: true },
-      { id: 'pencil-pouch-rainbow', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/pencil_pouch/Rainbow.png', price: 55000, stock: 40, sku: 'PENCIL-POUCH-RAINBOW', isDefault: false, isActive: true },
+      { id: 'pencil-pouch-rainbow', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/pencil_pouch/Rainbow.png', price: 55000, stock: 40, sku: 'PENCIL-POUCH-RAINBOW', isDefault: true, isActive: true },
       { id: 'pencil-pouch-lion', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/pencil_pouch/Lion.png', price: 55000, stock: 40, sku: 'PENCIL-POUCH-LION', isDefault: false, isActive: true },
       { id: 'pencil-pouch-bunny', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/pencil_pouch/Bunny.png', price: 55000, stock: 35, sku: 'PENCIL-POUCH-BUNNY', isDefault: false, isActive: true },
       { id: 'pencil-pouch-sports', productId: 'c17724c2-3608-47c6-9ee5-ee791d7baf21', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/pencil_pouch/Sports.png', price: 55000, stock: 35, sku: 'PENCIL-POUCH-SPORTS', isDefault: false, isActive: true },
@@ -509,10 +509,10 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c310-0002-4001-8001-000000000010', url: '/images/products/duffle_bag/Unicorn.png', altText: 'Duffle Bag - Unicorn', order: 10, isPrimary: false },
     ],
     variants: [
-      { id: 'duffle-bag-aqua', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/duffle_bag/Aqua.png', price: 90000, stock: 40, sku: 'DUFFLE-BAG-AQUA', isDefault: true, isActive: true },
+      { id: 'duffle-bag-aqua', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/duffle_bag/Aqua.png', price: 90000, stock: 40, sku: 'DUFFLE-BAG-AQUA', isDefault: false, isActive: true },
       { id: 'duffle-bag-beach', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/duffle_bag/Beach.png', price: 90000, stock: 35, sku: 'DUFFLE-BAG-BEACH', isDefault: false, isActive: true },
       { id: 'duffle-bag-bunny', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/duffle_bag/Bunny.png', price: 90000, stock: 35, sku: 'DUFFLE-BAG-BUNNY', isDefault: false, isActive: true },
-      { id: 'duffle-bag-jungle-safari', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/duffle_bag/Jungle Safari.png', price: 90000, stock: 30, sku: 'DUFFLE-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
+      { id: 'duffle-bag-jungle-safari', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/duffle_bag/Jungle Safari.png', price: 90000, stock: 30, sku: 'DUFFLE-BAG-JUNGLE-SAFARI', isDefault: true, isActive: true },
       { id: 'duffle-bag-lion', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/duffle_bag/Lion.png', price: 90000, stock: 30, sku: 'DUFFLE-BAG-LION', isDefault: false, isActive: true },
       { id: 'duffle-bag-marine', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/duffle_bag/Marine.png', price: 90000, stock: 30, sku: 'DUFFLE-BAG-MARINE', isDefault: false, isActive: true },
       { id: 'duffle-bag-rainbow', productId: 'a1b2c310-0001-4001-8001-000000000001', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/duffle_bag/Rainbow.png', price: 90000, stock: 30, sku: 'DUFFLE-BAG-RAINBOW', isDefault: false, isActive: true },
@@ -551,7 +551,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c311-0002-4001-8001-000000000010', url: '/images/products/kids_bag/Aqua.png', altText: 'Kids Bag - Aqua', order: 10, isPrimary: false },
     ],
     variants: [
-      { id: 'kids-bag-beach', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/kids_bag/Beach.png', price: 145000, stock: 45, sku: 'KIDS-BAG-BEACH', isDefault: true, isActive: true },
+      { id: 'kids-bag-beach', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/kids_bag/Beach.png', price: 145000, stock: 45, sku: 'KIDS-BAG-BEACH', isDefault: false, isActive: true },
       { id: 'kids-bag-bunny', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/kids_bag/Bunny.png', price: 145000, stock: 40, sku: 'KIDS-BAG-BUNNY', isDefault: false, isActive: true },
       { id: 'kids-bag-jungle-safari', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/kids_bag/Jungle Safari.png', price: 145000, stock: 35, sku: 'KIDS-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'kids-bag-lion', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/kids_bag/Lion.png', price: 145000, stock: 35, sku: 'KIDS-BAG-LION', isDefault: false, isActive: true },
@@ -560,7 +560,7 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'kids-bag-space', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/kids_bag/Space.png', price: 145000, stock: 30, sku: 'KIDS-BAG-SPACE', isDefault: false, isActive: true },
       { id: 'kids-bag-sports', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/kids_bag/Sports.png', price: 145000, stock: 30, sku: 'KIDS-BAG-SPORTS', isDefault: false, isActive: true },
       { id: 'kids-bag-unicorn', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/kids_bag/Unicorn.png', price: 145000, stock: 30, sku: 'KIDS-BAG-UNICORN', isDefault: false, isActive: true },
-      { id: 'kids-bag-aqua', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/kids_bag/Aqua.png', price: 145000, stock: 30, sku: 'KIDS-BAG-AQUA', isDefault: false, isActive: true },
+      { id: 'kids-bag-aqua', productId: 'a1b2c311-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/kids_bag/Aqua.png', price: 145000, stock: 30, sku: 'KIDS-BAG-AQUA', isDefault: true, isActive: true },
     ]
   },
   {
@@ -593,9 +593,9 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c312-0002-4001-8001-000000000010', url: '/images/products/toddlers_bag/Unicorn.png', altText: 'Toddlers Bag - Unicorn', order: 10, isPrimary: false },
     ],
     variants: [
-      { id: 'toddlers-bag-aqua', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/toddlers_bag/Aqua.png', price: 115000, stock: 40, sku: 'TODDLERS-BAG-AQUA', isDefault: true, isActive: true },
+      { id: 'toddlers-bag-aqua', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Aqua', colorCode: '#1E7FD8', image: '/images/products/toddlers_bag/Aqua.png', price: 115000, stock: 40, sku: 'TODDLERS-BAG-AQUA', isDefault: false, isActive: true },
       { id: 'toddlers-bag-beach', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/toddlers_bag/Beach.png', price: 115000, stock: 35, sku: 'TODDLERS-BAG-BEACH', isDefault: false, isActive: true },
-      { id: 'toddlers-bag-bunny', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/toddlers_bag/Bunny.png', price: 115000, stock: 35, sku: 'TODDLERS-BAG-BUNNY', isDefault: false, isActive: true },
+      { id: 'toddlers-bag-bunny', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/toddlers_bag/Bunny.png', price: 115000, stock: 35, sku: 'TODDLERS-BAG-BUNNY', isDefault: true, isActive: true },
       { id: 'toddlers-bag-jungle-safari', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Jungle Safari', colorCode: '#4A7C59', image: '/images/products/toddlers_bag/Jungle safari.png', price: 115000, stock: 30, sku: 'TODDLERS-BAG-JUNGLE-SAFARI', isDefault: false, isActive: true },
       { id: 'toddlers-bag-lion', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/toddlers_bag/Lion.png', price: 115000, stock: 30, sku: 'TODDLERS-BAG-LION', isDefault: false, isActive: true },
       { id: 'toddlers-bag-marine', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/toddlers_bag/Marine.png', price: 115000, stock: 30, sku: 'TODDLERS-BAG-MARINE', isDefault: false, isActive: true },

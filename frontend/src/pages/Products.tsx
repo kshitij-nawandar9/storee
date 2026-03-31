@@ -114,7 +114,7 @@ export default function Products() {
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
                 {filtered.map((product, index) => {
                   const variants = product.variants?.filter((v) => v.isActive) ?? [];
-                  const variant = variants[index % variants.length] ?? variants[0];
+                  const variant = variants.find((v) => v.isDefault) ?? variants[0];
                   const originalPrice = variant?.price ?? product.basePrice;
                   const salePrice = getSalePrice(originalPrice);
                   const effectivePrice = salePrice ?? originalPrice;

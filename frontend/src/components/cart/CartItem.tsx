@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Pen, Trash2 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import type { CartItem as CartItemType } from '@/types';
 import QuantitySelector from '@/components/product/QuantitySelector';
@@ -51,6 +51,11 @@ export default function CartItem({ item }: CartItemProps) {
             <h3 className="font-serif font-medium text-sm sm:text-base mb-0.5" style={{ color: '#2a2220' }}>{product.name}</h3>
             {variant && (
               <p className="text-xs font-medium" style={{ color: '#C4756E' }}>{variant.colorName}</p>
+            )}
+            {item.customText && (
+              <p className="text-xs flex items-center gap-1 mt-0.5" style={{ color: '#8BA88A' }}>
+                <Pen className="w-3 h-3" /> "{item.customText}"
+              </p>
             )}
           </div>
           <button

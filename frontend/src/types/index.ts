@@ -39,6 +39,7 @@ export interface CartItem {
   quantity: number;
   // variant is optional - not needed for now
   variant?: ProductVariant;
+  customText?: string;
 }
 
 export interface Address {
