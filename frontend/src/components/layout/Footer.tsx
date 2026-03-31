@@ -1,7 +1,26 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Instagram, Mail, Phone } from 'lucide-react';
 
+function scrollToHash(hash: string) {
+  const el = document.getElementById(hash);
+  if (el) {
+    const y = el.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
 export default function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLinkClick = (to: string, e: React.MouseEvent) => {
+    const [path, hash] = to.split('#');
+    if (hash && location.pathname === path) {
+      e.preventDefault();
+      scrollToHash(hash);
+    }
+  };
+
   return (
     <footer style={{ background: 'linear-gradient(160deg, #2a2220 0%, #3d2b2b 60%, #332624 100%)' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
@@ -48,13 +67,13 @@ export default function Footer() {
             <h4 className="font-serif text-sm font-medium mb-4" style={{ color: '#FDF6EC' }}>Support</h4>
             <ul className="space-y-2.5">
               {[
-                { to: '/terms', label: 'Shipping Info' },
-                { to: '/terms', label: 'Returns & Replacements' },
+                { to: '/terms#shipping', label: 'Shipping Info' },
+                { to: '/terms#returns', label: 'Returns & Replacements' },
                 { to: '/privacy', label: 'Privacy Policy' },
                 { to: '/terms', label: 'Terms of Service' },
               ].map(({ to, label }) => (
                 <li key={label}>
-                  <Link to={to} className="text-sm transition-colors duration-200" style={{ color: 'rgba(253,246,236,0.4)' }}>
+                  <Link to={to} onClick={(e) => handleLinkClick(to, e)} className="text-sm transition-colors duration-200" style={{ color: 'rgba(253,246,236,0.4)' }}>
                     {label}
                   </Link>
                 </li>

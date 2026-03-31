@@ -81,6 +81,8 @@ export default function ProductDetail() {
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                   key={displayImage}
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.jpg'; }}
                 />
               ) : (
@@ -229,6 +231,7 @@ export default function ProductDetail() {
                 src={displayImages[modalImageIndex]}
                 alt={product.name}
                 className="max-w-full max-h-[78vh] object-contain mx-auto rounded-xl"
+                decoding="async"
               />
 
               {displayImages.length > 1 && (
@@ -265,7 +268,7 @@ export default function ProductDetail() {
                       opacity: modalImageIndex === index ? 1 : 0.6,
                     }}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   </button>
                 ))}
               </div>

@@ -70,6 +70,8 @@ export default function ColorSelector({
                   src={variant.image}
                   alt={`${productName} - ${variant.colorName}`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
 

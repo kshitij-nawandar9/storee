@@ -45,6 +45,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             src={primaryImage || '/placeholder.jpg'}
             alt={product.name}
             className="product-img w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
 
           {/* Warm overlay on hover */}

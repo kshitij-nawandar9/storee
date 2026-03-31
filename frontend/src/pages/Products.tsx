@@ -134,6 +134,8 @@ export default function Products() {
                           src={variant?.image || '/placeholder.jpg'}
                           alt={`${product.name}${variant ? ` - ${variant.colorName}` : ''}`}
                           className="product-img w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(to top, rgba(196,117,110,0.12) 0%, transparent 40%)' }} />
                       </div>

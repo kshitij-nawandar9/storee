@@ -70,6 +70,8 @@ export default function ProductGallery({
           src={displayImages[selectedImage]}
           alt={productName}
           className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
           <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium bg-black/50 px-4 py-2 rounded-lg">
@@ -121,6 +123,8 @@ export default function ProductGallery({
                 src={img}
                 alt={`${productName} ${index + 1}`}
                 className="w-full h-20 object-cover rounded"
+                loading="lazy"
+                decoding="async"
               />
             </button>
           ))}
@@ -150,6 +154,7 @@ export default function ProductGallery({
                 src={displayImages[selectedImage]}
                 alt={productName}
                 className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
+                decoding="async"
               />
               
               {displayImages.length > 1 && (
@@ -188,6 +193,8 @@ export default function ProductGallery({
                       src={img}
                       alt=""
                       className="w-full h-full object-cover rounded"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </button>
                 ))}

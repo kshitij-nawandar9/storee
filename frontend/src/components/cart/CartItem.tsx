@@ -39,6 +39,8 @@ export default function CartItem({ item }: CartItemProps) {
           src={displayImage || '/placeholder.jpg'}
           alt={variant ? `${product.name} - ${variant.colorName}` : product.name}
           className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
       </div>
 

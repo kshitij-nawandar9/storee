@@ -90,6 +90,7 @@ export default function Navbar() {
                 src={currentLogoPath}
                 alt="Storee"
                 className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
+                decoding="async"
                 onError={handleLogoError}
               />
             ) : (
@@ -140,6 +141,8 @@ export default function Navbar() {
                       alt={user.name}
                       className="w-7 h-7 rounded-full"
                       style={{ border: '2px solid #F8EDDA' }}
+                      loading="lazy"
+                      decoding="async"
                       onError={() => setProfilePictureError(true)}
                     />
                   ) : (

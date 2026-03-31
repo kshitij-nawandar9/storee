@@ -1,10 +1,31 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 export default function Privacy() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.replace('#', ''));
+      if (el) {
+        setTimeout(() => {
+          const y = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [hash]);
+
   const sections = [
     {
+      id: 'information-we-collect',
       title: 'Information We Collect',
       content: 'When you sign in to Storee using Google OAuth, we collect your email address, name, and profile picture from your Google account. This information is used solely to create and manage your account on our platform.',
     },
     {
+      id: 'how-we-use',
       title: 'How We Use Your Information',
       content: null,
       list: [
@@ -15,14 +36,17 @@ export default function Privacy() {
       ],
     },
     {
+      id: 'data-security',
       title: 'Data Security',
       content: 'We implement appropriate security measures to protect your personal information. Your data is stored securely and we do not share it with third parties except as necessary to process your orders.',
     },
     {
+      id: 'your-rights',
       title: 'Your Rights',
       content: 'You have the right to access, update, or delete your personal information at any time. You can also request that we stop processing your data.',
     },
     {
+      id: 'google-oauth',
       title: 'Google OAuth',
       content: "When you sign in with Google, you're allowing Storee to access your basic profile information (name, email, picture). This is handled through Google's secure OAuth 2.0 protocol. We do not have access to your Google password.",
     },
@@ -45,6 +69,7 @@ export default function Privacy() {
           {sections.map((section, i) => (
             <section
               key={section.title}
+              id={section.id}
               className="rounded-2xl px-6 py-5"
               style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
             >
@@ -74,6 +99,7 @@ export default function Privacy() {
 
           {/* Contact */}
           <section
+            id="contact"
             className="rounded-2xl px-6 py-5"
             style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
           >

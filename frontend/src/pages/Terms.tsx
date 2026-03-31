@@ -1,26 +1,51 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 export default function Terms() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.replace('#', ''));
+      if (el) {
+        setTimeout(() => {
+          const y = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [hash]);
+
   const sections = [
     {
+      id: 'acceptance',
       title: 'Acceptance of Terms',
       content: 'By accessing and using Storee, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.',
     },
     {
+      id: 'use-of-service',
       title: 'Use of Service',
       content: 'Storee provides an e-commerce platform for purchasing products. You agree to use the service only for lawful purposes and in accordance with these terms.',
     },
     {
+      id: 'account-registration',
       title: 'Account Registration',
       content: 'To place orders, you must sign in using Google OAuth. You are responsible for maintaining the security of your account and for all activities that occur under your account.',
     },
     {
+      id: 'orders-payments',
       title: 'Orders & Payments',
       content: 'All orders are subject to acceptance and availability. Prices are displayed in Indian Rupees (INR) and include applicable taxes. Payment is processed securely through Razorpay.',
     },
     {
+      id: 'limitation-of-liability',
       title: 'Limitation of Liability',
       content: 'Storee shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service.',
     },
     {
+      id: 'changes-to-terms',
       title: 'Changes to Terms',
       content: 'We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the modified terms.',
     },
@@ -43,6 +68,7 @@ export default function Terms() {
           {sections.map((section, i) => (
             <section
               key={section.title}
+              id={section.id}
               className="rounded-2xl px-6 py-5 transition-all duration-200"
               style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
             >
@@ -57,6 +83,7 @@ export default function Terms() {
 
           {/* Shipping — detailed */}
           <section
+            id="shipping"
             className="rounded-2xl px-6 py-5"
             style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
           >
@@ -83,6 +110,7 @@ export default function Terms() {
 
           {/* Returns — detailed */}
           <section
+            id="returns"
             className="rounded-2xl px-6 py-5"
             style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
           >
@@ -134,6 +162,7 @@ export default function Terms() {
 
           {/* Contact */}
           <section
+            id="contact"
             className="rounded-2xl px-6 py-5"
             style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.05)' }}
           >

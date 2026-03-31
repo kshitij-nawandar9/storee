@@ -36,6 +36,7 @@ export default function Checkout() {
   const [saveAsDefault, setSaveAsDefault] = useState(false);
   const [showSaveOption, setShowSaveOption] = useState(false);
   const [addressLabel, setAddressLabel] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const total = getTotal();
   const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
@@ -116,8 +117,35 @@ export default function Checkout() {
     setShowSaveOption(true);
   };
 
+  const validateEmail = (email: string): string => {
+    if (!email.trim()) return 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    if (email.length > 254) return 'Email address is too long';
+    const [localPart] = email.split('@');
+    if (localPart.length > 64) return 'Email username is too long';
+    return '';
+  };
+
+  const handleEmailChange = (email: string) => {
+    setFormData({ ...formData, email });
+    if (emailError) setEmailError(validateEmail(email));
+  };
+
+  const handleEmailBlur = () => {
+    setEmailError(validateEmail(formData.email));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const emailErr = validateEmail(formData.email);
+    if (emailErr) {
+      setEmailError(emailErr);
+      toast.error(emailErr);
+      return;
+    }
+
     setLoading(true);
 
     // Save address if user wants to save it
@@ -324,10 +352,18 @@ export default function Checkout() {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all bg-white"
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    onBlur={handleEmailBlur}
+                    className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 transition-all bg-white ${
+                      emailError
+                        ? 'border-red-400 focus:ring-red-300 focus:border-red-400'
+                        : 'border-orange-200 focus:ring-primary-500 focus:border-primary-500'
+                    }`}
                     placeholder="your@email.com"
                   />
+                  {emailError && (
+                    <p className="mt-1 text-sm text-red-500">{emailError}</p>
+                  )}
                 </div>
 
                 <div>
@@ -536,6 +572,8 @@ export default function Checkout() {
                         src={imageSrc}
                         alt={item.product.name}
                         className="w-16 h-16 object-cover rounded-xl border border-orange-200"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 truncate">{item.product.name}</p>
