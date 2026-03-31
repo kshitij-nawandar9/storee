@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { Package, Calendar, MapPin, ShoppingBag } from 'lucide-react';
+import { api } from '@/services/api';
 
 interface OrderItem {
   productId?: string;
@@ -51,14 +52,11 @@ export default function OrderHistory() {
   const fetchOrderHistory = async () => {
     try {
       setLoading(true); setError(null);
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
-      console.log('[OrderHistory] Fetching orders from:', `${apiUrl}/orders/history`);
-      const res = await fetch(`${apiUrl}/orders/history`, {
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        console.error('[OrderHistory] API error:', { status: res.status, message: data.message });
+      console.log('[OrderHistory] Fetching orders...');
+      const response = await api.get('/orders/history');
+      const data = response.data;
+      if (!data.success) {
+        console.error('[OrderHistory] API error:', { message: data.message });
         throw new Error(data.message || 'Failed to fetch orders');
       }
       console.log('[OrderHistory] Fetched', (data.data || []).length, 'orders');
@@ -72,7 +70,8 @@ export default function OrderHistory() {
       setOrders(parsedOrders);
     } catch (err: any) {
       console.error('[OrderHistory] Failed to load orders:', err);
-      setError(err.message || 'Failed to load order history');
+      const message = err.response?.data?.message || err.message || 'Failed to load order history';
+      setError(message);
     } finally { setLoading(false); }
   };
 
