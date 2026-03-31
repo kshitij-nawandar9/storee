@@ -53,7 +53,7 @@ export default function Footer() {
                 { to: '/cart', label: 'Cart' },
               ].map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="text-sm transition-colors duration-200" style={{ color: 'rgba(253,246,236,0.4)' }}>
+                  <Link to={to} onClick={() => window.scrollTo(0, 0)} className="text-sm transition-colors duration-200" style={{ color: 'rgba(253,246,236,0.4)' }}>
                     {label}
                   </Link>
                 </li>
