@@ -30,6 +30,7 @@ export default function Home() {
           {[...Array(2)].map((_, pass) => (
             <div key={pass} className="flex items-center">
               {[
+                '🎉 LAUNCH SALE — 30% OFF everything!',
                 '✨ New prints just dropped',
                 '🎀 Cute enough to gift',
                 '🚚 Free shipping above ₹1,000',

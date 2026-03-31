@@ -6,7 +6,7 @@ import QuantitySelector from '@/components/product/QuantitySelector';
 import { useCart } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
 import type { ProductVariant } from '@/types';
-import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
+import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO, getSalePrice } from '@/utils/constants';
 import { CheckCircle, ChevronLeft, ChevronRight, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -100,7 +100,7 @@ export default function ProductDetail() {
 
               {/* Price */}
               <div className="mb-5">
-                <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} />
+                <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} salePrice={getSalePrice(currentVariant?.price || product.basePrice)} />
               </div>
 
               {/* Description */}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
+import { getSalePrice } from '@/utils/constants';
 import toast from 'react-hot-toast';
 import { ShoppingBag, Sparkles, Heart } from 'lucide-react';
 
@@ -20,11 +21,11 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isComingSoon = !product.images || product.images.length === 0 || product.stock === 0;
 
   const displayPrice = defaultVariant?.price ?? product.basePrice;
-  const formattedPrice = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(displayPrice / 100);
+  const salePrice = getSalePrice(displayPrice);
+  const effectivePrice = salePrice ?? displayPrice;
+  const formatINR = (p: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(p / 100);
+  const formattedPrice = formatINR(effectivePrice);
+  const formattedOriginal = salePrice ? formatINR(displayPrice) : null;
 
   const variantCount = product.variants?.length ?? 0;
 
@@ -115,9 +116,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h3>
 
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-base sm:text-lg" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>
-              {formattedPrice}
-            </span>
+            <div className="flex items-center gap-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <span className="font-semibold text-base sm:text-lg" style={{ color: salePrice ? '#C4756E' : '#2a2220' }}>
+                {formattedPrice}
+              </span>
+              {formattedOriginal && (
+                <span className="text-xs line-through" style={{ color: '#b0aaa3' }}>{formattedOriginal}</span>
+              )}
+            </div>
             {isComingSoon ? (
               <span className="text-[0.7rem] font-medium" style={{ color: '#b0aaa3' }}>Notify me ✨</span>
             ) : (

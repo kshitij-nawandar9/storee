@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product, ProductVariant, CartItem } from '@/types';
+import { getSalePrice } from '@/utils/constants';
 
 // Unique key combining product + variant (or just product if no variant)
 function cartKey(productId: string, variantId?: string): string {
@@ -74,8 +75,11 @@ export const useCart = create<CartStore>()(
       clearCart: () => set({ items: [] }),
       getTotal: () => {
         return get().items.reduce(
-          (total, item) =>
-            total + (item.variant?.price ?? item.product.basePrice) * item.quantity,
+          (total, item) => {
+            const unitPrice = item.variant?.price ?? item.product.basePrice;
+            const effective = getSalePrice(unitPrice) ?? unitPrice;
+            return total + effective * item.quantity;
+          },
           0
         );
       },

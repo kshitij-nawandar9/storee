@@ -3,7 +3,7 @@ import { useCart } from '@/hooks/useCart';
 import { createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
-import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/utils/constants';
+import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, getSalePrice } from '@/utils/constants';
 import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
 import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -521,7 +521,7 @@ export default function Checkout() {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 truncate">{item.product.name}</p>
                         <p className="text-gray-600 text-sm">× {item.quantity}</p>
-                        <PriceDisplay regularPrice={item.product.basePrice * item.quantity} />
+                        <PriceDisplay regularPrice={item.product.basePrice * item.quantity} salePrice={getSalePrice(item.product.basePrice) ? getSalePrice(item.product.basePrice)! * item.quantity : undefined} />
                       </div>
                     </div>
                   );

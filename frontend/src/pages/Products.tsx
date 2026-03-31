@@ -4,6 +4,7 @@ import { useProducts } from '@/hooks/useProducts';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { Grid3x3, ArrowRight } from 'lucide-react';
+import { getSalePrice } from '@/utils/constants';
 
 export default function Products() {
   const { products, loading, error } = useProducts();
@@ -114,12 +115,12 @@ export default function Products() {
                 {filtered.map((product, index) => {
                   const variants = product.variants?.filter((v) => v.isActive) ?? [];
                   const variant = variants[index % variants.length] ?? variants[0];
-                  const displayPrice = new Intl.NumberFormat('en-IN', {
-                    style: 'currency',
-                    currency: 'INR',
-                    maximumFractionDigits: 0,
-                  }).format((variant?.price ?? product.basePrice) / 100);
-                  const variantCount = variants.length;
+                  const originalPrice = variant?.price ?? product.basePrice;
+                  const salePrice = getSalePrice(originalPrice);
+                  const effectivePrice = salePrice ?? originalPrice;
+                  const formatINR = (p: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(p / 100);
+                  const displayPrice = formatINR(effectivePrice);
+                  const displayOriginal = salePrice ? formatINR(originalPrice) : null;
 
                   return (
                     <Link
@@ -141,9 +142,14 @@ export default function Products() {
                           {product.name}
                         </h3>
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-base sm:text-lg" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>
-                            {displayPrice}
-                          </span>
+                          <div className="flex items-center gap-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                            <span className="font-semibold text-base sm:text-lg" style={{ color: salePrice ? '#C4756E' : '#2a2220' }}>
+                              {displayPrice}
+                            </span>
+                            {displayOriginal && (
+                              <span className="text-xs line-through" style={{ color: '#b0aaa3' }}>{displayOriginal}</span>
+                            )}
+                          </div>
                           <span className="text-[0.7rem] sm:text-xs font-medium" style={{ color: '#C4756E' }}>
                             <span className="inline-flex items-center gap-0.5 arrow-nudge">View <span className="arrow-icon inline-block">&rarr;</span></span>
                           </span>

@@ -3,6 +3,7 @@ import { useCart } from '@/hooks/useCart';
 import type { CartItem as CartItemType } from '@/types';
 import QuantitySelector from '@/components/product/QuantitySelector';
 import PriceDisplay from '@/components/product/PriceDisplay';
+import { getSalePrice } from '@/utils/constants';
 
 interface CartItemProps {
   item: CartItemType;
@@ -25,7 +26,10 @@ export default function CartItem({ item }: CartItemProps) {
     product.images?.find((img) => img.isPrimary)?.url ||
     product.images?.[0]?.url;
 
-  const displayPrice = (variant?.price ?? product.basePrice) * quantity;
+  const unitPrice = variant?.price ?? product.basePrice;
+  const displayPrice = unitPrice * quantity;
+  const saleDisplayPrice = getSalePrice(unitPrice);
+  const saleTotalPrice = saleDisplayPrice ? saleDisplayPrice * quantity : undefined;
 
   return (
     <div className="flex gap-4 sm:gap-5 p-4 sm:p-5">
@@ -49,7 +53,7 @@ export default function CartItem({ item }: CartItemProps) {
 
       {/* Price + Remove */}
       <div className="flex flex-col items-end justify-between">
-        <PriceDisplay regularPrice={displayPrice} />
+        <PriceDisplay regularPrice={displayPrice} salePrice={saleTotalPrice} />
         <button
           onClick={handleRemove}
           className="p-1.5 rounded-lg transition-all duration-200"
