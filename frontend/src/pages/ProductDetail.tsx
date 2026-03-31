@@ -65,7 +65,7 @@ export default function ProductDetail() {
           {/* ── LEFT: Image ── */}
           <div className="animate-fade-in">
             <div
-              className="relative overflow-hidden rounded-2xl cursor-pointer group"
+              className="relative overflow-hidden rounded-2xl cursor-pointer group aspect-square"
               style={{ background: '#F8EDDA' }}
               onClick={() => {
                 if (displayImages.length > 0) {
@@ -79,7 +79,7 @@ export default function ProductDetail() {
                 <img
                   src={displayImage}
                   alt={product.name}
-                  className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                   key={displayImage}
                   onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.jpg'; }}
                 />
@@ -91,7 +91,7 @@ export default function ProductDetail() {
 
           {/* ── RIGHT: Info ── */}
           <div className="animate-slide-up">
-            <div className="sticky top-24">
+            <div className="md:sticky md:top-24">
 
               {/* Product name */}
               <h1 className="font-serif font-medium leading-[1.15] mb-4" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', color: '#2a2220' }}>

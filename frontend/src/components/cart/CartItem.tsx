@@ -53,7 +53,7 @@ export default function CartItem({ item }: CartItemProps) {
 
       {/* Price + Remove */}
       <div className="flex flex-col items-end justify-between">
-        <PriceDisplay regularPrice={displayPrice} salePrice={saleTotalPrice} />
+        <PriceDisplay regularPrice={displayPrice} salePrice={saleTotalPrice} size="sm" />
         <button
           onClick={handleRemove}
           className="p-1.5 rounded-lg transition-all duration-200"

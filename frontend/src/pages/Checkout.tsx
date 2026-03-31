@@ -508,13 +508,15 @@ export default function Checkout() {
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
                 {items.map((item) => {
+                  const variantImage = item.variant?.image;
                   const primaryImage =
                     item.product.images?.find((img) => img.isPrimary) ||
                     item.product.images?.[0];
+                  const imageSrc = variantImage || primaryImage?.url || '/placeholder.jpg';
                   return (
-                    <div key={item.product.id} className="flex gap-3">
+                    <div key={`${item.product.id}-${item.variant?.id || ''}`} className="flex gap-3">
                       <img
-                        src={primaryImage?.url || '/placeholder.jpg'}
+                        src={imageSrc}
                         alt={item.product.name}
                         className="w-16 h-16 object-cover rounded-xl border border-orange-200"
                       />
