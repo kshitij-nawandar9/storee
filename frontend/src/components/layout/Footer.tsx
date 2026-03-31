@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Instagram, Mail, Phone } from 'lucide-react';
 
 function scrollToHash(hash: string) {
@@ -11,7 +11,6 @@ function scrollToHash(hash: string) {
 
 export default function Footer() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const handleLinkClick = (to: string, e: React.MouseEvent) => {
     const [path, hash] = to.split('#');
