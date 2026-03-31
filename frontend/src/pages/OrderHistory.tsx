@@ -52,20 +52,26 @@ export default function OrderHistory() {
     try {
       setLoading(true); setError(null);
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+      console.log('[OrderHistory] Fetching orders from:', `${apiUrl}/orders/history`);
       const res = await fetch(`${apiUrl}/orders/history`, {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.message || 'Failed to fetch orders');
+      if (!res.ok || !data.success) {
+        console.error('[OrderHistory] API error:', { status: res.status, message: data.message });
+        throw new Error(data.message || 'Failed to fetch orders');
+      }
+      console.log('[OrderHistory] Fetched', (data.data || []).length, 'orders');
       const parsedOrders = (data.data || []).map((order: any) => {
         let items = order.items;
-        if (typeof items === 'string') { try { items = JSON.parse(items); } catch { items = []; } }
+        if (typeof items === 'string') { try { items = JSON.parse(items); } catch (e) { console.warn('[OrderHistory] Failed to parse items for order', order.id, e); items = []; } }
         let address = order.address;
-        if (typeof address === 'string') { try { address = JSON.parse(address); } catch { address = {}; } }
+        if (typeof address === 'string') { try { address = JSON.parse(address); } catch (e) { console.warn('[OrderHistory] Failed to parse address for order', order.id, e); address = {}; } }
         return { ...order, items: Array.isArray(items) ? items : [], address: address || {} };
       });
       setOrders(parsedOrders);
     } catch (err: any) {
+      console.error('[OrderHistory] Failed to load orders:', err);
       setError(err.message || 'Failed to load order history');
     } finally { setLoading(false); }
   };

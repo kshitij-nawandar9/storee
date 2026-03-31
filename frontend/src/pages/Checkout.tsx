@@ -133,18 +133,24 @@ export default function Checkout() {
         });
         setSavedAddresses(getSavedAddresses());
       } catch (error) {
-        console.error('Error saving address:', error);
+        console.error('[Checkout] Failed to save address to localStorage:', error);
       }
     }
 
     try {
+      // Step 1: Load Razorpay SDK
+      console.log('[Checkout] Step 1: Loading Razorpay script...');
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
-        toast.error('Failed to load payment gateway');
+        console.error('[Checkout] Step 1 FAILED: Razorpay script did not load');
+        toast.error('Failed to load payment gateway. Please disable ad blockers and try again.');
         setLoading(false);
         return;
       }
+      console.log('[Checkout] Step 1: Razorpay script loaded');
 
+      // Step 2: Create order on backend
+      console.log('[Checkout] Step 2: Creating order...', { amount: finalTotal, itemCount: items.length });
       const orderResponse = await createRazorpayOrder({
         amount: finalTotal,
         items: items,
@@ -157,13 +163,17 @@ export default function Checkout() {
       });
 
       if (!orderResponse.success) {
+        console.error('[Checkout] Step 2 FAILED: Order creation failed', orderResponse);
         toast.error(orderResponse.message || 'Failed to create order');
         setLoading(false);
         return;
       }
 
       const { order } = orderResponse.data;
+      console.log('[Checkout] Step 2: Order created', { orderId: order.order_id, razorpayId: order.razorpay_id });
 
+      // Step 3: Open Razorpay checkout
+      console.log('[Checkout] Step 3: Initializing Razorpay checkout...');
       initializeRazorpayCheckout(
         order.razorpay_id,
         order.amount,
@@ -174,7 +184,9 @@ export default function Checkout() {
           contact: formData.phone,
         },
         async (razorpayResponse) => {
+          // Step 4: Verify payment
           try {
+            console.log('[Checkout] Step 4: Verifying payment...', { paymentId: razorpayResponse.razorpay_payment_id });
             const verifyResponse = await verifyPayment({
               order_id: order.razorpay_id,
               payment_id: razorpayResponse.razorpay_payment_id,
@@ -182,27 +194,32 @@ export default function Checkout() {
             });
 
             if (verifyResponse.success) {
+              console.log('[Checkout] Step 4: Payment verified successfully');
               toast.success('Order placed successfully!');
               clearCart();
               const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
               navigate(`/orders/${orderId}`);
             } else {
+              console.error('[Checkout] Step 4 FAILED: Verification response not successful', verifyResponse);
               toast.error(verifyResponse.message || 'Payment verification failed');
             }
           } catch (error) {
-            console.error('Payment verification error:', error);
-            toast.error('Payment verification failed');
+            console.error('[Checkout] Step 4 FAILED: Payment verification error:', error);
+            toast.error('Payment verification failed. Please contact support if money was deducted.');
           } finally {
             setLoading(false);
           }
         },
         (error) => {
+          console.error('[Checkout] Step 3 FAILED: Razorpay checkout error:', error);
           toast.error(error);
           setLoading(false);
         }
       );
     } catch (error) {
-      console.error('Checkout error:', error);
+      console.error('[Checkout] Unexpected error:', error);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      console.error('[Checkout] Error details:', message);
       toast.error('Something went wrong. Please try again.');
       setLoading(false);
     }

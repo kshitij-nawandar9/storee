@@ -39,14 +39,11 @@ api.interceptors.response.use(
   },
   (error: AxiosError) => {
     if (error.response) {
-      // Server responded with error
-      console.error('API Error:', error.response.data);
+      console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → ${error.response.status}`, error.response.data);
     } else if (error.request) {
-      // Request made but no response - backend not available
-      console.warn('Backend not available, using mock data');
+      console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → No response (backend unreachable)`, { timeout: error.config?.timeout });
     } else {
-      // Something else happened
-      console.error('Error:', error.message);
+      console.error(`[API] Request setup error:`, error.message);
     }
     return Promise.reject(error);
   }
@@ -209,7 +206,9 @@ export const createRazorpayOrder = async (data: {
     pincode: string;
   };
 }): Promise<ApiResponse<{ order: { id: string; order_id: string; razorpay_id: string; amount: number; currency: string; key_id: string } }>> => {
+  console.log('[API] Creating Razorpay order...', { amount: data.amount, itemCount: data.items.length });
   const response = await api.post('/razorpay/create-order', data);
+  console.log('[API] Razorpay order created:', { orderId: response.data?.data?.order?.order_id, razorpayId: response.data?.data?.order?.razorpay_id });
   return response.data;
 };
 
@@ -218,7 +217,9 @@ export const verifyPayment = async (data: {
   payment_id: string;
   signature: string;
 }): Promise<ApiResponse<{ paymentId: string; orderId: string }>> => {
+  console.log('[API] Verifying payment...', { orderId: data.order_id, paymentId: data.payment_id });
   const response = await api.post('/razorpay/verify-payment', data);
+  console.log('[API] Payment verification result:', { success: response.data?.success });
   return response.data;
 };
 
@@ -239,7 +240,9 @@ export const createCODOrder = async (data: {
     pincode: string;
   };
 }): Promise<ApiResponse<any>> => {
+  console.log('[API] Creating COD order...', { amount: data.amount, itemCount: data.items.length });
   const response = await api.post('/orders/cod', data);
+  console.log('[API] COD order created:', { success: response.data?.success });
   return response.data;
 };
 
@@ -264,11 +267,15 @@ export const getAdminOrders = async (params?: {
   if (params?.page) queryParams.append('page', params.page.toString());
   if (params?.limit) queryParams.append('limit', params.limit.toString());
 
+  console.log('[API] Fetching admin orders...', Object.fromEntries(queryParams));
   const response = await api.get(`/admin/orders?${queryParams.toString()}`);
+  console.log('[API] Admin orders fetched:', { count: response.data?.data?.orders?.length, total: response.data?.data?.pagination?.total });
   return response.data;
 };
 
 export const approveOrder = async (orderId: string): Promise<ApiResponse<any>> => {
+  console.log('[API] Approving order:', orderId);
   const response = await api.put(`/admin/orders/${orderId}/approve`);
+  console.log('[API] Order approve result:', { success: response.data?.success, orderId });
   return response.data;
 };

@@ -42,27 +42,42 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     try {
       setLoading(true); setError(null);
+      console.log('[AdminOrders] Fetching orders...', { status: statusFilter || 'all', page });
       const response = await getAdminOrders({ status: statusFilter || undefined, page, limit: 50 });
-      if (!response.success) throw new Error(response.message || 'Failed to fetch orders');
+      if (!response.success) {
+        console.error('[AdminOrders] API returned failure:', response);
+        throw new Error(response.message || 'Failed to fetch orders');
+      }
+      console.log('[AdminOrders] Fetched', response.data.orders?.length, 'orders, page', response.data.pagination?.page, 'of', response.data.pagination?.pages);
       const parsedOrders = (response.data.orders || []).map((order: any) => {
         let items = order.items;
-        if (typeof items === 'string') { try { items = JSON.parse(items); } catch { items = []; } }
+        if (typeof items === 'string') { try { items = JSON.parse(items); } catch (e) { console.warn('[AdminOrders] Failed to parse items for order', order.id, e); items = []; } }
         let address = order.address;
-        if (typeof address === 'string') { try { address = JSON.parse(address); } catch { address = { line1: '', city: '', state: '', pincode: '' }; } }
+        if (typeof address === 'string') { try { address = JSON.parse(address); } catch (e) { console.warn('[AdminOrders] Failed to parse address for order', order.id, e); address = { line1: '', city: '', state: '', pincode: '' }; } }
         return { ...order, items: Array.isArray(items) ? items : [], address };
       });
       setOrders(parsedOrders); setPagination(response.data.pagination);
     } catch (err: any) {
+      console.error('[AdminOrders] Failed to fetch orders:', err);
       setError(err.message); toast.error(err.message || 'Failed to fetch orders');
     } finally { setLoading(false); }
   };
 
   const handleApprove = async (orderId: string) => {
     try {
+      console.log('[AdminOrders] Approving order:', orderId);
       const response = await approveOrder(orderId);
-      if (response.success) { toast.success('Order approved'); fetchOrders(); }
-      else throw new Error(response.message);
-    } catch (err: any) { toast.error(err.message || 'Failed to approve'); }
+      if (response.success) {
+        console.log('[AdminOrders] Order approved successfully:', orderId);
+        toast.success('Order approved'); fetchOrders();
+      } else {
+        console.error('[AdminOrders] Approve failed:', response);
+        throw new Error(response.message);
+      }
+    } catch (err: any) {
+      console.error('[AdminOrders] Failed to approve order:', orderId, err);
+      toast.error(err.message || 'Failed to approve');
+    }
   };
 
   const formatAmount = (a: number) => `₹${(a / 100).toFixed(2)}`;

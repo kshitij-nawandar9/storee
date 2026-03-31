@@ -6,14 +6,16 @@ export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
     // Check if script is already loaded
     if ((window as any).Razorpay) {
+      console.log('[Razorpay] Script already loaded');
       resolve(true);
       return;
     }
 
+    console.log('[Razorpay] Loading script from checkout.razorpay.com...');
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+    script.onload = () => { console.log('[Razorpay] Script loaded successfully'); resolve(true); };
+    script.onerror = (e) => { console.error('[Razorpay] Script failed to load — possible ad blocker or network issue', e); resolve(false); };
     document.body.appendChild(script);
   });
 };
@@ -34,14 +36,18 @@ export const initializeRazorpayCheckout = (
   const razorpayKey = keyId || RAZORPAY_KEY_ID;
   
   if (!razorpayKey) {
+    console.error('[Razorpay] No key configured. keyId from backend:', keyId, 'env VITE_RAZORPAY_KEY_ID:', RAZORPAY_KEY_ID);
     onError('Razorpay key not configured. Please contact support.');
     return;
   }
 
   if (!(window as any).Razorpay) {
+    console.error('[Razorpay] Razorpay constructor not available on window — script not loaded');
     onError('Razorpay script not loaded. Please refresh the page.');
     return;
   }
+
+  console.log('[Razorpay] Initializing checkout...', { orderId, amount, keyPrefix: razorpayKey.substring(0, 8) + '...' });
 
   // Format contact number: ensure it starts with + and country code
   // If it doesn't start with +, assume it's an Indian number (+91)
@@ -92,12 +98,13 @@ export const initializeRazorpayCheckout = (
   try {
     const razorpayInstance = new (window as any).Razorpay(options);
     razorpayInstance.on('payment.failed', function (response: any) {
-      console.error('Payment failed:', response);
+      console.error('[Razorpay] Payment failed:', { code: response.error?.code, description: response.error?.description, reason: response.error?.reason, orderId: response.error?.metadata?.order_id });
       onError(`Payment failed: ${response.error.description || 'Unknown error'}`);
     });
+    console.log('[Razorpay] Opening checkout modal');
     razorpayInstance.open();
   } catch (error: any) {
-    console.error('Error initializing Razorpay:', error);
+    console.error('[Razorpay] Failed to initialize:', error);
     onError(`Failed to initialize payment: ${error.message || 'Unknown error'}`);
   }
 };

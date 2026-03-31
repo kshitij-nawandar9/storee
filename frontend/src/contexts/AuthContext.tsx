@@ -29,12 +29,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Load auth state from localStorage
     const storedToken = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
-    
+
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+        console.log('[Auth] Restored session from localStorage');
+      } catch (e) {
+        console.error('[Auth] Failed to parse stored user data, clearing auth state:', e);
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+      }
     }
-    
+
     setLoading(false);
   }, []);
 
