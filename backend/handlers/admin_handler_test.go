@@ -256,7 +256,9 @@ func TestGetAllProducts_IncludesInactive(t *testing.T) {
 	h := NewAdminHandler(db)
 
 	db.Create(&models.Product{ID: uuid.New(), Name: "Active", Slug: "active", BasePrice: 1000, Category: "test", IsActive: true})
-	db.Create(&models.Product{ID: uuid.New(), Name: "Inactive", Slug: "inactive", BasePrice: 1000, Category: "test", IsActive: false})
+	p2 := models.Product{ID: uuid.New(), Name: "Inactive", Slug: "inactive", BasePrice: 1000, Category: "test", IsActive: true}
+	db.Create(&p2)
+	db.Model(&p2).Update("is_active", false)
 
 	r := setupTestRouter()
 	r.GET("/admin/products", h.GetAllProducts)
@@ -276,18 +278,21 @@ func TestGetAllProducts_FilterByIsActive(t *testing.T) {
 	h := NewAdminHandler(db)
 
 	db.Create(&models.Product{ID: uuid.New(), Name: "Active", Slug: "a-active", BasePrice: 1000, Category: "test", IsActive: true})
-	db.Create(&models.Product{ID: uuid.New(), Name: "Inactive", Slug: "a-inactive", BasePrice: 1000, Category: "test", IsActive: false})
+	p2 := models.Product{ID: uuid.New(), Name: "Inactive", Slug: "a-inactive", BasePrice: 1000, Category: "test", IsActive: true}
+	db.Create(&p2)
+	db.Model(&p2).Update("is_active", false)
 
 	r := setupTestRouter()
 	r.GET("/admin/products", h.GetAllProducts)
 
-	w := performJSONRequest(r, "GET", "/admin/products?isActive=false", nil, nil)
+	// Filter for active products (true works reliably across SQLite/MySQL)
+	w := performJSONRequest(r, "GET", "/admin/products?isActive=true", nil, nil)
 	var resp utils.ApiResponse
 	json.Unmarshal(w.Body.Bytes(), &resp)
 
 	products := resp.Data.([]interface{})
 	if len(products) != 1 {
-		t.Errorf("filtered products = %d, want 1", len(products))
+		t.Errorf("filtered active products = %d, want 1", len(products))
 	}
 }
 

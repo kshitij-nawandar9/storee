@@ -8,7 +8,6 @@ import (
 	"storee/backend/models"
 	"storee/backend/utils"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
@@ -31,7 +30,7 @@ func seedProducts(t *testing.T, h *ProductHandler) (models.Product, models.Produ
 		Slug:      "inactive-shirt",
 		BasePrice: 1000,
 		Category:  "clothing",
-		IsActive:  false,
+		IsActive:  true, // Create first (GORM default:true skips false zero-value)
 	}
 	if err := h.DB.Create(&p1).Error; err != nil {
 		t.Fatalf("seed p1: %v", err)
@@ -39,6 +38,9 @@ func seedProducts(t *testing.T, h *ProductHandler) (models.Product, models.Produ
 	if err := h.DB.Create(&p2).Error; err != nil {
 		t.Fatalf("seed p2: %v", err)
 	}
+	// Set inactive after creation to work around GORM default:true
+	h.DB.Model(&p2).Update("is_active", false)
+	p2.IsActive = false
 	return p1, p2
 }
 
