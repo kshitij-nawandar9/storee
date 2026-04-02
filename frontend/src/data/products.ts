@@ -308,6 +308,10 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'a1b2c308-0001-4001-8001-000000000003', url: '/images/products/on_the_go_foldable_pouch/Space.png', altText: 'On-the-Go Foldable Pouch - Space', order: 4, isPrimary: false },
       { id: 'a1b2c308-0001-4001-8001-000000000004', url: '/images/products/on_the_go_foldable_pouch/Sports.png', altText: 'On-the-Go Foldable Pouch - Sports', order: 5, isPrimary: false },
       { id: 'a1b2c308-0001-4001-8001-000000000005', url: '/images/products/on_the_go_foldable_pouch/Unicorn.png', altText: 'On-the-Go Foldable Pouch - Unicorn', order: 6, isPrimary: false },
+      { id: 'a1b2c308-0001-4001-8001-000000000006', url: '/images/products/on_the_go_foldable_pouch/Aqua.png', altText: 'On-the-Go Foldable Pouch - Aqua', order: 7, isPrimary: false },
+      { id: 'a1b2c308-0001-4001-8001-000000000007', url: '/images/products/on_the_go_foldable_pouch/Beach.png', altText: 'On-the-Go Foldable Pouch - Beach', order: 8, isPrimary: false },
+      { id: 'a1b2c308-0001-4001-8001-000000000008', url: '/images/products/on_the_go_foldable_pouch/Bunny.png', altText: 'On-the-Go Foldable Pouch - Bunny', order: 9, isPrimary: false },
+      { id: 'a1b2c308-0001-4001-8001-000000000009', url: '/images/products/on_the_go_foldable_pouch/Rainbow.png', altText: 'On-the-Go Foldable Pouch - Rainbow', order: 10, isPrimary: false },
     ],
     variants: [
       { id: 'on-the-go-foldable-pouch-lion', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/on_the_go_foldable_pouch/Lion.jpg', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-LION', isDefault: false, isActive: true },
@@ -316,6 +320,10 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'on-the-go-foldable-pouch-space', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Space', colorCode: '#2C2C54', image: '/images/products/on_the_go_foldable_pouch/Space.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-SPACE', isDefault: true, isActive: true },
       { id: 'on-the-go-foldable-pouch-sports', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/on_the_go_foldable_pouch/Sports.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-SPORTS', isDefault: false, isActive: true },
       { id: 'on-the-go-foldable-pouch-unicorn', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/on_the_go_foldable_pouch/Unicorn.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-UNICORN', isDefault: false, isActive: true },
+      { id: 'on-the-go-foldable-pouch-aqua', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Aqua', colorCode: '#00CED1', image: '/images/products/on_the_go_foldable_pouch/Aqua.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-AQUA', isDefault: false, isActive: true },
+      { id: 'on-the-go-foldable-pouch-beach', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/on_the_go_foldable_pouch/Beach.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-BEACH', isDefault: false, isActive: true },
+      { id: 'on-the-go-foldable-pouch-bunny', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/on_the_go_foldable_pouch/Bunny.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-BUNNY', isDefault: false, isActive: true },
+      { id: 'on-the-go-foldable-pouch-rainbow', productId: '168eef9e-27c8-409e-b65a-f6ba779f90ce', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/on_the_go_foldable_pouch/Rainbow.png', price: 90000, stock: 30, sku: 'ON-THE-GO-FOLDABLE-POUCH-RAINBOW', isDefault: false, isActive: true },
     ]
   },
   {

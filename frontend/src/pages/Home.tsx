@@ -285,10 +285,11 @@ export default function Home() {
             <p className="text-xs sm:text-sm mt-1.5 sm:mt-2" style={{ color: '#8a7e78' }}>See the cuteness in action 🌸</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
             {[
-              'https://www.instagram.com/reel/DVdCXpwiBU7/embed',
-              'https://www.instagram.com/reel/DVaZ2p6iA8J/embed',
+              'https://www.instagram.com/reel/DWWCymEiLmC/embed',
+              'https://www.instagram.com/reel/DTKr-g7iPA2/embed',
+              'https://www.instagram.com/reel/DWJB21NiBSt/embed',
             ].map((src, i) => (
               <div key={i} className="rounded-xl sm:rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 20px -4px rgba(59,50,48,0.08)' }}>
                 <iframe src={src} width="100%" height="420" className="sm:h-[520px]" frameBorder="0" scrolling="no" allowTransparency={true} title={`Reel ${i + 1}`} />
