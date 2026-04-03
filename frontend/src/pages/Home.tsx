@@ -7,10 +7,10 @@ const reviews = [
   {
     name: 'Priya Sharma',
     location: 'Mumbai',
-    text: 'The 7 Days Pack Kit has been a lifesaver for our family trips! My kids can now pack their own clothes for the week. Total game-changer.',
+    text: 'The Pack A Week Kit has been a lifesaver for our family trips! My kids can now pack their own clothes for the week. Total game-changer.',
     initial: 'P',
     rating: 5,
-    product: '7 Days Pack Kit',
+    product: 'Pack A Week Kit',
   },
   {
     name: 'Rajesh Kumar',

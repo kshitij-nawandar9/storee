@@ -29,7 +29,7 @@ The Storee frontend has been successfully updated with product data from PRODUCT
    - 5 color variants
    - Images: `/images/products/foldable_travel_kit/`
 
-4. **7 Days Pack Kit** - ₹599
+4. **Pack A Week Kit** - ₹599
    - 5 color variants
    - Images: `/images/products/pack_a_week_kit/`
 

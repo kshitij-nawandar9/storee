@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"storee/backend/models"
 
@@ -19,6 +20,39 @@ type Config struct {
 	DBName   string
 }
 
+func connectWithRetry(dsn string, maxRetries int) (*gorm.DB, error) {
+	var db *gorm.DB
+	var err error
+	delay := 2 * time.Second
+
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+			Logger: logger.Default.LogMode(logger.Info),
+		})
+		if err == nil {
+			return db, nil
+		}
+		log.Printf("DB connection attempt %d/%d failed: %v. Retrying in %v...", attempt, maxRetries, err, delay)
+		time.Sleep(delay)
+		if delay < 30*time.Second {
+			delay *= 2
+		}
+	}
+	return nil, fmt.Errorf("failed after %d attempts: %w", maxRetries, err)
+}
+
+func configurePool(db *gorm.DB) error {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return fmt.Errorf("failed to get underlying sql.DB: %w", err)
+	}
+	sqlDB.SetMaxOpenConns(10)
+	sqlDB.SetMaxIdleConns(5)
+	sqlDB.SetConnMaxLifetime(5 * time.Minute)
+	sqlDB.SetConnMaxIdleTime(3 * time.Minute)
+	return nil
+}
+
 func Initialize(cfg *Config) (*gorm.DB, error) {
 	// First connect without database to create it if it doesn't exist
 	dsnWithoutDB := fmt.Sprintf(
@@ -29,9 +63,7 @@ func Initialize(cfg *Config) (*gorm.DB, error) {
 		cfg.Port,
 	)
 
-	dbWithoutDB, err := gorm.Open(mysql.Open(dsnWithoutDB), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+	dbWithoutDB, err := connectWithRetry(dsnWithoutDB, 10)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to MySQL server: %w", err)
 	}
@@ -60,12 +92,14 @@ func Initialize(cfg *Config) (*gorm.DB, error) {
 		cfg.DBName,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
-
+	db, err := connectWithRetry(dsn, 10)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
+	}
+
+	// Configure connection pool to handle dropped connections
+	if err := configurePool(db); err != nil {
+		return nil, err
 	}
 
 	log.Println("Database connected successfully")

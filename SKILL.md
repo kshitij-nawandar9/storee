@@ -650,7 +650,7 @@ For questions or issues:
 
 | Product | Price | Variants | Status |
 |---------|-------|----------|--------|
-| 7 Days Pack Kit | ₹2600 | 5 | ✅ Available |
+| Pack A Week Kit | ₹2600 | 5 | ✅ Available |
 | Packing Cubes | ₹2500 | 5 | ✅ Available |
 | Toiletry Kit | ₹1000 | 5 | ✅ Available |
 | Shoe Pouch | ₹1000 | 5 | ✅ Available |

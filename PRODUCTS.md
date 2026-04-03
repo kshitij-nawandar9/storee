@@ -25,7 +25,7 @@ Storee is a premium e-commerce platform specializing in high-quality pouches, ba
 
 | Product | Price | Variants | Status |
 |---------|-------|----------|--------|
-| 7 Days Pack Kit | ₹2600 | 5 | ✅ Available |
+| Pack A Week Kit | ₹2600 | 5 | ✅ Available |
 | Packing Cubes | ₹2500 | 5 | ✅ Available |
 | Toiletry Kit | ₹1000 | 5 | ✅ Available |
 | Shoe Pouch | ₹1000 | 5 | ✅ Available |
@@ -61,12 +61,12 @@ Storee is a premium e-commerce platform specializing in high-quality pouches, ba
 - **Files**: `foldable_travel_kit_1.jpg` to `foldable_travel_kit_5.jpg`
 - **Description**: A compact foldable travel organiser designed to keep kids' essentials neatly sorted. With multiple compartments and a space-saving design, it's perfect for travel, sleepovers, and everyday organisation. Lightweight, practical, and easy to carry.
 
-### 4. Pack A Week Kit (7 Days Pack Kit)
+### 4. Pack A Week Kit
 - **Price**: ₹2600
 - **Variants**: 5 different designs/colors
 - **Image Location**: `/images/products/pack_a_week_kit/`
 - **Files**: `pack_a_week_kit_1.jpg` to `pack_a_week_kit_5.jpg`
-- **Description**: Plan outfits and essentials effortlessly with our 7 Days Pack Kit. Seven separate pouches help organise each day of the week, all stored inside one larger pouch for easy packing. Ideal for travel, school trips, and organised routines.
+- **Description**: Plan outfits and essentials effortlessly with our Pack A Week Kit. Seven separate pouches help organise each day of the week, all stored inside one larger pouch for easy packing. Ideal for travel, school trips, and organised routines.
 
 ### 5. Packing Cubes
 - **Price**: ₹2500
