@@ -1,0 +1,4 @@
+frontend/src/utils/constants.ts
+  04c7738b-a7b3-48af-a7e4-8f3636d9561e:2026-05-14T16:57:35.975Z 12
+---
+{"schema_version": "authorship/3.0.0", "base_commit_sha": "HEAD~1", "prompts": {"04c7738b-a7b3-48af-a7e4-8f3636d9561e:2026-05-14T16:57:35.975Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "kshitij.nawandar@razorpay.com", "accepted_lines": 1, "overriden_lines": 0}}}
