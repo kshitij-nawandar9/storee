@@ -32,7 +32,7 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor
+// Response interceptor — auto-logout on 401
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -40,6 +40,14 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → ${error.response.status}`, error.response.data);
+
+      // If we get a 401, the token is expired or invalid — clear auth state
+      if (error.response.status === 401 && localStorage.getItem('auth_token')) {
+        console.warn('[API] Received 401 — clearing stale auth token');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        window.location.reload();
+      }
     } else if (error.request) {
       console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → No response (backend unreachable)`, { timeout: error.config?.timeout });
     } else {
