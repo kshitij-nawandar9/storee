@@ -281,9 +281,9 @@ export const getAdminOrders = async (params?: {
   return response.data;
 };
 
-export const approveOrder = async (orderId: string): Promise<ApiResponse<any>> => {
-  console.log('[API] Approving order:', orderId);
-  const response = await api.put(`/admin/orders/${orderId}/approve`);
-  console.log('[API] Order approve result:', { success: response.data?.success, orderId });
+export const updateOrderStatus = async (orderId: string, status: string): Promise<ApiResponse<any>> => {
+  console.log('[API] Updating order status:', { orderId, status });
+  const response = await api.put(`/admin/orders/${orderId}/status`, { status });
+  console.log('[API] Order status update result:', { success: response.data?.success, orderId, status });
   return response.data;
 };

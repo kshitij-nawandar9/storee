@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getAdminOrders, approveOrder } from '@/services/api';
-import { Package, ShoppingBag, CheckCircle, MapPin, Pen } from 'lucide-react';
+import { getAdminOrders, updateOrderStatus } from '@/services/api';
+import { Package, ShoppingBag, MapPin, Pen } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'kshitij.nawandar@razorpay.com'];
@@ -13,14 +13,21 @@ interface Order { id: string; orderId: string; customerName: string; customerEma
 
 const statusStyles: Record<string, { bg: string; color: string }> = {
   pending:    { bg: 'rgba(201,169,110,0.1)', color: '#8a6e38' },
-  approved:   { bg: 'rgba(139,168,138,0.12)', color: '#547254' },
   paid:       { bg: 'rgba(139,168,138,0.1)', color: '#547254' },
   processing: { bg: 'rgba(196,117,110,0.1)', color: '#a85d56' },
   shipped:    { bg: 'rgba(139,168,138,0.15)', color: '#547254' },
   delivered:  { bg: 'rgba(139,168,138,0.15)', color: '#4a7c3a' },
   cancelled:  { bg: 'rgba(196,117,110,0.1)', color: '#a85d56' },
 };
-const statusLabels: Record<string, string> = { pending: 'Pending', approved: 'Approved', paid: 'Paid', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+const statusLabels: Record<string, string> = { pending: 'Pending', paid: 'Paid', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+const allowedTransitions: Record<string, string[]> = {
+  pending:    ['cancelled'],
+  paid:       ['processing', 'cancelled'],
+  processing: ['shipped', 'cancelled'],
+  shipped:    ['delivered', 'cancelled'],
+  delivered:  ['cancelled'],
+  cancelled:  ['pending', 'paid', 'processing', 'shipped', 'delivered'],
+};
 
 export default function AdminOrders() {
   const { isAuthenticated, user, loading: authLoading } = useAuth();
@@ -63,20 +70,20 @@ export default function AdminOrders() {
     } finally { setLoading(false); }
   };
 
-  const handleApprove = async (orderId: string) => {
+  const handleStatusChange = async (orderId: string, status: string) => {
     try {
-      console.log('[AdminOrders] Approving order:', orderId);
-      const response = await approveOrder(orderId);
+      console.log('[AdminOrders] Updating order status:', { orderId, status });
+      const response = await updateOrderStatus(orderId, status);
       if (response.success) {
-        console.log('[AdminOrders] Order approved successfully:', orderId);
-        toast.success('Order approved'); fetchOrders();
+        console.log('[AdminOrders] Order status updated:', { orderId, status });
+        toast.success(`Order marked ${statusLabels[status] || status}`); fetchOrders();
       } else {
-        console.error('[AdminOrders] Approve failed:', response);
+        console.error('[AdminOrders] Status update failed:', response);
         throw new Error(response.message);
       }
     } catch (err: any) {
-      console.error('[AdminOrders] Failed to approve order:', orderId, err);
-      toast.error(err.message || 'Failed to approve');
+      console.error('[AdminOrders] Failed to update order status:', orderId, err);
+      toast.error(err.message || 'Failed to update status');
     }
   };
 
@@ -224,16 +231,18 @@ export default function AdminOrders() {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-semibold text-base" style={{ color: '#C4756E' }}>{formatAmount(order.totalAmount)}</span>
-                      {(order.status === 'pending' || order.status === 'paid') && (
-                        <button
-                          onClick={() => handleApprove(order.orderId)}
-                          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-200"
-                          style={{ background: 'rgba(139,168,138,0.12)', color: '#547254' }}
-                          onMouseEnter={(e) => { e.currentTarget.style.background = '#8BA88A'; e.currentTarget.style.color = '#fff'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(139,168,138,0.12)'; e.currentTarget.style.color = '#547254'; }}
+                      {allowedTransitions[order.status]?.length > 0 && (
+                        <select
+                          value=""
+                          onChange={(e) => { if (e.target.value) handleStatusChange(order.orderId, e.target.value); }}
+                          className="text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer"
+                          style={{ background: 'rgba(139,168,138,0.12)', color: '#547254', border: 'none' }}
                         >
-                          <CheckCircle className="w-3.5 h-3.5" /> Approve
-                        </button>
+                          <option value="">Change status…</option>
+                          {allowedTransitions[order.status].map((s) => (
+                            <option key={s} value={s}>{statusLabels[s] || s}</option>
+                          ))}
+                        </select>
                       )}
                     </div>
                   </div>

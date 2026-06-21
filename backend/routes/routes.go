@@ -78,7 +78,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			adminOrders := admin.Group("/orders")
 			{
 				adminOrders.GET("", adminHandler.GetAllOrders)
-				adminOrders.PUT("/:id/approve", adminHandler.ApproveOrder)
+				adminOrders.PUT("/:id/status", adminHandler.UpdateOrderStatus)
 			}
 		}
 	}

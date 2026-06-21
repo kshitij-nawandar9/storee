@@ -19,7 +19,7 @@ type Order struct {
 	Address        datatypes.JSON  `json:"address" gorm:"type:json;not null"`
 	Items          datatypes.JSON  `json:"items" gorm:"type:json;not null"`
 	TotalAmount    int64           `json:"totalAmount" gorm:"not null"` // in paise
-	Status         string          `json:"status" gorm:"type:varchar(50);default:pending"` // pending, approved, paid, processing, shipped, delivered, cancelled
+	Status         string          `json:"status" gorm:"type:varchar(50);default:pending"` // pending, paid, processing, shipped, delivered, cancelled
 	PaymentID     string          `json:"paymentId" gorm:"type:varchar(255)"`                    // Razorpay payment ID
 	PaymentMethod  string         `json:"paymentMethod" gorm:"type:varchar(50);not null"` // razorpay or cod
 	CreatedAt      time.Time       `json:"createdAt"`
@@ -32,4 +32,26 @@ func (o *Order) BeforeCreate(tx *gorm.DB) error {
 		o.ID = uuid.New()
 	}
 	return nil
+}
+
+// allowedOrderTransitions maps a status to the statuses an admin may move it to.
+// Forward-only fulfillment chain; pending->paid is owned by the payment flow.
+// Any state can be cancelled, and cancelled can be restored to any other state.
+var allowedOrderTransitions = map[string][]string{
+	"pending":    {"cancelled"},
+	"paid":       {"processing", "cancelled"},
+	"processing": {"shipped", "cancelled"},
+	"shipped":    {"delivered", "cancelled"},
+	"delivered":  {"cancelled"},
+	"cancelled":  {"pending", "paid", "processing", "shipped", "delivered"},
+}
+
+// CanTransitionTo reports whether an admin may move the order to target.
+func (o *Order) CanTransitionTo(target string) bool {
+	for _, s := range allowedOrderTransitions[o.Status] {
+		if s == target {
+			return true
+		}
+	}
+	return false
 }

@@ -119,12 +119,28 @@ func Migrate(db *gorm.DB) error {
 	}
 
 	log.Println("Database migration completed successfully")
-	
+
+	if affected, err := BackfillApprovedOrders(db); err != nil {
+		return fmt.Errorf("failed to backfill approved orders: %w", err)
+	} else if affected > 0 {
+		log.Printf("Backfilled %d order(s): approved -> processing", affected)
+	}
+
 	// Verify tables were created
 	var tables []string
 	if err := db.Raw("SHOW TABLES").Scan(&tables).Error; err == nil {
 		log.Printf("Created tables: %v", tables)
 	}
-	
+
 	return nil
+}
+
+// BackfillApprovedOrders converts legacy `approved` orders to `processing`.
+// `approved` was removed in favor of the explicit fulfillment chain; this is a
+// one-time, idempotent data fix (no-op once no approved rows remain).
+func BackfillApprovedOrders(db *gorm.DB) (int64, error) {
+	res := db.Model(&models.Order{}).
+		Where("status = ?", "approved").
+		Update("status", "processing")
+	return res.RowsAffected, res.Error
 }

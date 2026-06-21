@@ -309,9 +309,17 @@ func (h *AdminHandler) GetAllOrders(c *gin.Context) {
 	utils.SuccessResponse(c, http.StatusOK, "Orders fetched successfully", response)
 }
 
-// ApproveOrder handles PUT /api/v1/admin/orders/:id/approve
-func (h *AdminHandler) ApproveOrder(c *gin.Context) {
+// UpdateOrderStatus handles PUT /api/v1/admin/orders/:id/status
+func (h *AdminHandler) UpdateOrderStatus(c *gin.Context) {
 	orderID := c.Param("id")
+
+	var req struct {
+		Status string `json:"status" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.ErrorResponse(c, http.StatusBadRequest, "status is required", err)
+		return
+	}
 
 	var order models.Order
 	if err := h.DB.Where("id = ? OR order_id = ?", orderID, orderID).First(&order).Error; err != nil {
@@ -323,20 +331,18 @@ func (h *AdminHandler) ApproveOrder(c *gin.Context) {
 		return
 	}
 
-	// Check if order is in a valid state to be approved
-	if order.Status != "pending" && order.Status != "paid" {
-		utils.ErrorResponse(c, http.StatusBadRequest, fmt.Sprintf("Cannot approve order with status: %s. Order must be 'pending' or 'paid'", order.Status), nil)
+	if !order.CanTransitionTo(req.Status) {
+		utils.ErrorResponse(c, http.StatusBadRequest, fmt.Sprintf("Cannot change order status from %q to %q", order.Status, req.Status), nil)
 		return
 	}
 
-	// Update order status to approved
-	order.Status = "approved"
+	order.Status = req.Status
 	if err := h.DB.Save(&order).Error; err != nil {
-		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to approve order", err)
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to update order status", err)
 		return
 	}
 
-	utils.SuccessResponse(c, http.StatusOK, "Order approved successfully", order)
+	utils.SuccessResponse(c, http.StatusOK, "Order status updated successfully", order)
 }
 
 // generateSlug creates a URL-friendly slug from a name

@@ -361,101 +361,147 @@ func TestGetAllOrders_StatusFilter(t *testing.T) {
 	}
 }
 
-func TestApproveOrder_FromPending(t *testing.T) {
-	db := setupTestDB(t)
-	h := NewAdminHandler(db)
-
-	order := models.Order{
-		OrderID: "APPROVE001", CustomerName: "Test", CustomerEmail: "t@t.com",
-		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
-		TotalAmount: 1000, PaymentMethod: "cod", Status: "pending",
-	}
-	db.Create(&order)
-
-	r := setupTestRouter()
-	r.PUT("/admin/orders/:id/approve", h.ApproveOrder)
-
-	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/approve", nil, nil)
-	if w.Code != http.StatusOK {
-		t.Fatalf("status = %d, want %d, body: %s", w.Code, http.StatusOK, w.Body.String())
-	}
-
-	var updated models.Order
-	db.First(&updated, "id = ?", order.ID)
-	if updated.Status != "approved" {
-		t.Errorf("status = %q, want approved", updated.Status)
-	}
+func statusBody(status string) []byte {
+	body, _ := json.Marshal(map[string]string{"status": status})
+	return body
 }
 
-func TestApproveOrder_FromPaid(t *testing.T) {
+func TestUpdateOrderStatus_PaidToProcessing(t *testing.T) {
 	db := setupTestDB(t)
 	h := NewAdminHandler(db)
 
 	order := models.Order{
-		OrderID: "APPROVE002", CustomerName: "Test", CustomerEmail: "t@t.com",
+		OrderID: "STATUS001", CustomerName: "Test", CustomerEmail: "t@t.com",
 		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
 		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "paid",
 	}
 	db.Create(&order)
 
 	r := setupTestRouter()
-	r.PUT("/admin/orders/:id/approve", h.ApproveOrder)
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
 
-	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/approve", nil, nil)
+	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/status", statusBody("processing"), nil)
 	if w.Code != http.StatusOK {
-		t.Errorf("status = %d, want %d", w.Code, http.StatusOK)
+		t.Fatalf("status = %d, want %d, body: %s", w.Code, http.StatusOK, w.Body.String())
+	}
+
+	var updated models.Order
+	db.First(&updated, "id = ?", order.ID)
+	if updated.Status != "processing" {
+		t.Errorf("status = %q, want processing", updated.Status)
 	}
 }
 
-func TestApproveOrder_InvalidState(t *testing.T) {
+func TestUpdateOrderStatus_FullChain(t *testing.T) {
 	db := setupTestDB(t)
 	h := NewAdminHandler(db)
 
 	order := models.Order{
-		OrderID: "APPROVE003", CustomerName: "Test", CustomerEmail: "t@t.com",
+		OrderID: "STATUS002", CustomerName: "Test", CustomerEmail: "t@t.com",
 		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
-		TotalAmount: 1000, PaymentMethod: "cod", Status: "shipped",
+		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "paid",
 	}
 	db.Create(&order)
 
 	r := setupTestRouter()
-	r.PUT("/admin/orders/:id/approve", h.ApproveOrder)
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
 
-	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/approve", nil, nil)
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("status = %d, want %d (invalid state)", w.Code, http.StatusBadRequest)
+	for _, next := range []string{"processing", "shipped", "delivered"} {
+		w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/status", statusBody(next), nil)
+		if w.Code != http.StatusOK {
+			t.Fatalf("transition to %q: status = %d, want %d, body: %s", next, w.Code, http.StatusOK, w.Body.String())
+		}
 	}
 }
 
-func TestApproveOrder_ByOrderID(t *testing.T) {
+func TestUpdateOrderStatus_IllegalJump(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewAdminHandler(db)
+
+	order := models.Order{
+		OrderID: "STATUS003", CustomerName: "Test", CustomerEmail: "t@t.com",
+		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
+		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "paid",
+	}
+	db.Create(&order)
+
+	r := setupTestRouter()
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
+
+	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/status", statusBody("shipped"), nil)
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("status = %d, want %d (illegal jump paid->shipped)", w.Code, http.StatusBadRequest)
+	}
+}
+
+func TestUpdateOrderStatus_CancelFromAnyState(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewAdminHandler(db)
+
+	order := models.Order{
+		OrderID: "STATUS004", CustomerName: "Test", CustomerEmail: "t@t.com",
+		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
+		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "shipped",
+	}
+	db.Create(&order)
+
+	r := setupTestRouter()
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
+
+	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/status", statusBody("cancelled"), nil)
+	if w.Code != http.StatusOK {
+		t.Errorf("status = %d, want %d (cancel from shipped)", w.Code, http.StatusOK)
+	}
+}
+
+func TestUpdateOrderStatus_RestoreFromCancelled(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewAdminHandler(db)
+
+	order := models.Order{
+		OrderID: "STATUS005", CustomerName: "Test", CustomerEmail: "t@t.com",
+		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
+		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "cancelled",
+	}
+	db.Create(&order)
+
+	r := setupTestRouter()
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
+
+	w := performJSONRequest(r, "PUT", "/admin/orders/"+order.ID.String()+"/status", statusBody("paid"), nil)
+	if w.Code != http.StatusOK {
+		t.Errorf("status = %d, want %d (restore cancelled->paid)", w.Code, http.StatusOK)
+	}
+}
+
+func TestUpdateOrderStatus_ByOrderID(t *testing.T) {
 	db := setupTestDB(t)
 	h := NewAdminHandler(db)
 
 	order := models.Order{
 		OrderID: "BYORDERID1", CustomerName: "Test", CustomerEmail: "t@t.com",
 		CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
-		TotalAmount: 1000, PaymentMethod: "cod", Status: "pending",
+		TotalAmount: 1000, PaymentMethod: "razorpay", Status: "paid",
 	}
 	db.Create(&order)
 
 	r := setupTestRouter()
-	r.PUT("/admin/orders/:id/approve", h.ApproveOrder)
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
 
-	// Approve by order_id instead of UUID
-	w := performJSONRequest(r, "PUT", "/admin/orders/BYORDERID1/approve", nil, nil)
+	w := performJSONRequest(r, "PUT", "/admin/orders/BYORDERID1/status", statusBody("processing"), nil)
 	if w.Code != http.StatusOK {
 		t.Errorf("status = %d, want %d (lookup by order_id)", w.Code, http.StatusOK)
 	}
 }
 
-func TestApproveOrder_NotFound(t *testing.T) {
+func TestUpdateOrderStatus_NotFound(t *testing.T) {
 	db := setupTestDB(t)
 	h := NewAdminHandler(db)
 
 	r := setupTestRouter()
-	r.PUT("/admin/orders/:id/approve", h.ApproveOrder)
+	r.PUT("/admin/orders/:id/status", h.UpdateOrderStatus)
 
-	w := performJSONRequest(r, "PUT", "/admin/orders/NONEXISTENT/approve", nil, nil)
+	w := performJSONRequest(r, "PUT", "/admin/orders/NONEXISTENT/status", statusBody("processing"), nil)
 	if w.Code != http.StatusNotFound {
 		t.Errorf("status = %d, want %d", w.Code, http.StatusNotFound)
 	}
