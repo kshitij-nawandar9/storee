@@ -161,7 +161,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
             {[
-              { name: 'Rakhi Hampers', sub: 'limited festive gifts', link: '/hampers', image: '/images/hampers/UNDER 800/MULTIPURPOSE POUCH + KEYCHAIN/Jungle Safari.png' },
+              { name: 'Rakhi Hampers', sub: 'limited festive gifts', link: '/hampers', image: '/images/hampers/under-800/multipurpose-pouch-keychain/jungle-safari.png' },
               { name: 'All', sub: 'explore everything', link: '/products', image: '/images/products/foldable_travel_kit/Rainbow.jpg' },
               { name: 'Bags', sub: 'for little adventures', link: '/products?category=Bags', image: '/images/products/kids_bag/Beach.png' },
               { name: 'Organisers and Pouches', sub: 'pack like a pro', link: '/products?category=Organisers+and+Pouches', image: '/images/products/packing_cubes/Lion.jpg' },
