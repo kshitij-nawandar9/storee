@@ -5,14 +5,24 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { Package, Calendar, MapPin, ShoppingBag, Pen } from 'lucide-react';
 import { api } from '@/services/api';
+import {
+  getStoredOrderItemCustomText,
+  getStoredOrderItemName,
+  getStoredOrderItemPrice,
+  getStoredOrderItemPrint,
+} from '@/utils/orderItems';
 
 interface OrderItem {
   productId?: string;
+  variantId?: string;
   name?: string;
+  printName?: string;
+  customText?: string;
   quantity: number;
   price?: number;
-  product?: { id: string; name: string; basePrice: number };
-  variant?: { colorName?: string; price?: number };
+  sku?: string;
+  product?: { id?: string; name?: string; basePrice?: number };
+  variant?: { colorName?: string; price?: number; sku?: string };
 }
 
 interface Address { line1: string; line2?: string; city: string; state: string; pincode: string; }
@@ -122,19 +132,20 @@ export default function OrderHistory() {
                   <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #F0E0C6' }}>
                     <p className="text-xs font-semibold mb-2" style={{ color: '#6b5f58' }}>Items</p>
                     <div className="space-y-1.5">
-                      {Array.isArray(order.items) && order.items.length > 0 ? order.items.map((item: any, i: number) => {
-                        const name = item.product?.name || item.name || 'Product';
-                        const print = item.variant?.colorName;
-                        const price = item.variant?.price ?? item.product?.basePrice ?? item.price ?? 0;
+                      {Array.isArray(order.items) && order.items.length > 0 ? order.items.map((item: OrderItem, i: number) => {
+                        const name = getStoredOrderItemName(item);
+                        const print = getStoredOrderItemPrint(item);
+                        const price = getStoredOrderItemPrice(item);
+                        const customText = getStoredOrderItemCustomText(item);
                         return (
                           <div key={i} className="text-sm" style={{ color: '#4a443e' }}>
                             <div className="flex justify-between">
                               <span>{name}{print && <span style={{ color: '#C4756E' }}> · {print}</span>} × {item.quantity || 1}</span>
                               <span className="font-medium">{formatAmount(price * (item.quantity || 1))}</span>
                             </div>
-                            {item.customText && (
+                            {customText && (
                               <p className="flex items-center gap-1 mt-0.5 text-xs" style={{ color: '#8a6e38' }}>
-                                <Pen className="w-3 h-3" /> Customisation: "{item.customText}"
+                                <Pen className="w-3 h-3" /> Customisation: "{customText}"
                               </p>
                             )}
                           </div>

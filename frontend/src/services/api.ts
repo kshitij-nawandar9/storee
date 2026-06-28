@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import type { Product, ApiResponse } from '@/types';
 import { mockProducts } from '@/data/mockProducts';
+import type { CheckoutOrderItem } from '@/utils/orderItems';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 console.log('[API] Environment check:', {
@@ -207,7 +208,7 @@ export const getProductBySlug = async (slug: string): Promise<ApiResponse<Produc
 // Razorpay APIs
 export const createRazorpayOrder = async (data: {
   amount: number;
-  items: any[];
+  items: CheckoutOrderItem[];
   customer: {
     name: string;
     email: string;
@@ -243,7 +244,7 @@ export const verifyPayment = async (data: {
 // COD Order API
 export const createCODOrder = async (data: {
   amount: number;
-  items: any[];
+  items: CheckoutOrderItem[];
   customer: {
     name: string;
     email: string;

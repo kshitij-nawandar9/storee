@@ -4,6 +4,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import Cart from '@/pages/Cart';
 import Checkout from '@/pages/Checkout';
 import Home from '@/pages/Home';
+import Hampers from '@/pages/Hampers';
 import NotFound from '@/pages/NotFound';
 import OrderConfirmation from '@/pages/OrderConfirmation';
 import OrderHistory from '@/pages/OrderHistory';
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/hampers" element={<Hampers />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
