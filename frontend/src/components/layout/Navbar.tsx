@@ -71,6 +71,30 @@ export default function Navbar() {
     </Link>
   );
 
+  const campaignLink = (
+    <Link
+      to="/hampers"
+      className="relative px-3 py-1.5 text-sm font-semibold transition-all duration-200 group/nav"
+      style={{
+        color: location.pathname === '/hampers' ? '#C4756E' : '#2D2A26',
+        fontFamily: "'DM Sans', sans-serif",
+      }}
+    >
+      <span className="inline-flex items-center gap-1.5 transition-transform duration-200 group-hover/nav:-translate-y-0.5">
+        Rakhi Hampers
+        <span
+          className="rounded-full px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wide"
+          style={{ background: '#C4756E', color: '#FDF6EC' }}
+        >
+          Limited
+        </span>
+      </span>
+      {location.pathname === '/hampers' && (
+        <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-[2px] rounded-full" style={{ background: '#C4756E' }} />
+      )}
+    </Link>
+  );
+
   return (
     <nav
       className="sticky top-0 z-50 transition-all duration-300 overflow-visible"
@@ -102,6 +126,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             {navLink('/', 'Home')}
             {navLink('/products', 'Shop')}
+            {campaignLink}
             {isAuthenticated && navLink('/orders', 'Orders')}
             {isAuthenticated && isAdmin && navLink('/admin/orders', 'Admin')}
           </div>
@@ -208,6 +233,7 @@ export default function Navbar() {
               {[
                 { to: '/', label: 'Home' },
                 { to: '/products', label: 'Shop' },
+                { to: '/hampers', label: 'Rakhi Hampers' },
                 ...(isAuthenticated ? [{ to: '/orders', label: 'My Orders' }] : []),
                 ...(isAuthenticated && isAdmin ? [{ to: '/admin/orders', label: 'Admin' }] : []),
               ].map(({ to, label }) => (

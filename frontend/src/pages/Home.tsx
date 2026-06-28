@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
 import SaleBanner from '@/components/home/SaleBanner';
+import RakhiHamperBanner from '@/components/home/RakhiHamperBanner';
 
 const reviews = [
   {
@@ -82,9 +83,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SALE BANNER WITH COUNTDOWN ── */}
-      <SaleBanner />
-
       {/* ── TRUST STRIP — scrolling marquee on mobile, grid on desktop ── */}
       <section style={{ background: '#FFFDF9', borderBottom: '1px solid #F0E0C6' }}>
         {/* Mobile: scrolling strip */}
@@ -137,6 +135,12 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── LIMITED RAKHI HAMPERS ── */}
+      <RakhiHamperBanner />
+
+      {/* ── SALE BANNER WITH COUNTDOWN ── */}
+      <SaleBanner />
+
       {/* ── SHOP BY CATEGORY ── */}
       <section className="pt-10 sm:pt-16 pb-10 sm:pb-16 relative bg-warm-pattern">
         <div className="absolute top-12 right-8 pointer-events-none hidden lg:block float-gentle" style={{ opacity: 0.07 }}>
@@ -155,8 +159,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
             {[
+              { name: 'Rakhi Hampers', sub: 'limited festive gifts', link: '/hampers', image: '/images/hampers/UNDER 800/MULTIPURPOSE POUCH + KEYCHAIN/ChatGPT Image Jun 27, 2026, 05_48_04 PM.png' },
               { name: 'All', sub: 'explore everything', link: '/products', image: '/images/products/foldable_travel_kit/Rainbow.jpg' },
               { name: 'Bags', sub: 'for little adventures', link: '/products?category=Bags', image: '/images/products/kids_bag/Beach.png' },
               { name: 'Organisers and Pouches', sub: 'pack like a pro', link: '/products?category=Organisers+and+Pouches', image: '/images/products/packing_cubes/Lion.jpg' },
