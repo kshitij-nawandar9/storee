@@ -4,10 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { getAdminOrders, updateOrderStatus } from '@/services/api';
 import { Package, ShoppingBag, MapPin, Pen } from 'lucide-react';
 import toast from 'react-hot-toast';
+import {
+  getStoredOrderItemCustomText,
+  getStoredOrderItemName,
+  getStoredOrderItemPrice,
+  getStoredOrderItemPrint,
+} from '@/utils/orderItems';
 
 const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'kshitij.nawandar@razorpay.com'];
 
-interface OrderItem { productId?: string; name?: string; quantity: number; price?: number; product?: { id: string; name: string; basePrice: number }; }
+interface OrderItem {
+  productId?: string;
+  variantId?: string;
+  name?: string;
+  printName?: string;
+  customText?: string;
+  quantity: number;
+  price?: number;
+  sku?: string;
+  product?: { id?: string; name?: string; basePrice?: number };
+  variant?: { colorName?: string; price?: number; sku?: string };
+}
 interface Address { line1: string; line2?: string; city: string; state: string; pincode: string; }
 interface Order { id: string; orderId: string; customerName: string; customerEmail: string; customerPhone: string; address: Address | string; items: OrderItem[] | string; totalAmount: number; status: string; paymentMethod: string; createdAt: string; }
 
@@ -191,19 +208,20 @@ export default function AdminOrders() {
                         <ShoppingBag className="w-3 h-3" /> Items ({Array.isArray(order.items) ? order.items.length : 0})
                       </p>
                       <div className="space-y-1">
-                        {Array.isArray(order.items) && order.items.length > 0 ? order.items.map((item: any, i: number) => {
-                          const name = item.product?.name || item.name || 'Product';
-                          const price = item.variant?.price ?? item.product?.basePrice ?? item.price ?? 0;
-                          const print = item.variant?.colorName;
+                        {Array.isArray(order.items) && order.items.length > 0 ? order.items.map((item: OrderItem, i: number) => {
+                          const name = getStoredOrderItemName(item);
+                          const price = getStoredOrderItemPrice(item);
+                          const print = getStoredOrderItemPrint(item);
+                          const customText = getStoredOrderItemCustomText(item);
                           return (
                             <div key={i} className="text-xs" style={{ color: '#4a443e' }}>
                               <div className="flex justify-between">
                                 <span>{name}{print && <span style={{ color: '#C4756E' }}> · {print}</span>} × {item.quantity || 1}</span>
                                 <span className="font-medium">{formatAmount(price * (item.quantity || 1))}</span>
                               </div>
-                              {item.customText && (
+                              {customText && (
                                 <p className="flex items-center gap-1 mt-0.5" style={{ color: '#8a6e38' }}>
-                                  <Pen className="w-3 h-3" /> Customisation: "{item.customText}"
+                                  <Pen className="w-3 h-3" /> Customisation: "{customText}"
                                 </p>
                               )}
                             </div>

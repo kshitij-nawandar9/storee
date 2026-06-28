@@ -4,6 +4,7 @@ import { createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
 import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, getSalePrice } from '@/utils/constants';
+import { buildCheckoutOrderItems } from '@/utils/orderItems';
 import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
 import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -178,10 +179,11 @@ export default function Checkout() {
       console.log('[Checkout] Step 1: Razorpay script loaded');
 
       // Step 2: Create order on backend
-      console.log('[Checkout] Step 2: Creating order...', { amount: finalTotal, itemCount: items.length });
+      const orderItems = buildCheckoutOrderItems(items);
+      console.log('[Checkout] Step 2: Creating order...', { amount: finalTotal, itemCount: orderItems.length });
       const orderResponse = await createRazorpayOrder({
         amount: finalTotal,
-        items: items,
+        items: orderItems,
         customer: {
           name: formData.name,
           email: formData.email,
