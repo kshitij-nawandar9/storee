@@ -22,8 +22,8 @@ func NewOrderHandler(db *gorm.DB) *OrderHandler {
 }
 
 type CreateCODOrderRequest struct {
-	Amount  int64  `json:"amount" binding:"required"`
-	Items   []any  `json:"items" binding:"required"`
+	Amount   int64 `json:"amount" binding:"required"`
+	Items    []any `json:"items" binding:"required"`
 	Customer struct {
 		Name  string `json:"name" binding:"required"`
 		Email string `json:"email" binding:"required,email"`
@@ -47,6 +47,33 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 		return
 	}
 
+	idempotencyKey, ok := requireIdempotencyKey(c)
+	if !ok {
+		return
+	}
+
+	requestHash, err := hashOrderCreateRequest("cod", req)
+	if err != nil {
+		log.Printf("Failed to hash COD order request: %v", err)
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+		return
+	}
+
+	existingOrder, err := findOrderByIdempotencyKey(h.DB, idempotencyKey)
+	if err != nil {
+		log.Printf("Failed to check COD idempotency key: %v", err)
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+		return
+	}
+	if existingOrder != nil {
+		if !validateIdempotentOrder(c, existingOrder, requestHash) {
+			return
+		}
+		log.Printf("Returning existing COD order for idempotency key: %s", idempotencyKey)
+		utils.SuccessResponse(c, http.StatusOK, "COD order already created", existingOrder)
+		return
+	}
+
 	// Generate unique 10-digit alphanumeric order ID
 	// Retry if there's a collision (extremely rare with 36^10 possibilities)
 	var orderID string
@@ -54,7 +81,7 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 	maxRetries := 5
 	for i := 0; i < maxRetries; i++ {
 		orderID = utils.GenerateOrderID()
-		
+
 		// Check if order ID already exists
 		var existingOrder models.Order
 		if err := h.DB.Where("order_id = ?", orderID).First(&existingOrder).Error; err != nil {
@@ -77,7 +104,7 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 			return
 		}
 	}
-	
+
 	log.Printf("Creating COD order: %s for customer: %s (%s)", orderID, req.Customer.Name, req.Customer.Email)
 
 	// Check if user is authenticated
@@ -95,19 +122,30 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 
 	// Create order record
 	order = models.Order{
-		OrderID:       orderID,
-		UserID:        userID,
-		CustomerName:  req.Customer.Name,
-		CustomerEmail: req.Customer.Email,
-		CustomerPhone: req.Customer.Phone,
-		Address:       datatypes.JSON([]byte(utils.MustMarshalJSON(req.Address))),
-		Items:         datatypes.JSON(utils.MustMarshalJSON(req.Items)),
-		TotalAmount:   req.Amount,
-		Status:        "pending",
-		PaymentMethod: "cod",
+		OrderID:         orderID,
+		IdempotencyKey:  &idempotencyKey,
+		IdempotencyHash: requestHash,
+		UserID:          userID,
+		CustomerName:    req.Customer.Name,
+		CustomerEmail:   req.Customer.Email,
+		CustomerPhone:   req.Customer.Phone,
+		Address:         datatypes.JSON([]byte(utils.MustMarshalJSON(req.Address))),
+		Items:           datatypes.JSON(utils.MustMarshalJSON(req.Items)),
+		TotalAmount:     req.Amount,
+		Status:          "pending",
+		PaymentMethod:   "cod",
 	}
 
 	if err := h.DB.Create(&order).Error; err != nil {
+		existingOrder, lookupErr := findOrderByIdempotencyKey(h.DB, idempotencyKey)
+		if lookupErr == nil && existingOrder != nil {
+			if !validateIdempotentOrder(c, existingOrder, requestHash) {
+				return
+			}
+			log.Printf("Returning existing COD order after idempotency race: %s", idempotencyKey)
+			utils.SuccessResponse(c, http.StatusOK, "COD order already created", existingOrder)
+			return
+		}
 		log.Printf("Failed to create COD order in database: %v", err)
 		c.Error(err) // Add error to context for logging middleware
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)

@@ -40,7 +40,7 @@ func TestCreateCODOrder_Success(t *testing.T) {
 	r := setupTestRouter()
 	r.POST("/orders/cod", h.CreateCODOrder)
 
-	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), nil)
+	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), idempotencyHeaders("cod-success"))
 	if w.Code != http.StatusCreated {
 		t.Fatalf("status = %d, want %d, body: %s", w.Code, http.StatusCreated, w.Body.String())
 	}
@@ -100,7 +100,7 @@ func TestCreateCODOrder_GuestOrder(t *testing.T) {
 	r := setupTestRouter()
 	r.POST("/orders/cod", h.CreateCODOrder)
 
-	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), nil)
+	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), idempotencyHeaders("cod-guest"))
 	if w.Code != http.StatusCreated {
 		t.Fatalf("status = %d, want %d", w.Code, http.StatusCreated)
 	}
@@ -124,7 +124,7 @@ func TestCreateCODOrder_AuthenticatedOrder(t *testing.T) {
 		h.CreateCODOrder(c)
 	})
 
-	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), nil)
+	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), idempotencyHeaders("cod-authenticated"))
 	if w.Code != http.StatusCreated {
 		t.Fatalf("status = %d, want %d", w.Code, http.StatusCreated)
 	}
@@ -137,6 +137,83 @@ func TestCreateCODOrder_AuthenticatedOrder(t *testing.T) {
 	}
 	if *order.UserID != userID {
 		t.Errorf("UserID = %v, want %v", *order.UserID, userID)
+	}
+}
+
+func TestCreateCODOrder_MissingIdempotencyKey(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewOrderHandler(db)
+
+	r := setupTestRouter()
+	r.POST("/orders/cod", h.CreateCODOrder)
+
+	w := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), nil)
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("status = %d, want %d", w.Code, http.StatusBadRequest)
+	}
+}
+
+func TestCreateCODOrder_IdempotentRetry(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewOrderHandler(db)
+
+	r := setupTestRouter()
+	r.POST("/orders/cod", h.CreateCODOrder)
+
+	headers := idempotencyHeaders("cod-retry")
+	w1 := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), headers)
+	if w1.Code != http.StatusCreated {
+		t.Fatalf("first status = %d, want %d, body: %s", w1.Code, http.StatusCreated, w1.Body.String())
+	}
+
+	w2 := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), headers)
+	if w2.Code != http.StatusOK {
+		t.Fatalf("retry status = %d, want %d, body: %s", w2.Code, http.StatusOK, w2.Body.String())
+	}
+
+	var resp1, resp2 utils.ApiResponse
+	json.Unmarshal(w1.Body.Bytes(), &resp1)
+	json.Unmarshal(w2.Body.Bytes(), &resp2)
+	order1 := resp1.Data.(map[string]interface{})
+	order2 := resp2.Data.(map[string]interface{})
+	if order1["orderId"] != order2["orderId"] {
+		t.Errorf("retry orderId = %v, want %v", order2["orderId"], order1["orderId"])
+	}
+
+	var count int64
+	db.Model(&models.Order{}).Count(&count)
+	if count != 1 {
+		t.Errorf("orders count = %d, want 1", count)
+	}
+}
+
+func TestCreateCODOrder_IdempotencyConflict(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewOrderHandler(db)
+
+	r := setupTestRouter()
+	r.POST("/orders/cod", h.CreateCODOrder)
+
+	headers := idempotencyHeaders("cod-conflict")
+	w1 := performJSONRequest(r, "POST", "/orders/cod", validCODOrderBody(), headers)
+	if w1.Code != http.StatusCreated {
+		t.Fatalf("first status = %d, want %d, body: %s", w1.Code, http.StatusCreated, w1.Body.String())
+	}
+
+	var body map[string]interface{}
+	json.Unmarshal(validCODOrderBody(), &body)
+	body["amount"] = 20000
+	changedBody, _ := json.Marshal(body)
+
+	w2 := performJSONRequest(r, "POST", "/orders/cod", changedBody, headers)
+	if w2.Code != http.StatusConflict {
+		t.Fatalf("conflict status = %d, want %d, body: %s", w2.Code, http.StatusConflict, w2.Body.String())
+	}
+
+	var count int64
+	db.Model(&models.Order{}).Count(&count)
+	if count != 1 {
+		t.Errorf("orders count = %d, want 1", count)
 	}
 }
 

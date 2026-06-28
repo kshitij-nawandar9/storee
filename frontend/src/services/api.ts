@@ -18,6 +18,13 @@ export const api = axios.create({
   timeout: 10000, // 10 second timeout
 });
 
+export const createIdempotencyKey = (): string => {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+};
+
 // Request interceptor - add auth token if available
 api.interceptors.request.use(
   (config) => {
@@ -213,9 +220,11 @@ export const createRazorpayOrder = async (data: {
     state: string;
     pincode: string;
   };
-}): Promise<ApiResponse<{ order: { id: string; order_id: string; razorpay_id: string; amount: number; currency: string; key_id: string } }>> => {
+}, idempotencyKey: string): Promise<ApiResponse<{ order: { id: string; order_id: string; razorpay_id: string; amount: number; currency: string; key_id: string } }>> => {
   console.log('[API] Creating Razorpay order...', { amount: data.amount, itemCount: data.items.length });
-  const response = await api.post('/razorpay/create-order', data);
+  const response = await api.post('/razorpay/create-order', data, {
+    headers: { 'Idempotency-Key': idempotencyKey },
+  });
   console.log('[API] Razorpay order created:', { orderId: response.data?.data?.order?.order_id, razorpayId: response.data?.data?.order?.razorpay_id });
   return response.data;
 };
@@ -247,9 +256,11 @@ export const createCODOrder = async (data: {
     state: string;
     pincode: string;
   };
-}): Promise<ApiResponse<any>> => {
+}, idempotencyKey: string): Promise<ApiResponse<any>> => {
   console.log('[API] Creating COD order...', { amount: data.amount, itemCount: data.items.length });
-  const response = await api.post('/orders/cod', data);
+  const response = await api.post('/orders/cod', data, {
+    headers: { 'Idempotency-Key': idempotencyKey },
+  });
   console.log('[API] COD order created:', { success: response.data?.success });
   return response.data;
 };

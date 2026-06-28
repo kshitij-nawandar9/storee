@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -21,8 +20,8 @@ import (
 )
 
 type RazorpayHandler struct {
-	DB            *gorm.DB
-	Config        *config.Config
+	DB             *gorm.DB
+	Config         *config.Config
 	RazorpayClient *services.RazorpayClient
 }
 
@@ -35,8 +34,8 @@ func NewRazorpayHandler(db *gorm.DB, cfg *config.Config) *RazorpayHandler {
 }
 
 type CreateOrderRequest struct {
-	Amount  int64  `json:"amount" binding:"required"`
-	Items   []any  `json:"items" binding:"required"`
+	Amount   int64 `json:"amount" binding:"required"`
+	Items    []any `json:"items" binding:"required"`
 	Customer struct {
 		Name  string `json:"name" binding:"required"`
 		Email string `json:"email" binding:"required,email"`
@@ -57,6 +56,21 @@ type VerifyPaymentRequest struct {
 	Signature string `json:"signature" binding:"required"`
 }
 
+func (h *RazorpayHandler) writeCreateOrderResponse(c *gin.Context, status int, message string, order models.Order) {
+	response := map[string]any{
+		"order": map[string]any{
+			"id":          order.ID.String(),
+			"order_id":    order.OrderID, // Our 10-digit order ID
+			"razorpay_id": order.RazorpayOrderID,
+			"amount":      order.TotalAmount,
+			"currency":    "INR",
+			"key_id":      h.Config.RazorpayKeyID,
+		},
+	}
+
+	utils.SuccessResponse(c, status, message, response)
+}
+
 // CreateOrder handles POST /api/v1/razorpay/create-order
 func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	var req CreateOrderRequest
@@ -67,13 +81,44 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 	}
 	log.Printf("CreateOrder request: amount=%d, items=%d, customer=%s <%s>", req.Amount, len(req.Items), req.Customer.Name, req.Customer.Email)
 
+	idempotencyKey, ok := requireIdempotencyKey(c)
+	if !ok {
+		return
+	}
+
+	requestHash, err := hashOrderCreateRequest("razorpay", req)
+	if err != nil {
+		log.Printf("Failed to hash Razorpay order request: %v", err)
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+		return
+	}
+
+	existingOrder, err := findOrderByIdempotencyKey(h.DB, idempotencyKey)
+	if err != nil {
+		log.Printf("Failed to check Razorpay idempotency key: %v", err)
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
+		return
+	}
+	if existingOrder != nil {
+		if !validateIdempotentOrder(c, existingOrder, requestHash) {
+			return
+		}
+		if existingOrder.RazorpayOrderID == "" {
+			utils.ErrorResponse(c, http.StatusConflict, "Order creation is already in progress; retry shortly", nil)
+			return
+		}
+		log.Printf("Returning existing Razorpay order for idempotency key: %s", idempotencyKey)
+		h.writeCreateOrderResponse(c, http.StatusOK, "Order already created", *existingOrder)
+		return
+	}
+
 	// Generate unique 10-digit alphanumeric order ID
 	// Retry if there's a collision (extremely rare with 36^10 possibilities)
 	var orderID string
 	maxRetries := 5
 	for i := 0; i < maxRetries; i++ {
 		orderID = utils.GenerateOrderID()
-		
+
 		// Check if order ID already exists
 		var existingOrder models.Order
 		if err := h.DB.Where("order_id = ?", orderID).First(&existingOrder).Error; err != nil {
@@ -96,16 +141,6 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 			return
 		}
 	}
-	
-	// Create Razorpay order
-	receipt := "receipt_" + orderID
-	razorpayOrder, err := h.RazorpayClient.CreateOrder(req.Amount, receipt)
-	if err != nil {
-		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create Razorpay order", err)
-		return
-	}
-	razorpayOrderID := razorpayOrder.ID
-
 	// Check if user is authenticated
 	var userID *uuid.UUID
 	if userIDVal, exists := c.Get("userID"); exists {
@@ -119,38 +154,59 @@ func (h *RazorpayHandler) CreateOrder(c *gin.Context) {
 		log.Printf("Razorpay Order: No userID in context - guest order")
 	}
 
-	// Create order record in database
+	// Reserve the idempotency key before calling Razorpay so concurrent retries
+	// do not create multiple upstream orders for the same checkout attempt.
 	order := models.Order{
-		OrderID:        orderID,
-		RazorpayOrderID: razorpayOrderID,
-		UserID:         userID,
-		CustomerName:   req.Customer.Name,
-		CustomerEmail:  req.Customer.Email,
-		CustomerPhone:  req.Customer.Phone,
-		Address:        datatypes.JSON([]byte(fmt.Sprintf(`{"line1":"%s","line2":"%s","city":"%s","state":"%s","pincode":"%s"}`, req.Address.Line1, req.Address.Line2, req.Address.City, req.Address.State, req.Address.Pincode))),
-		Items:          datatypes.JSON(utils.MustMarshalJSON(req.Items)),
-		TotalAmount:    req.Amount,
-		Status:         "pending",
-		PaymentMethod:  "razorpay",
+		OrderID:         orderID,
+		IdempotencyKey:  &idempotencyKey,
+		IdempotencyHash: requestHash,
+		UserID:          userID,
+		CustomerName:    req.Customer.Name,
+		CustomerEmail:   req.Customer.Email,
+		CustomerPhone:   req.Customer.Phone,
+		Address:         datatypes.JSON(utils.MustMarshalJSON(req.Address)),
+		Items:           datatypes.JSON(utils.MustMarshalJSON(req.Items)),
+		TotalAmount:     req.Amount,
+		Status:          "pending",
+		PaymentMethod:   "razorpay",
 	}
 
 	if err := h.DB.Create(&order).Error; err != nil {
+		existingOrder, lookupErr := findOrderByIdempotencyKey(h.DB, idempotencyKey)
+		if lookupErr == nil && existingOrder != nil {
+			if !validateIdempotentOrder(c, existingOrder, requestHash) {
+				return
+			}
+			if existingOrder.RazorpayOrderID == "" {
+				utils.ErrorResponse(c, http.StatusConflict, "Order creation is already in progress; retry shortly", nil)
+				return
+			}
+			log.Printf("Returning existing Razorpay order after idempotency race: %s", idempotencyKey)
+			h.writeCreateOrderResponse(c, http.StatusOK, "Order already created", *existingOrder)
+			return
+		}
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create order", err)
 		return
 	}
 
-	response := map[string]any{
-		"order": map[string]any{
-			"id":           order.ID.String(),
-			"order_id":     orderID, // Our 10-digit order ID
-			"razorpay_id":  razorpayOrderID,
-			"amount":       order.TotalAmount,
-			"currency":     "INR",
-			"key_id":       h.Config.RazorpayKeyID,
-		},
+	// Create Razorpay order
+	receipt := "receipt_" + orderID
+	razorpayOrder, err := h.RazorpayClient.CreateOrder(req.Amount, receipt)
+	if err != nil {
+		if deleteErr := h.DB.Delete(&order).Error; deleteErr != nil {
+			log.Printf("Failed to remove Razorpay order reservation after API error: %v", deleteErr)
+		}
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to create Razorpay order", err)
+		return
+	}
+	order.RazorpayOrderID = razorpayOrder.ID
+
+	if err := h.DB.Model(&order).Update("razorpay_order_id", order.RazorpayOrderID).Error; err != nil {
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to update order", err)
+		return
 	}
 
-	utils.SuccessResponse(c, http.StatusCreated, "Order created successfully", response)
+	h.writeCreateOrderResponse(c, http.StatusCreated, "Order created successfully", order)
 }
 
 // VerifyPayment handles POST /api/v1/razorpay/verify-payment
@@ -192,7 +248,6 @@ func (h *RazorpayHandler) VerifyPayment(c *gin.Context) {
 
 	utils.SuccessResponse(c, http.StatusOK, "Payment verified successfully", response)
 }
-
 
 // verifySignature verifies Razorpay payment signature
 func (h *RazorpayHandler) verifySignature(orderID, paymentID, signature string) bool {
@@ -301,7 +356,7 @@ func (h *RazorpayHandler) HandleWebhook(c *gin.Context) {
 				dbOrder.Status = "paid" // Treat authorized as paid for now
 			}
 			dbOrder.PaymentID = paymentID
-			
+
 			if err := h.DB.Save(&dbOrder).Error; err != nil {
 				log.Printf("Webhook: Failed to update order: %v", err)
 				utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to update order", nil)
