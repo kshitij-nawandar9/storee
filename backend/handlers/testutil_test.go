@@ -43,3 +43,7 @@ func performJSONRequest(r *gin.Engine, method, path string, body []byte, headers
 	r.ServeHTTP(w, req)
 	return w
 }
+
+func idempotencyHeaders(key string) map[string]string {
+	return map[string]string{idempotencyKeyHeader: key}
+}

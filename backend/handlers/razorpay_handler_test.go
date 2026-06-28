@@ -80,7 +80,7 @@ func TestCreateOrder_Success(t *testing.T) {
 	r := setupTestRouter()
 	r.POST("/razorpay/create-order", h.CreateOrder)
 
-	w := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), nil)
+	w := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), idempotencyHeaders("razorpay-success"))
 	if w.Code != http.StatusCreated {
 		t.Fatalf("status = %d, want %d, body: %s", w.Code, http.StatusCreated, w.Body.String())
 	}
@@ -98,6 +98,110 @@ func TestCreateOrder_Success(t *testing.T) {
 	}
 	if order["key_id"] != "rzp_test_key" {
 		t.Errorf("key_id = %v, want rzp_test_key", order["key_id"])
+	}
+}
+
+func TestCreateOrder_MissingIdempotencyKey(t *testing.T) {
+	server := mockRazorpayServer(t)
+	defer server.Close()
+
+	h, _ := newTestRazorpayHandler(t, server.URL)
+
+	r := setupTestRouter()
+	r.POST("/razorpay/create-order", h.CreateOrder)
+
+	w := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), nil)
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("status = %d, want %d", w.Code, http.StatusBadRequest)
+	}
+}
+
+func TestCreateOrder_IdempotentRetry(t *testing.T) {
+	razorpayCalls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		razorpayCalls++
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"id":"order_retry123","entity":"order","amount":50000,"currency":"INR","receipt":"receipt_RETRY","status":"created","created_at":1234567890}`)
+	}))
+	defer server.Close()
+
+	h, _ := newTestRazorpayHandler(t, server.URL)
+
+	r := setupTestRouter()
+	r.POST("/razorpay/create-order", h.CreateOrder)
+
+	headers := idempotencyHeaders("razorpay-retry")
+	w1 := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), headers)
+	if w1.Code != http.StatusCreated {
+		t.Fatalf("first status = %d, want %d, body: %s", w1.Code, http.StatusCreated, w1.Body.String())
+	}
+
+	w2 := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), headers)
+	if w2.Code != http.StatusOK {
+		t.Fatalf("retry status = %d, want %d, body: %s", w2.Code, http.StatusOK, w2.Body.String())
+	}
+
+	var resp1, resp2 utils.ApiResponse
+	json.Unmarshal(w1.Body.Bytes(), &resp1)
+	json.Unmarshal(w2.Body.Bytes(), &resp2)
+	order1 := resp1.Data.(map[string]interface{})["order"].(map[string]interface{})
+	order2 := resp2.Data.(map[string]interface{})["order"].(map[string]interface{})
+	if order1["order_id"] != order2["order_id"] {
+		t.Errorf("retry order_id = %v, want %v", order2["order_id"], order1["order_id"])
+	}
+	if order2["razorpay_id"] != "order_retry123" {
+		t.Errorf("retry razorpay_id = %v, want order_retry123", order2["razorpay_id"])
+	}
+	if razorpayCalls != 1 {
+		t.Errorf("razorpay calls = %d, want 1", razorpayCalls)
+	}
+
+	var count int64
+	h.DB.Model(&models.Order{}).Count(&count)
+	if count != 1 {
+		t.Errorf("orders count = %d, want 1", count)
+	}
+}
+
+func TestCreateOrder_IdempotencyConflict(t *testing.T) {
+	razorpayCalls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		razorpayCalls++
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"id":"order_conflict123","entity":"order","amount":50000,"currency":"INR","receipt":"receipt_CONFLICT","status":"created","created_at":1234567890}`)
+	}))
+	defer server.Close()
+
+	h, _ := newTestRazorpayHandler(t, server.URL)
+
+	r := setupTestRouter()
+	r.POST("/razorpay/create-order", h.CreateOrder)
+
+	headers := idempotencyHeaders("razorpay-conflict")
+	w1 := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), headers)
+	if w1.Code != http.StatusCreated {
+		t.Fatalf("first status = %d, want %d, body: %s", w1.Code, http.StatusCreated, w1.Body.String())
+	}
+
+	var body map[string]interface{}
+	json.Unmarshal(validCreateOrderBody(), &body)
+	body["amount"] = 60000
+	changedBody, _ := json.Marshal(body)
+
+	w2 := performJSONRequest(r, "POST", "/razorpay/create-order", changedBody, headers)
+	if w2.Code != http.StatusConflict {
+		t.Fatalf("conflict status = %d, want %d, body: %s", w2.Code, http.StatusConflict, w2.Body.String())
+	}
+	if razorpayCalls != 1 {
+		t.Errorf("razorpay calls = %d, want 1", razorpayCalls)
+	}
+
+	var count int64
+	h.DB.Model(&models.Order{}).Count(&count)
+	if count != 1 {
+		t.Errorf("orders count = %d, want 1", count)
 	}
 }
 
@@ -128,7 +232,7 @@ func TestCreateOrder_RazorpayAPIError(t *testing.T) {
 	r := setupTestRouter()
 	r.POST("/razorpay/create-order", h.CreateOrder)
 
-	w := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), nil)
+	w := performJSONRequest(r, "POST", "/razorpay/create-order", validCreateOrderBody(), idempotencyHeaders("razorpay-api-error"))
 	if w.Code != http.StatusInternalServerError {
 		t.Errorf("status = %d, want %d", w.Code, http.StatusInternalServerError)
 	}

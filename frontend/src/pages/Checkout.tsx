@@ -1,13 +1,13 @@
 import PriceDisplay from '@/components/product/PriceDisplay';
 import { useCart } from '@/hooks/useCart';
-import { createRazorpayOrder, verifyPayment } from '@/services/api';
+import { createIdempotencyKey, createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
 import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, getSalePrice } from '@/utils/constants';
 import { buildCheckoutOrderItems } from '@/utils/orderItems';
 import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
 import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -38,6 +38,8 @@ export default function Checkout() {
   const [showSaveOption, setShowSaveOption] = useState(false);
   const [addressLabel, setAddressLabel] = useState('');
   const [emailError, setEmailError] = useState('');
+  const orderIdempotencyRef = useRef<{ key: string; fingerprint: string } | null>(null);
+  const submittingRef = useRef(false);
 
   const total = getTotal();
   const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
@@ -137,8 +139,27 @@ export default function Checkout() {
     setEmailError(validateEmail(formData.email));
   };
 
+  const getOrderIdempotencyKey = (fingerprint: string) => {
+    if (!orderIdempotencyRef.current || orderIdempotencyRef.current.fingerprint !== fingerprint) {
+      orderIdempotencyRef.current = {
+        key: createIdempotencyKey(),
+        fingerprint,
+      };
+    }
+    return orderIdempotencyRef.current.key;
+  };
+
+  const finishCheckoutAttempt = () => {
+    submittingRef.current = false;
+    setLoading(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (submittingRef.current) {
+      return;
+    }
 
     const emailErr = validateEmail(formData.email);
     if (emailErr) {
@@ -147,6 +168,7 @@ export default function Checkout() {
       return;
     }
 
+    submittingRef.current = true;
     setLoading(true);
 
     // Save address if user wants to save it
@@ -173,7 +195,7 @@ export default function Checkout() {
       if (!scriptLoaded) {
         console.error('[Checkout] Step 1 FAILED: Razorpay script did not load');
         toast.error('Failed to load payment gateway. Please disable ad blockers and try again.');
-        setLoading(false);
+        finishCheckoutAttempt();
         return;
       }
       console.log('[Checkout] Step 1: Razorpay script loaded');
@@ -181,7 +203,7 @@ export default function Checkout() {
       // Step 2: Create order on backend
       const orderItems = buildCheckoutOrderItems(items);
       console.log('[Checkout] Step 2: Creating order...', { amount: finalTotal, itemCount: orderItems.length });
-      const orderResponse = await createRazorpayOrder({
+      const orderPayload = {
         amount: finalTotal,
         items: orderItems,
         customer: {
@@ -190,12 +212,14 @@ export default function Checkout() {
           phone: formData.phone,
         },
         address: formData.address,
-      });
+      };
+      const idempotencyKey = getOrderIdempotencyKey(JSON.stringify(orderPayload));
+      const orderResponse = await createRazorpayOrder(orderPayload, idempotencyKey);
 
       if (!orderResponse.success) {
         console.error('[Checkout] Step 2 FAILED: Order creation failed', orderResponse);
         toast.error(orderResponse.message || 'Failed to create order');
-        setLoading(false);
+        finishCheckoutAttempt();
         return;
       }
 
@@ -227,6 +251,7 @@ export default function Checkout() {
               console.log('[Checkout] Step 4: Payment verified successfully');
               toast.success('Order placed successfully!');
               clearCart();
+              orderIdempotencyRef.current = null;
               const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
               navigate(`/orders/${orderId}`);
             } else {
@@ -237,13 +262,13 @@ export default function Checkout() {
             console.error('[Checkout] Step 4 FAILED: Payment verification error:', error);
             toast.error('Payment verification failed. Please contact support if money was deducted.');
           } finally {
-            setLoading(false);
+            finishCheckoutAttempt();
           }
         },
         (error) => {
           console.error('[Checkout] Step 3 FAILED: Razorpay checkout error:', error);
           toast.error(error);
-          setLoading(false);
+          finishCheckoutAttempt();
         }
       );
     } catch (error) {
@@ -251,7 +276,7 @@ export default function Checkout() {
       const message = error instanceof Error ? error.message : 'Unknown error';
       console.error('[Checkout] Error details:', message);
       toast.error('Something went wrong. Please try again.');
-      setLoading(false);
+      finishCheckoutAttempt();
     }
   };
 
