@@ -159,9 +159,6 @@ export default function Hampers() {
                 {SHIPPING_INFO}
               </p>
             </div>
-            <div className="mt-4 hidden md:flex justify-center">
-              <RakhiThread className="rotate-[1deg] opacity-80" variant="rose" />
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">

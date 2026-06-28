@@ -1,4 +1,4 @@
-import type { Product } from '@/types';
+import type { Product, ProductVariant } from '@/types';
 
 export type HamperBudget = 'under-500' | 'under-800' | 'under-1100';
 
@@ -13,14 +13,100 @@ export interface RakhiHamper extends Product {
 
 const image = (path: string) => `/images/hampers/${path}`;
 
-const images = (base: string, names: string[]) =>
-  names.map((name, index) => ({
+const printNames = ['Aqua', 'Beach', 'Bunny', 'Rainbow', 'Lion', 'Jungle Safari', 'Marine', 'Space', 'Sports', 'Unicorn'] as const;
+type HamperPrint = typeof printNames[number];
+
+interface HamperPrintImage {
+  name: HamperPrint;
+  file: string;
+}
+
+const printColors: Record<HamperPrint, string> = {
+  Aqua: '#1E7FD8',
+  Beach: '#FADADD',
+  Bunny: '#1A2744',
+  Rainbow: '#F8C8D0',
+  Lion: '#5BA3A0',
+  'Jungle Safari': '#4A7C59',
+  Marine: '#1B4D8E',
+  Space: '#2C2C54',
+  Sports: '#E85D3A',
+  Unicorn: '#D4A0D4',
+};
+
+const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const printFile = (name: HamperPrint) => `${name}.png`;
+
+const withPrintFiles = (names: readonly HamperPrint[]): HamperPrintImage[] =>
+  names.map((name) => ({ name, file: printFile(name) }));
+
+const images = (base: string, entries: HamperPrintImage[]) =>
+  entries.map((entry, index) => ({
     id: `${base.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${index + 1}`,
-    url: image(`${base}/${name}`),
-    altText: `${base.replace(/\s+/g, ' ')} hamper ${index + 1}`,
+    url: image(`${base}/${entry.file}`),
+    altText: `${base.replace(/\s+/g, ' ')} hamper - ${entry.name}`,
     order: index + 1,
     isPrimary: index === 0,
   }));
+
+const variants = (
+  productId: string,
+  base: string,
+  price: number,
+  entries: HamperPrintImage[],
+  defaultPrint?: HamperPrint
+): ProductVariant[] => {
+  const activeDefault = defaultPrint || entries[0]?.name;
+
+  return entries.map((entry) => ({
+    id: `${productId}-${slugify(entry.name)}`,
+    productId,
+    colorName: entry.name,
+    colorCode: printColors[entry.name],
+    image: image(`${base}/${entry.file}`),
+    price,
+    stock: 20,
+    sku: `${productId.toUpperCase().replace(/[^A-Z0-9]+/g, '-')}-${slugify(entry.name).toUpperCase()}`,
+    isDefault: entry.name === activeDefault,
+    isActive: true,
+  }));
+};
+
+const crossbodyPrints = withPrintFiles(printNames);
+
+const toiletryPrints = withPrintFiles(printNames);
+
+const dufflePrints = withPrintFiles(printNames);
+
+const multipurposePrints = withPrintFiles([
+  'Jungle Safari',
+  'Marine',
+  'Space',
+  'Sports',
+  'Unicorn',
+  'Beach',
+  'Lion',
+  'Bunny',
+  'Rainbow',
+  'Aqua',
+]);
+
+const activityPrints = withPrintFiles(printNames);
+
+const foldablePrints = withPrintFiles([
+  'Jungle Safari',
+  'Space',
+  'Bunny',
+  'Marine',
+  'Unicorn',
+  'Beach',
+  'Aqua',
+  'Lion',
+  'Rainbow',
+]);
+
+const backpackPrints = withPrintFiles(printNames);
 
 export const RAKHI_HAMPERS: RakhiHamper[] = [
   {
@@ -40,13 +126,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Crossbody bag', 'Personalised keychain', 'Gift-ready styling'],
     features: ['Personalised name keychain included', 'Lightweight crossbody bag', 'Fun prints for kids', 'Limited Rakhi drop'],
-    images: images('UNDER 500/CROSSBODY + KEYCHAIN ', [
-      'ChatGPT Image Jun 27, 2026, 10_10_15 PM.png',
-      'ChatGPT Image Jun 27, 2026, 10_10_21 PM.png',
-      'ChatGPT Image Jun 27, 2026, 10_10_29 PM.png',
-      'ChatGPT Image Jun 27, 2026, 10_10_39 PM.png',
-      'ChatGPT Image Jun 27, 2026, 10_10_46 PM.png',
-    ]),
+    images: images('UNDER 500/CROSSBODY + KEYCHAIN ', crossbodyPrints),
+    variants: variants('rakhi-crossbody-keychain', 'UNDER 500/CROSSBODY + KEYCHAIN ', 49900, crossbodyPrints),
   },
   {
     id: 'rakhi-toiletry-sunglasses-keychain',
@@ -65,13 +146,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Toiletry pouch', 'Sunglasses', 'Personalised keychain'],
     features: ['Three useful pieces in one gift', 'Personalised name keychain included', 'Travel-friendly pouch', 'Limited Rakhi drop'],
-    images: images('UNDER 500/TOILETRY + SUNGLASSES + KEYCHAIN ', [
-      'ChatGPT Image Jun 27, 2026, 07_18_22 PM.png',
-      'ChatGPT Image Jun 27, 2026, 07_18_39 PM.png',
-      'ChatGPT Image Jun 27, 2026, 07_18_47 PM.png',
-      'ChatGPT Image Jun 27, 2026, 07_18_56 PM.png',
-      'ChatGPT Image Jun 27, 2026, 07_19_04 PM.png',
-    ]),
+    images: images('UNDER 500/TOILETRY + SUNGLASSES + KEYCHAIN ', toiletryPrints),
+    variants: variants('rakhi-toiletry-sunglasses-keychain', 'UNDER 500/TOILETRY + SUNGLASSES + KEYCHAIN ', 49900, toiletryPrints),
   },
   {
     id: 'rakhi-duffle-keychain',
@@ -90,13 +166,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Duffle bag', 'Personalised keychain', 'Free custom name'],
     features: ['Spacious duffle bag', 'Personalised name keychain included', 'Great for travel and activities', 'Limited Rakhi drop'],
-    images: images('UNDER 800/DUFFLE BAG + KEYCHAIN ', [
-      'ChatGPT Image Jun 27, 2026, 11_03_33 PM.png',
-      'ChatGPT Image Jun 27, 2026, 11_03_37 PM.png',
-      'ChatGPT Image Jun 27, 2026, 11_03_52 PM.png',
-      'ChatGPT Image Jun 27, 2026, 11_03_59 PM.png',
-      'ChatGPT Image Jun 27, 2026, 11_04_04 PM.png',
-    ]),
+    images: images('UNDER 800/DUFFLE BAG + KEYCHAIN ', dufflePrints),
+    variants: variants('rakhi-duffle-keychain', 'UNDER 800/DUFFLE BAG + KEYCHAIN ', 79900, dufflePrints),
   },
   {
     id: 'rakhi-multipurpose-keychain',
@@ -115,13 +186,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Multipurpose pouch set', 'Personalised keychain', 'Free custom name'],
     features: ['Multiple pouch sizes', 'Personalised name keychain included', 'Great for school and travel', 'Limited Rakhi drop'],
-    images: images('UNDER 800/MULTIPURPOSE POUCH + KEYCHAIN', [
-      'ChatGPT Image Jun 27, 2026, 05_48_04 PM.png',
-      'ChatGPT Image Jun 27, 2026, 05_51_22 PM.png',
-      'ChatGPT Image Jun 27, 2026, 05_53_48 PM.png',
-      'ChatGPT Image Jun 27, 2026, 05_56_07 PM.png',
-      'IMG_7916.PNG',
-    ]),
+    images: images('UNDER 800/MULTIPURPOSE POUCH + KEYCHAIN', multipurposePrints),
+    variants: variants('rakhi-multipurpose-keychain', 'UNDER 800/MULTIPURPOSE POUCH + KEYCHAIN', 79900, multipurposePrints),
   },
   {
     id: 'rakhi-activity-keychain',
@@ -140,13 +206,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Activity bag', 'Personalised keychain', 'Free custom name'],
     features: ['Roomy activity bag', 'Personalised name keychain included', 'Useful for classes and outings', 'Limited Rakhi drop'],
-    images: images('UNDER 1100/acctivity bag + keychain', [
-      'ChatGPT Image Jun 27, 2026, 03_01_49 PM.png',
-      'ChatGPT Image Jun 27, 2026, 03_04_54 PM.png',
-      'ChatGPT Image Jun 27, 2026, 03_06_54 PM.png',
-      'ChatGPT Image Jun 27, 2026, 03_09_05 PM.png',
-      'ChatGPT Image Jun 27, 2026, 03_12_37 PM.png',
-    ]),
+    images: images('UNDER 1100/acctivity bag + keychain', activityPrints),
+    variants: variants('rakhi-activity-keychain', 'UNDER 1100/acctivity bag + keychain', 109900, activityPrints),
   },
   {
     id: 'rakhi-foldable-toiletry',
@@ -165,13 +226,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Foldable travel kit', 'Toiletry kit', 'Gift-ready styling'],
     features: ['Two organiser essentials', 'Great for vacations and school trips', 'Easy to pack and use', 'Limited Rakhi drop'],
-    images: images('UNDER 1100/foldable travel kit + toiletry kit', [
-      'ChatGPT Image Jun 25, 2026, 10_33_08 AM.png',
-      'ChatGPT Image Jun 25, 2026, 11_12_17 AM.png',
-      'ChatGPT Image Jun 25, 2026, 11_16_34 AM.png',
-      'ChatGPT Image Jun 25, 2026, 11_20_08 AM.png',
-      'ChatGPT Image Jun 26, 2026, 11_05_29 PM.png',
-    ]),
+    images: images('UNDER 1100/foldable travel kit + toiletry kit', foldablePrints),
+    variants: variants('rakhi-foldable-toiletry', 'UNDER 1100/foldable travel kit + toiletry kit', 109900, foldablePrints),
   },
   {
     id: 'rakhi-backpack-pencil',
@@ -190,13 +246,8 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     size: 'Gift-ready combo',
     includes: ['Small backpack', 'Pencil pouch', 'Gift-ready styling'],
     features: ['Backpack plus matching pouch', 'Useful for school and outings', 'Fun kid-friendly prints', 'Limited Rakhi drop'],
-    images: images('UNDER 1100/small backpack + pencil pouch', [
-      'ChatGPT Image Jun 24, 2026, 11_23_59 PM.png',
-      'ChatGPT Image Jun 24, 2026, 11_27_27 PM.png',
-      'ChatGPT Image Jun 24, 2026, 11_29_39 PM.png',
-      'ChatGPT Image Jun 24, 2026, 11_36_35 PM.png',
-      'ChatGPT Image Jun 24, 2026, 11_38_36 PM.png',
-    ]),
+    images: images('UNDER 1100/small backpack + pencil pouch', backpackPrints),
+    variants: variants('rakhi-backpack-pencil', 'UNDER 1100/small backpack + pencil pouch', 109900, backpackPrints),
   },
 ];
 
