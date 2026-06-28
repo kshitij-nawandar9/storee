@@ -3,7 +3,7 @@ import { ArrowRight, Gift, Heart, PackageCheck, Sparkles, Truck } from 'lucide-r
 import HamperCard from '@/components/hamper/HamperCard';
 import RakhiThread from '@/components/hamper/RakhiThread';
 import { RAKHI_BUDGETS, RAKHI_HAMPERS, type HamperBudget } from '@/data/hampers';
-import { FREE_SHIPPING_MESSAGE, SHIPPING_INFO } from '@/utils/constants';
+import { FREE_SHIPPING_MESSAGE } from '@/utils/constants';
 
 type ActiveBudget = 'all' | HamperBudget;
 
@@ -155,9 +155,6 @@ export default function Hampers() {
                   {hampers.length} {hampers.length === 1 ? 'hamper' : 'hampers'} ready to gift
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm max-w-sm" style={{ color: '#8a7e78' }}>
-                {SHIPPING_INFO}
-              </p>
             </div>
           </div>
 

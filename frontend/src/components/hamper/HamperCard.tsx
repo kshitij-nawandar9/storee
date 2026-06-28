@@ -91,7 +91,7 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="mb-2 flex items-start justify-between gap-3">
+        <div className="mb-2 flex min-h-[76px] items-start justify-between gap-3">
           <div>
             <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.14em]" style={{ color: hamper.accent }}>
               Rakhi hamper
@@ -105,7 +105,7 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
           </span>
         </div>
 
-        <p className="mb-4 text-sm leading-relaxed" style={{ color: '#6b5f58' }}>
+        <p className="mb-4 min-h-[46px] text-sm leading-relaxed" style={{ color: '#6b5f58' }}>
           {hamper.giftNote}
         </p>
 
@@ -195,11 +195,20 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
         )}
 
         {!hasKeychain && (
-          <div
-            className="mb-4 flex min-h-[78px] items-center rounded-xl px-3 py-2.5 text-xs font-semibold leading-relaxed"
-            style={{ background: '#FDF6EC', border: '1.5px solid #F0E0C6', color: '#6b5f58' }}
-          >
-            Gift-ready combo, no custom name needed.
+          <div className="mb-4 block min-h-[78px]">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none mb-1.5 flex items-center gap-1.5 text-xs font-semibold opacity-0"
+            >
+              <Pen className="w-3.5 h-3.5" />
+              Name on keychain
+            </span>
+            <div
+              className="flex min-h-[44px] items-center rounded-xl px-3 py-2.5 text-xs font-semibold leading-relaxed"
+              style={{ background: '#FDF6EC', border: '1.5px solid #F0E0C6', color: '#6b5f58' }}
+            >
+              Gift-ready combo, no custom name needed.
+            </div>
           </div>
         )}
 
