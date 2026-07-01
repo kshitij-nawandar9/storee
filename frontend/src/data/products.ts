@@ -406,7 +406,7 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'Dental Kit',
     slug: 'dental-kit',
     description: "A compact dental organiser designed to keep kids' oral care essentials in one place. Perfect for storing toothbrush, toothpaste, and hygiene products during travel or daily routines. Practical, organised, and easy to carry.",
-    basePrice: 20000,
+    basePrice: 30000,
     category: 'Speciality Kits',
     stock: 35,
     isActive: true,
@@ -426,11 +426,11 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'd8659310-1749-4fcb-8713-2e2f01e954ff', url: '/images/products/dental_kit/Bunny.png', altText: 'Dental Kit - Bunny', order: 5, isPrimary: false },
     ],
     variants: [
-      { id: 'dental-kit-rainbow', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/dental_kit/Rainbow.png', price: 20000, stock: 35, sku: 'DENTAL-KIT-RAINBOW', isDefault: false, isActive: true },
-      { id: 'dental-kit-lion', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/dental_kit/Lion.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-LION', isDefault: false, isActive: true },
-      { id: 'dental-kit-marine', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/dental_kit/Marine.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-MARINE', isDefault: true, isActive: true },
-      { id: 'dental-kit-beach', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/dental_kit/Beach.png', price: 20000, stock: 30, sku: 'DENTAL-KIT-BEACH', isDefault: false, isActive: true },
-      { id: 'dental-kit-bunny', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/dental_kit/Bunny.png', price: 20000, stock: 25, sku: 'DENTAL-KIT-BUNNY', isDefault: false, isActive: true },
+      { id: 'dental-kit-rainbow', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Rainbow', colorCode: '#F8C8D0', image: '/images/products/dental_kit/Rainbow.png', price: 30000, stock: 35, sku: 'DENTAL-KIT-RAINBOW', isDefault: false, isActive: true },
+      { id: 'dental-kit-lion', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Lion', colorCode: '#5BA3A0', image: '/images/products/dental_kit/Lion.png', price: 30000, stock: 30, sku: 'DENTAL-KIT-LION', isDefault: false, isActive: true },
+      { id: 'dental-kit-marine', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Marine', colorCode: '#1B4D8E', image: '/images/products/dental_kit/Marine.png', price: 30000, stock: 30, sku: 'DENTAL-KIT-MARINE', isDefault: true, isActive: true },
+      { id: 'dental-kit-beach', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Beach', colorCode: '#FADADD', image: '/images/products/dental_kit/Beach.png', price: 30000, stock: 30, sku: 'DENTAL-KIT-BEACH', isDefault: false, isActive: true },
+      { id: 'dental-kit-bunny', productId: '1d4973fe-d94f-464d-87a0-e94b807e9fd6', colorName: 'Bunny', colorCode: '#1A2744', image: '/images/products/dental_kit/Bunny.png', price: 30000, stock: 25, sku: 'DENTAL-KIT-BUNNY', isDefault: false, isActive: true },
     ]
   },
   {
