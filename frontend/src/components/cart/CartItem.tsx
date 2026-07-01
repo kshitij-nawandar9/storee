@@ -28,7 +28,7 @@ export default function CartItem({ item }: CartItemProps) {
 
   const unitPrice = variant?.price ?? product.basePrice;
   const displayPrice = unitPrice * quantity;
-  const saleDisplayPrice = getSalePrice(unitPrice);
+  const saleDisplayPrice = getSalePrice(unitPrice, product);
   const saleTotalPrice = saleDisplayPrice ? saleDisplayPrice * quantity : undefined;
 
   return (

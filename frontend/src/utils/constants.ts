@@ -1,3 +1,5 @@
+import type { Product } from '@/types';
+
 export const APP_NAME = 'Storee';
 
 export const CURRENCY_SYMBOL = '₹';
@@ -8,13 +10,17 @@ export const FREE_SHIPPING_MESSAGE = 'Free Pan India Delivery above ₹1,000';
 export const SHIPPING_INFO = 'Orders will be dispatched in 5-7 working days. Delivery time depends on your location.';
 export const RETURN_POLICY_MESSAGE = 'Hassle-free 7-day replacement policy';
 
-// Launch sale – set to 0 to disable
-export const LAUNCH_SALE_DISCOUNT = 0; // set to 0 to disable
+// Product sale. Hampers are excluded from this discount.
+export const LAUNCH_SALE_DISCOUNT = 0.2; // set to 0 to disable
 export const LAUNCH_SALE_END_DATE = '2026-04-30T23:59:59+05:30';
 
-/** Return the sale price (in paise) after the launch discount, or undefined if no sale is active. */
-export function getSalePrice(regularPrice: number): number | undefined {
+export const isHamperProduct = (product: Pick<Product, 'category'>) =>
+  product.category === 'Rakhi Hampers';
+
+/** Return the sale price (in paise) after the launch discount, or undefined if no sale is active or the product is excluded. */
+export function getSalePrice(regularPrice: number, product?: Pick<Product, 'category'>): number | undefined {
   if (LAUNCH_SALE_DISCOUNT <= 0) return undefined;
+  if (!product || isHamperProduct(product)) return undefined;
   return Math.round(regularPrice * (1 - LAUNCH_SALE_DISCOUNT));
 }
 

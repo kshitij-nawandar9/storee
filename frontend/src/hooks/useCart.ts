@@ -78,7 +78,7 @@ export const useCart = create<CartStore>()(
         return get().items.reduce(
           (total, item) => {
             const unitPrice = item.variant?.price ?? item.product.basePrice;
-            const effective = getSalePrice(unitPrice) ?? unitPrice;
+            const effective = getSalePrice(unitPrice, item.product) ?? unitPrice;
             return total + effective * item.quantity;
           },
           0

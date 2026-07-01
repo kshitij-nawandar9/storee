@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Gift, Sparkles } from 'lucide-react';
-import { RAKHI_HAMPERS } from '@/data/hampers';
+import { getRakhiHamperBySlug, RAKHI_HAMPERS, type RakhiHamper } from '@/data/hampers';
 import RakhiThread from '@/components/hamper/RakhiThread';
 
 export default function RakhiHamperBanner() {
-  const hero = RAKHI_HAMPERS[0];
-  const supporting = [RAKHI_HAMPERS[3], RAKHI_HAMPERS[6]].filter(Boolean);
+  const hero = getRakhiHamperBySlug('rakhi-crossbody-keychain') ?? RAKHI_HAMPERS[0];
+  const supporting = ['rakhi-multipurpose-keychain', 'rakhi-backpack-pencil']
+    .map(getRakhiHamperBySlug)
+    .filter((hamper): hamper is RakhiHamper => Boolean(hamper));
 
   return (
     <section className="relative overflow-hidden py-10 sm:py-14" style={{ background: '#FFFDF9' }}>

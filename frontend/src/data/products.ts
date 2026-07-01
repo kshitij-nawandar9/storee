@@ -1,5 +1,80 @@
 import type { Product } from '@/types';
 
+const printColors = {
+  Aqua: '#1E7FD8',
+  Beach: '#FADADD',
+  Bunny: '#1A2744',
+  'Jungle Safari': '#4A7C59',
+  Lion: '#5BA3A0',
+  Marine: '#1B4D8E',
+  Rainbow: '#F8C8D0',
+  Space: '#2C2C54',
+  Sports: '#E85D3A',
+  Unicorn: '#D4A0D4',
+  Fruit: '#F8C8D0',
+} as const;
+
+type PrintName = keyof typeof printColors;
+
+const standardPrints: PrintName[] = [
+  'Aqua',
+  'Beach',
+  'Bunny',
+  'Jungle Safari',
+  'Lion',
+  'Marine',
+  'Rainbow',
+  'Space',
+  'Sports',
+  'Unicorn',
+];
+
+const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const productImages = (
+  productSlug: string,
+  productName: string,
+  folder: string,
+  prints: PrintName[],
+  extraFiles: { file: string; altText: string }[] = []
+) => [
+  ...prints.map((print, index) => ({
+    id: `${productSlug}-image-${index + 1}`,
+    url: `/images/products/${folder}/${print}.png`,
+    altText: `${productName} - ${print}`,
+    order: index + 1,
+    isPrimary: index === 0,
+  })),
+  ...extraFiles.map((entry, index) => ({
+    id: `${productSlug}-image-${prints.length + index + 1}`,
+    url: `/images/products/${folder}/${entry.file}`,
+    altText: entry.altText,
+    order: prints.length + index + 1,
+    isPrimary: false,
+  })),
+];
+
+const productVariants = (
+  productSlug: string,
+  productId: string,
+  folder: string,
+  price: number,
+  prints: PrintName[],
+  defaultPrint: PrintName
+) =>
+  prints.map((print) => ({
+    id: `${productSlug}-${slugify(print)}`,
+    productId,
+    colorName: print,
+    colorCode: printColors[print],
+    image: `/images/products/${folder}/${print}.png`,
+    price,
+    stock: 30,
+    sku: `${productSlug.toUpperCase()}-${slugify(print).toUpperCase()}`,
+    isDefault: print === defaultPrint,
+    isActive: true,
+  }));
+
 export const PRODUCTS_DATA: Product[] = [
   {
     id: 'bddc617e-8864-4d6d-884e-aaa68079b316',
@@ -612,5 +687,82 @@ export const PRODUCTS_DATA: Product[] = [
       { id: 'toddlers-bag-sports', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Sports', colorCode: '#E85D3A', image: '/images/products/toddlers_bag/Sports.png', price: 115000, stock: 30, sku: 'TODDLERS-BAG-SPORTS', isDefault: false, isActive: true },
       { id: 'toddlers-bag-unicorn', productId: 'a1b2c312-0001-4001-8001-000000000001', colorName: 'Unicorn', colorCode: '#D4A0D4', image: '/images/products/toddlers_bag/Unicorn.png', price: 115000, stock: 30, sku: 'TODDLERS-BAG-UNICORN', isDefault: false, isActive: true },
     ]
+  },
+  {
+    id: 'a1b2c313-0001-4001-8001-000000000001',
+    name: 'Activity Bag',
+    slug: 'activity-bag',
+    description: 'A roomy activity bag for art supplies, toys, classes, and little outing essentials. The clear panel keeps things easy to spot while playful prints make it a fun everyday carry.',
+    basePrice: 100000,
+    category: 'Bags',
+    stock: 40,
+    isActive: true,
+    features: [
+      'Roomy storage for activities and outings',
+      'Clear front panel for quick visibility',
+      'Easy-carry handles',
+      'Fun prints for kids',
+      'Practical for classes, travel, and gifting'
+    ],
+    size: 'Activity carry bag',
+    images: productImages('activity-bag', 'Activity Bag', 'activity_bag', standardPrints),
+    variants: productVariants('activity-bag', 'a1b2c313-0001-4001-8001-000000000001', 'activity_bag', 100000, standardPrints, 'Aqua'),
+  },
+  {
+    id: 'a1b2c314-0001-4001-8001-000000000001',
+    name: 'Sunglasses Pouch',
+    slug: 'sunglasses-pouch',
+    description: 'A compact padded pouch to keep sunglasses protected inside school bags, totes, and travel kits. Lightweight, easy to carry, and available in cheerful kid-friendly prints.',
+    basePrice: 30000,
+    category: 'Organisers and Pouches',
+    stock: 40,
+    isActive: true,
+    features: [
+      'Padded pouch for sunglasses',
+      'Compact and lightweight',
+      'Protects eyewear in bags',
+      'Smooth zip closure',
+      'Easy to carry for travel and daily use'
+    ],
+    size: 'Compact sunglasses pouch',
+    images: productImages(
+      'sunglasses-pouch',
+      'Sunglasses Pouch',
+      'sunglasses_pouch',
+      standardPrints,
+      [{ file: 'Unicorn_open.png', altText: 'Sunglasses Pouch - Unicorn (open)' }]
+    ),
+    variants: productVariants('sunglasses-pouch', 'a1b2c314-0001-4001-8001-000000000001', 'sunglasses_pouch', 30000, standardPrints, 'Aqua'),
+  },
+  {
+    id: 'a1b2c315-0001-4001-8001-000000000001',
+    name: 'Wet Bags',
+    slug: 'wet-bags',
+    description: 'A handy wet bag set for swimwear, damp clothes, snacks, and travel extras. The zip compartments help keep clean and wet items separate while the soft fruit print keeps it cheerful.',
+    basePrice: 45000,
+    category: 'Bags',
+    stock: 40,
+    isActive: true,
+    isCustomisable: false,
+    features: [
+      'Useful for damp clothes and swimwear',
+      'Zip compartments for separation',
+      'Lightweight and easy to pack',
+      'Travel-friendly bag set',
+      'Easy to clean after use'
+    ],
+    size: 'Wet bag set',
+    images: productImages(
+      'wet-bags',
+      'Wet Bags',
+      'wet_bags',
+      ['Fruit'],
+      [
+        { file: 'Fruit_set.png', altText: 'Wet Bags - Fruit (set)' },
+        { file: 'Fruit_set_alt.png', altText: 'Wet Bags - Fruit (set alternate)' },
+        { file: 'Fruit_detail.png', altText: 'Wet Bags - Fruit (detail)' },
+      ]
+    ),
+    variants: productVariants('wet-bags', 'a1b2c315-0001-4001-8001-000000000001', 'wet_bags', 45000, ['Fruit'], 'Fruit'),
   },
 ];

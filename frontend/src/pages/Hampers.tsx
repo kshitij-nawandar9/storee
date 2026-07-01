@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Gift, Heart, PackageCheck, Sparkles, Truck } from 'lucide-react';
 import HamperCard from '@/components/hamper/HamperCard';
 import RakhiThread from '@/components/hamper/RakhiThread';
-import { RAKHI_BUDGETS, RAKHI_HAMPERS, type HamperBudget } from '@/data/hampers';
+import { getRakhiHamperBySlug, RAKHI_BUDGETS, RAKHI_HAMPERS, type HamperBudget } from '@/data/hampers';
 import { FREE_SHIPPING_MESSAGE } from '@/utils/constants';
 
 type ActiveBudget = 'all' | HamperBudget;
@@ -23,8 +23,8 @@ export default function Hampers() {
     else setSearchParams({ budget });
   };
 
-  const heroHamper = RAKHI_HAMPERS[2];
-  const sideHamper = RAKHI_HAMPERS[1];
+  const heroHamper = getRakhiHamperBySlug('rakhi-duffle-keychain') ?? RAKHI_HAMPERS[0];
+  const sideHamper = getRakhiHamperBySlug('rakhi-toiletry-sunglasses-keychain') ?? RAKHI_HAMPERS[1];
 
   return (
     <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
