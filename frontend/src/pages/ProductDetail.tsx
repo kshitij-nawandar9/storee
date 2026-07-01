@@ -41,7 +41,8 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addItem(product, quantity, currentVariant ?? undefined, customiseEnabled && customText.trim() ? customText.trim() : undefined);
+    const supportsCustomisation = product.isCustomisable !== false;
+    addItem(product, quantity, currentVariant ?? undefined, supportsCustomisation && customiseEnabled && customText.trim() ? customText.trim() : undefined);
     const printLabel = currentVariant ? ` in ${currentVariant.colorName}` : '';
     toast.success(`${product.name}${printLabel} is in your bag! 🎉`, {
       icon: '🤍',
@@ -58,6 +59,7 @@ export default function ProductDetail() {
   const productImageUrls = product.images?.map((img) => typeof img === 'string' ? img : img.url).filter(Boolean) || [];
   const displayImages = variantImages.length > 0 ? variantImages : productImageUrls;
   const displayImage = (hoveredVariant?.image || currentVariant?.image || displayImages[0]) ?? '/placeholder.jpg';
+  const supportsCustomisation = product.isCustomisable !== false;
 
   return (
     <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
@@ -104,7 +106,7 @@ export default function ProductDetail() {
 
               {/* Price */}
               <div className="mb-5">
-                <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} salePrice={getSalePrice(currentVariant?.price || product.basePrice)} />
+                <PriceDisplay regularPrice={currentVariant?.price || product.basePrice} salePrice={getSalePrice(currentVariant?.price || product.basePrice, product)} />
               </div>
 
               {/* Description */}
@@ -139,53 +141,55 @@ export default function ProductDetail() {
               </div>
 
               {/* Free Customisation */}
-              <div className="mb-7">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Pen className="w-4 h-4" style={{ color: '#C4756E' }} />
-                    <span className="text-sm font-medium" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>Free Customisation</span>
-                  </div>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={customiseEnabled}
-                    onClick={() => {
-                      setCustomiseEnabled(!customiseEnabled);
-                      if (customiseEnabled) setCustomText('');
-                    }}
-                    className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200"
-                    style={{ background: customiseEnabled ? '#C4756E' : '#d1cdc8' }}
-                  >
-                    <span
-                      className="inline-block h-4 w-4 rounded-full bg-white transition-transform duration-200"
-                      style={{ transform: customiseEnabled ? 'translateX(1.375rem)' : 'translateX(0.25rem)' }}
-                    />
-                  </button>
-                </div>
-                {customiseEnabled && (
-                  <div className="mt-3 animate-fade-in">
-                    <input
-                      type="text"
-                      maxLength={10}
-                      value={customText}
-                      onChange={(e) => setCustomText(e.target.value)}
-                      placeholder="Enter text (max 10 chars)"
-                      className="w-full text-sm py-2.5 px-4 rounded-xl outline-none transition-all duration-200"
-                      style={{
-                        background: '#FFFDF9',
-                        border: '1.5px solid #F0E0C6',
-                        color: '#2a2220',
-                        fontFamily: "'DM Sans', sans-serif",
+              {supportsCustomisation && (
+                <div className="mb-7">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Pen className="w-4 h-4" style={{ color: '#C4756E' }} />
+                      <span className="text-sm font-medium" style={{ color: '#2a2220', fontFamily: "'DM Sans', sans-serif" }}>Free Customisation</span>
+                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={customiseEnabled}
+                      onClick={() => {
+                        setCustomiseEnabled(!customiseEnabled);
+                        if (customiseEnabled) setCustomText('');
                       }}
-                      onFocus={(e) => { e.currentTarget.style.borderColor = '#C4756E'; }}
-                      onBlur={(e) => { e.currentTarget.style.borderColor = '#F0E0C6'; }}
-                    />
-                    <p className="text-xs mt-1.5 text-right" style={{ color: '#b0aaa3' }}>
-                      {customText.length}/10
-                    </p>
+                      className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200"
+                      style={{ background: customiseEnabled ? '#C4756E' : '#d1cdc8' }}
+                    >
+                      <span
+                        className="inline-block h-4 w-4 rounded-full bg-white transition-transform duration-200"
+                        style={{ transform: customiseEnabled ? 'translateX(1.375rem)' : 'translateX(0.25rem)' }}
+                      />
+                    </button>
                   </div>
-                )}
-              </div>
+                  {customiseEnabled && (
+                    <div className="mt-3 animate-fade-in">
+                      <input
+                        type="text"
+                        maxLength={10}
+                        value={customText}
+                        onChange={(e) => setCustomText(e.target.value)}
+                        placeholder="Enter text (max 10 chars)"
+                        className="w-full text-sm py-2.5 px-4 rounded-xl outline-none transition-all duration-200"
+                        style={{
+                          background: '#FFFDF9',
+                          border: '1.5px solid #F0E0C6',
+                          color: '#2a2220',
+                          fontFamily: "'DM Sans', sans-serif",
+                        }}
+                        onFocus={(e) => { e.currentTarget.style.borderColor = '#C4756E'; }}
+                        onBlur={(e) => { e.currentTarget.style.borderColor = '#F0E0C6'; }}
+                      />
+                      <p className="text-xs mt-1.5 text-right" style={{ color: '#b0aaa3' }}>
+                        {customText.length}/10
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Add to Cart */}
               <button

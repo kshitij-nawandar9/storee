@@ -588,6 +588,9 @@ export default function Checkout() {
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
                 {items.map((item) => {
+                  const unitPrice = item.variant?.price ?? item.product.basePrice;
+                  const linePrice = unitPrice * item.quantity;
+                  const saleLinePrice = getSalePrice(unitPrice, item.product);
                   const variantImage = item.variant?.image;
                   const primaryImage =
                     item.product.images?.find((img) => img.isPrimary) ||
@@ -605,7 +608,7 @@ export default function Checkout() {
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm text-gray-900 truncate">{item.product.name}</p>
                         <p className="text-gray-600 text-sm">× {item.quantity}</p>
-                        <PriceDisplay regularPrice={item.product.basePrice * item.quantity} salePrice={getSalePrice(item.product.basePrice) ? getSalePrice(item.product.basePrice)! * item.quantity : undefined} />
+                        <PriceDisplay regularPrice={linePrice} salePrice={saleLinePrice ? saleLinePrice * item.quantity : undefined} />
                       </div>
                     </div>
                   );

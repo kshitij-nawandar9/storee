@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isComingSoon = !product.images || product.images.length === 0 || product.stock === 0;
 
   const displayPrice = defaultVariant?.price ?? product.basePrice;
-  const salePrice = getSalePrice(displayPrice);
+  const salePrice = getSalePrice(displayPrice, product);
   const effectivePrice = salePrice ?? displayPrice;
   const formatINR = (p: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(p / 100);
   const formattedPrice = formatINR(effectivePrice);

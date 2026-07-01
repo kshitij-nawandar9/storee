@@ -743,6 +743,7 @@ export const PRODUCTS_DATA: Product[] = [
     category: 'Bags',
     stock: 40,
     isActive: true,
+    isCustomisable: false,
     features: [
       'Useful for damp clothes and swimwear',
       'Zip compartments for separation',

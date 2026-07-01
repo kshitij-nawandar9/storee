@@ -116,7 +116,7 @@ export default function Products() {
                   const variants = product.variants?.filter((v) => v.isActive) ?? [];
                   const variant = variants.find((v) => v.isDefault) ?? variants[0];
                   const originalPrice = variant?.price ?? product.basePrice;
-                  const salePrice = getSalePrice(originalPrice);
+                  const salePrice = getSalePrice(originalPrice, product);
                   const effectivePrice = salePrice ?? originalPrice;
                   const formatINR = (p: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(p / 100);
                   const displayPrice = formatINR(effectivePrice);

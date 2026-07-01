@@ -1,4 +1,5 @@
 import type { CartItem } from '@/types';
+import { getSalePrice } from '@/utils/constants';
 
 export interface CheckoutOrderItem {
   productId: string;
@@ -66,6 +67,7 @@ const primaryImage = (item: CartItem) =>
 export const buildCheckoutOrderItems = (items: CartItem[]): CheckoutOrderItem[] =>
   items.map((item) => {
     const unitPrice = item.variant?.price ?? item.product.basePrice;
+    const effectiveUnitPrice = getSalePrice(unitPrice, item.product) ?? unitPrice;
     const printName = item.variant?.colorName;
 
     return {
@@ -75,8 +77,8 @@ export const buildCheckoutOrderItems = (items: CartItem[]): CheckoutOrderItem[] 
       slug: item.product.slug,
       category: item.product.category,
       quantity: item.quantity,
-      price: unitPrice,
-      lineTotal: unitPrice * item.quantity,
+      price: effectiveUnitPrice,
+      lineTotal: effectiveUnitPrice * item.quantity,
       ...(primaryImage(item) ? { image: primaryImage(item) } : {}),
       ...(printName ? { printName } : {}),
       ...(item.variant?.sku ? { sku: item.variant.sku } : {}),

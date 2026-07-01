@@ -32,6 +32,7 @@ export interface Product {
   size?: string;
   stock?: number; // Stock for product without variants
   isActive: boolean;
+  isCustomisable?: boolean;
 }
 
 export interface CartItem {
