@@ -77,6 +77,8 @@ const crossbodyPrints = withPrintFiles(printNames);
 
 const toiletryPrints = withPrintFiles(printNames);
 
+const pencilSunglassesPrints = withPrintFiles(printNames);
+
 const dufflePrints = withPrintFiles(printNames);
 
 const multipurposePrints = withPrintFiles([
@@ -148,6 +150,26 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     features: ['Three useful pieces in one gift', 'Personalised name keychain included', 'Travel-friendly pouch', 'Limited Rakhi drop'],
     images: images('under-500/toiletry-sunglasses-keychain', toiletryPrints),
     variants: variants('rakhi-toiletry-sunglasses-keychain', 'under-500/toiletry-sunglasses-keychain', 49900, toiletryPrints),
+  },
+  {
+    id: 'rakhi-pencil-sunglasses-keychain',
+    name: 'Pencil Pouch + Sunglasses Pouch + Keychain Hamper',
+    slug: 'rakhi-pencil-sunglasses-keychain',
+    description: 'A useful pencil pouch and sunglasses pouch bundled with a personalised keychain for a cheerful Rakhi surprise.',
+    basePrice: 49900,
+    category: 'Rakhi Hampers',
+    stock: 20,
+    isActive: true,
+    budget: 'under-500',
+    budgetLabel: 'Under ₹500',
+    giftNote: 'A school-and-travel friendly set with a personalised touch.',
+    ribbon: '3-piece gift combo',
+    accent: '#1B4D8E',
+    size: 'Gift-ready combo',
+    includes: ['Pencil pouch', 'Sunglasses pouch', 'Personalised keychain'],
+    features: ['Two handy pouches in one gift', 'Personalised name keychain included', 'Useful for school and travel', 'Limited Rakhi drop'],
+    images: images('under-500/pencil-pouch-sunglasses-pouch-keychain', pencilSunglassesPrints),
+    variants: variants('rakhi-pencil-sunglasses-keychain', 'under-500/pencil-pouch-sunglasses-pouch-keychain', 49900, pencilSunglassesPrints),
   },
   {
     id: 'rakhi-duffle-keychain',
@@ -250,6 +272,9 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     variants: variants('rakhi-backpack-pencil', 'under-1100/small-backpack-pencil-pouch', 109900, backpackPrints),
   },
 ];
+
+export const getRakhiHamperBySlug = (slug: string) =>
+  RAKHI_HAMPERS.find((hamper) => hamper.slug === slug);
 
 export const RAKHI_BUDGETS: { id: 'all' | HamperBudget; label: string; shortLabel: string }[] = [
   { id: 'all', label: 'All Hampers', shortLabel: 'All' },
