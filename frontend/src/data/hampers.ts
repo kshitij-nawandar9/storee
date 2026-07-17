@@ -75,6 +75,8 @@ const variants = (
 
 const crossbodyPrints = withPrintFiles(printNames);
 
+const sunglassesPouchPrints = withPrintFiles(printNames);
+
 const toiletryPrints = withPrintFiles(printNames);
 
 const pencilSunglassesPrints = withPrintFiles(printNames);
@@ -130,6 +132,26 @@ export const RAKHI_HAMPERS: RakhiHamper[] = [
     features: ['Personalised name keychain included', 'Lightweight crossbody bag', 'Fun prints for kids', 'Limited Rakhi drop'],
     images: images('under-500/crossbody-keychain', crossbodyPrints),
     variants: variants('rakhi-crossbody-keychain', 'under-500/crossbody-keychain', 49900, crossbodyPrints),
+  },
+  {
+    id: 'rakhi-sunglasses-pouch-keychain',
+    name: 'Sunglasses Pouch + Keychain Hamper',
+    slug: 'rakhi-sunglasses-pouch-keychain',
+    description: 'A cheerful sunglasses pouch paired with a personalised name keychain for a thoughtful little Rakhi gift.',
+    basePrice: 29900,
+    category: 'Rakhi Hampers',
+    stock: 20,
+    isActive: true,
+    budget: 'under-500',
+    budgetLabel: 'Under ₹500',
+    giftNote: 'A small, useful gift with a personal touch.',
+    ribbon: 'Personalised gift duo',
+    accent: '#E85D3A',
+    size: 'Gift-ready combo',
+    includes: ['Sunglasses pouch', 'Personalised keychain', 'Gift-ready styling'],
+    features: ['Personalised name keychain included', 'Soft protective sunglasses pouch', 'Fun kid-friendly prints', 'Limited Rakhi drop'],
+    images: images('under-500/sunglasses-pouch-keychain', sunglassesPouchPrints),
+    variants: variants('rakhi-sunglasses-pouch-keychain', 'under-500/sunglasses-pouch-keychain', 29900, sunglassesPouchPrints),
   },
   {
     id: 'rakhi-toiletry-sunglasses-keychain',
