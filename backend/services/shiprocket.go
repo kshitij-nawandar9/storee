@@ -100,56 +100,61 @@ type ShiprocketTrackingResponse struct {
 
 // CreateOrder creates an adhoc order (order + shipment) in Shiprocket.
 func (s *ShiprocketClient) CreateOrder(req *ShiprocketOrderRequest) (*ShiprocketOrderResponse, error) {
-	var resp ShiprocketOrderResponse
-	if err := s.doRequest("POST", "/orders/create/adhoc", req, &resp); err != nil {
+	respBody, err := s.doRequest("POST", "/orders/create/adhoc", req)
+	if err != nil {
 		return nil, err
 	}
+	var resp ShiprocketOrderResponse
+	if err := json.Unmarshal(respBody, &resp); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal shiprocket response: %w (body: %s)", err, string(respBody))
+	}
 	if resp.OrderID.String() == "" {
-		return nil, fmt.Errorf("shiprocket did not return an order id (status: %q)", resp.Status)
+		return nil, fmt.Errorf("shiprocket did not return an order id, response: %s", string(respBody))
 	}
 	return &resp, nil
 }
 
 // TrackShipment fetches tracking details for a Shiprocket shipment ID.
 func (s *ShiprocketClient) TrackShipment(shipmentID string) (*ShiprocketTrackingResponse, error) {
-	var resp ShiprocketTrackingResponse
-	if err := s.doRequest("GET", "/courier/track/shipment/"+shipmentID, nil, &resp); err != nil {
+	respBody, err := s.doRequest("GET", "/courier/track/shipment/"+shipmentID, nil)
+	if err != nil {
 		return nil, err
+	}
+	var resp ShiprocketTrackingResponse
+	if err := json.Unmarshal(respBody, &resp); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal shiprocket response: %w (body: %s)", err, string(respBody))
 	}
 	return &resp, nil
 }
 
-func (s *ShiprocketClient) doRequest(method, path string, body any, out any) error {
+// doRequest performs an authenticated request and returns the raw response
+// body of a 2xx response.
+func (s *ShiprocketClient) doRequest(method, path string, body any) ([]byte, error) {
 	token, err := s.getToken(false)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	status, respBody, err := s.send(method, path, body, token)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	// Token may have been revoked before its expiry; refresh once and retry.
 	if status == http.StatusUnauthorized {
 		token, err = s.getToken(true)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		status, respBody, err = s.send(method, path, body, token)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
 	if status < 200 || status >= 300 {
-		return fmt.Errorf("shiprocket API error: %s (status: %d)", string(respBody), status)
+		return nil, fmt.Errorf("shiprocket API error: %s (status: %d)", string(respBody), status)
 	}
-	if out != nil {
-		if err := json.Unmarshal(respBody, out); err != nil {
-			return fmt.Errorf("failed to unmarshal shiprocket response: %w", err)
-		}
-	}
-	return nil
+	return respBody, nil
 }
 
 func (s *ShiprocketClient) send(method, path string, body any, token string) (int, []byte, error) {
