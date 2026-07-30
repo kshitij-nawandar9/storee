@@ -22,8 +22,8 @@ func TestLoad_Defaults(t *testing.T) {
 		}
 	}
 
-	if len(cfg.AdminEmails) != 2 {
-		t.Fatalf("AdminEmails length = %d, want 2", len(cfg.AdminEmails))
+	if len(cfg.AdminEmails) != 3 {
+		t.Fatalf("AdminEmails length = %d, want 3", len(cfg.AdminEmails))
 	}
 	if cfg.AdminEmails[0] != "thestoree.in@gmail.com" {
 		t.Errorf("AdminEmails[0] = %q, want thestoree.in@gmail.com", cfg.AdminEmails[0])
