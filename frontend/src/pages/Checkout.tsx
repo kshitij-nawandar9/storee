@@ -1,5 +1,6 @@
 import PriceDisplay from '@/components/product/PriceDisplay';
 import { useCart } from '@/hooks/useCart';
+import { trackEvent } from '@/services/analytics';
 import { createIdempotencyKey, createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
 import type { Address } from '@/types';
@@ -40,11 +41,24 @@ export default function Checkout() {
   const [emailError, setEmailError] = useState('');
   const orderIdempotencyRef = useRef<{ key: string; fingerprint: string } | null>(null);
   const submittingRef = useRef(false);
+  const checkoutTrackedRef = useRef(false);
 
   const total = getTotal();
   const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
   const shippingCost = isFreeShipping ? 0 : SHIPPING_FEE;
   const finalTotal = total + shippingCost;
+
+  useEffect(() => {
+    if (items.length > 0 && !checkoutTrackedRef.current) {
+      checkoutTrackedRef.current = true;
+      trackEvent('checkout_started', {
+        value: finalTotal / 100,
+        currency: 'INR',
+        item_count: items.reduce((count, item) => count + item.quantity, 0),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load saved addresses on mount
   useEffect(() => {
@@ -225,6 +239,11 @@ export default function Checkout() {
 
       const { order } = orderResponse.data;
       console.log('[Checkout] Step 2: Order created', { orderId: order.order_id, razorpayId: order.razorpay_id });
+      trackEvent('payment_initiated', {
+        order_id: order.order_id,
+        value: finalTotal / 100,
+        currency: 'INR',
+      });
 
       // Step 3: Open Razorpay checkout
       console.log('[Checkout] Step 3: Initializing Razorpay checkout...');
@@ -249,17 +268,25 @@ export default function Checkout() {
 
             if (verifyResponse.success) {
               console.log('[Checkout] Step 4: Payment verified successfully');
+              const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
+              trackEvent('order_completed', {
+                order_id: orderId,
+                value: finalTotal / 100,
+                currency: 'INR',
+                item_count: items.reduce((count, item) => count + item.quantity, 0),
+              });
               toast.success('Order placed successfully!');
               clearCart();
               orderIdempotencyRef.current = null;
-              const orderId = verifyResponse.data?.orderId || order.order_id || order.id;
               navigate(`/orders/${orderId}`);
             } else {
               console.error('[Checkout] Step 4 FAILED: Verification response not successful', verifyResponse);
+              trackEvent('payment_failed', { order_id: order.order_id, reason: verifyResponse.message || 'verification failed' });
               toast.error(verifyResponse.message || 'Payment verification failed');
             }
           } catch (error) {
             console.error('[Checkout] Step 4 FAILED: Payment verification error:', error);
+            trackEvent('payment_failed', { order_id: order.order_id, reason: 'verification error' });
             toast.error('Payment verification failed. Please contact support if money was deducted.');
           } finally {
             finishCheckoutAttempt();
@@ -267,6 +294,7 @@ export default function Checkout() {
         },
         (error) => {
           console.error('[Checkout] Step 3 FAILED: Razorpay checkout error:', error);
+          trackEvent('payment_failed', { order_id: order.order_id, reason: error });
           toast.error(error);
           finishCheckoutAttempt();
         }

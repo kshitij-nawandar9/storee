@@ -11,6 +11,13 @@ VITE_API_URL=http://localhost:8080/api/v1
 # Razorpay Key ID (for payment gateway)
 VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
 
+# PostHog analytics (optional — analytics are disabled if unset)
+VITE_POSTHOG_KEY=your_posthog_project_api_key
+# VITE_POSTHOG_HOST=https://us.i.posthog.com  # use https://eu.i.posthog.com for EU cloud
+
+# PostHog shared dashboard link, embedded on /admin/analytics (optional)
+# VITE_POSTHOG_DASHBOARD_URL=https://us.posthog.com/shared/xxxxxxxx
+
 # Optional: Use mock data instead of backend (set to 'true' to enable)
 # VITE_USE_MOCK_DATA=false
 
@@ -52,6 +59,20 @@ VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
 - **Required**: Yes (for payment functionality)
 - **Description**: Razorpay API Key ID for payment gateway
 - **Example**: `rzp_test_xxxxxxxxxxxxx`
+
+### VITE_POSTHOG_KEY
+- **Required**: No (analytics are silently disabled if unset)
+- **Description**: PostHog project API key (publishable) for visitor/funnel analytics
+- **Example**: `phc_xxxxxxxxxxxxx` — from PostHog → Project Settings → Project API Key
+
+### VITE_POSTHOG_HOST
+- **Required**: No (default: `https://us.i.posthog.com`)
+- **Description**: PostHog ingestion host — set to `https://eu.i.posthog.com` if the project is on EU cloud
+
+### VITE_POSTHOG_DASHBOARD_URL
+- **Required**: No (the /admin/analytics page shows setup instructions if unset)
+- **Description**: Public share link of a PostHog dashboard, embedded on the admin Analytics tab. Anyone with this URL can view the dashboard, so don't share it beyond admins.
+- **Example**: `https://us.posthog.com/shared/xxxxxxxx` — from PostHog → your dashboard → Share → enable public sharing
 
 ### VITE_USE_MOCK_DATA
 - **Required**: No (default: `false`)

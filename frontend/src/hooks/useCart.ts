@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product, ProductVariant, CartItem } from '@/types';
 import { getSalePrice } from '@/utils/constants';
+import { trackEvent } from '@/services/analytics';
 
 // Unique key combining product + variant (or just product if no variant)
 function cartKey(productId: string, variantId?: string): string {
@@ -24,6 +25,15 @@ export const useCart = create<CartStore>()(
     (set, get) => ({
       items: [],
       addItem: (product, quantity = 1, variant?, customText?) => {
+        const unitPrice = variant?.price ?? product.basePrice;
+        trackEvent('add_to_cart', {
+          product_id: product.id,
+          product_name: product.name,
+          variant: variant?.colorName,
+          quantity,
+          price: ((getSalePrice(unitPrice, product) ?? unitPrice) / 100),
+          currency: 'INR',
+        });
         const items = get().items;
         const key = cartKey(product.id, variant?.id);
         const existingItemIndex = items.findIndex(

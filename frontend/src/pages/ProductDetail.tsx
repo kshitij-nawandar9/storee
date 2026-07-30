@@ -5,6 +5,7 @@ import PriceDisplay from '@/components/product/PriceDisplay';
 import QuantitySelector from '@/components/product/QuantitySelector';
 import { useCart } from '@/hooks/useCart';
 import { useProduct } from '@/hooks/useProducts';
+import { trackEvent } from '@/services/analytics';
 import type { ProductVariant } from '@/types';
 import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO, getSalePrice } from '@/utils/constants';
 import { CheckCircle, ChevronLeft, ChevronRight, Pen, Ruler, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
@@ -31,6 +32,19 @@ export default function ProductDetail() {
   useEffect(() => {
     if (!selectedVariant && defaultVariant) setSelectedVariant(defaultVariant);
   }, [selectedVariant, defaultVariant]);
+
+  useEffect(() => {
+    if (product) {
+      trackEvent('product_viewed', {
+        product_id: product.id,
+        product_name: product.name,
+        product_slug: slug,
+        price: (getSalePrice(product.basePrice, product) ?? product.basePrice) / 100,
+        currency: 'INR',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
 
   useEffect(() => {
     if (currentVariant && product?.variants && product.variants.length > 0) {

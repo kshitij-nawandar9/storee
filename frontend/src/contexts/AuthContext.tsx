@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useCart } from '@/hooks/useCart';
+import { identifyUser, resetAnalytics } from '@/services/analytics';
 
 interface User {
   id: string;
@@ -33,7 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (storedToken && storedUser) {
       try {
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+        identifyUser(parsedUser.id, { email: parsedUser.email, name: parsedUser.name });
         console.log('[Auth] Restored session from localStorage');
       } catch (e) {
         console.error('[Auth] Failed to parse stored user data, clearing auth state:', e);
@@ -50,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(newUser);
     localStorage.setItem('auth_token', newToken);
     localStorage.setItem('auth_user', JSON.stringify(newUser));
+    identifyUser(newUser.id, { email: newUser.email, name: newUser.name });
   };
 
   const logout = () => {
@@ -57,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
+    resetAnalytics();
     // Clear cart on logout
     const { clearCart } = useCart.getState();
     clearCart();
