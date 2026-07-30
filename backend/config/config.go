@@ -24,7 +24,7 @@ type Config struct {
 
 func Load() *Config {
 	// Get admin emails from environment or use defaults
-	adminEmailsEnv := getEnv("ADMIN_EMAILS", "thestoree.in@gmail.com,kshitij.nawandar@razorpay.com,nawandar.kshitij@gmail.com")
+	adminEmailsEnv := getEnv("ADMIN_EMAILS", "thestoree.in@gmail.com,nawandar.kshitij@gmail.com")
 	adminEmails := strings.Split(adminEmailsEnv, ",")
 	// Trim whitespace from each email
 	for i := range adminEmails {
