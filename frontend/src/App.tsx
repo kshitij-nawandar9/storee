@@ -14,6 +14,7 @@ import SignIn from '@/pages/SignIn';
 import AdminOrders from '@/pages/AdminOrders';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
+import ChatWidget from '@/components/common/ChatWidget';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -43,6 +44,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <ChatWidget />
           <Toaster position="top-right" />
         </div>
       </BrowserRouter>

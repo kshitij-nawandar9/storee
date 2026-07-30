@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"time"
+
 	"storee/backend/config"
 	"storee/backend/handlers"
 	"storee/backend/middleware"
@@ -45,6 +47,10 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		{
 			razorpayWebhook.POST("/webhook", razorpayHandler.HandleWebhook)
 		}
+
+		// Chatbot route (rate limited per IP — it fronts a paid LLM API)
+		chatHandler := handlers.NewChatHandler(db, services.NewClaudeClient(cfg.AnthropicAPIKey, cfg.AnthropicModel))
+		v1.POST("/chat", middleware.RateLimitMiddleware(20, 5*time.Minute), chatHandler.Chat)
 
 		// Auth routes
 		authHandler := handlers.NewAuthHandler(db, cfg.JWTSecret, cfg.GoogleClientID, cfg.GoogleSecret, cfg.FrontendURL)

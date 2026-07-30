@@ -311,6 +311,20 @@ export const shipOrder = async (
   return response.data;
 };
 
+// Chatbot API
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export const sendChatMessage = async (messages: ChatMessage[]): Promise<ApiResponse<{ reply: string }>> => {
+  console.log('[API] Sending chat message...', { historyLength: messages.length });
+  // Chat replies can involve multiple LLM round trips; allow more than the default 10s
+  const response = await api.post('/chat', { messages }, { timeout: 60000 });
+  console.log('[API] Chat reply received:', { success: response.data?.success });
+  return response.data;
+};
+
 export const getOrderTracking = async (orderId: string): Promise<ApiResponse<any>> => {
   console.log('[API] Fetching Shiprocket tracking:', { orderId });
   const response = await api.get(`/admin/orders/${orderId}/tracking`);
