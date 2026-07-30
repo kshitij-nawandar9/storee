@@ -25,6 +25,10 @@ type Config struct {
 	ShiprocketEmail          string // API user email (create under Settings > API in Shiprocket)
 	ShiprocketPassword       string // API user password
 	ShiprocketPickupLocation string // Pickup location nickname configured in Shiprocket
+
+	// Claude API (customer support chatbot)
+	AnthropicAPIKey string // create at console.anthropic.com
+	AnthropicModel  string
 }
 
 func Load() *Config {
@@ -55,6 +59,9 @@ func Load() *Config {
 		ShiprocketEmail:          getEnv("SHIPROCKET_EMAIL", ""),
 		ShiprocketPassword:       getEnv("SHIPROCKET_PASSWORD", ""),
 		ShiprocketPickupLocation: getEnv("SHIPROCKET_PICKUP_LOCATION", "Primary"),
+
+		AnthropicAPIKey: getEnv("ANTHROPIC_API_KEY", ""),
+		AnthropicModel:  getEnv("ANTHROPIC_MODEL", "claude-sonnet-5"),
 	}
 }
 
