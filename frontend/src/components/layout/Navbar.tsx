@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, User, LogOut, Package, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Menu, X, User, LogOut, Package, ChevronDown, BarChart3 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -188,9 +188,14 @@ export default function Navbar() {
                       <Package className="w-4 h-4" style={{ color: '#C4756E' }} /> My Orders
                     </Link>
                     {isAdmin && (
-                      <Link to="/admin/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors" style={{ color: '#4a443e' }}>
-                        <Package className="w-4 h-4" style={{ color: '#C4756E' }} /> Admin Orders
-                      </Link>
+                      <>
+                        <Link to="/admin/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors" style={{ color: '#4a443e' }}>
+                          <Package className="w-4 h-4" style={{ color: '#C4756E' }} /> Admin Orders
+                        </Link>
+                        <Link to="/admin/analytics" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors" style={{ color: '#4a443e' }}>
+                          <BarChart3 className="w-4 h-4" style={{ color: '#C4756E' }} /> Analytics
+                        </Link>
+                      </>
                     )}
                     <div style={{ borderTop: '1px solid #F8EDDA', marginTop: '4px', paddingTop: '4px' }}>
                       <button
@@ -235,7 +240,12 @@ export default function Navbar() {
                 { to: '/products', label: 'Shop' },
                 { to: '/hampers', label: 'Rakhi Hampers' },
                 ...(isAuthenticated ? [{ to: '/orders', label: 'My Orders' }] : []),
-                ...(isAuthenticated && isAdmin ? [{ to: '/admin/orders', label: 'Admin' }] : []),
+                ...(isAuthenticated && isAdmin
+                  ? [
+                      { to: '/admin/orders', label: 'Admin' },
+                      { to: '/admin/analytics', label: 'Analytics' },
+                    ]
+                  : []),
               ].map(({ to, label }) => (
                 <Link
                   key={to}

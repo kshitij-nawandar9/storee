@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import AdminTabs from '@/components/common/AdminTabs';
 import { useNavigate } from 'react-router-dom';
 import { getAdminOrders, updateOrderStatus, shipOrder, getOrderTracking } from '@/services/api';
 import { Package, ShoppingBag, MapPin, Pen, Truck } from 'lucide-react';
@@ -163,6 +164,8 @@ export default function AdminOrders() {
           <span className="section-label mb-1 block">Admin</span>
           <h1 className="font-serif text-2xl font-medium" style={{ color: '#2a2220' }}>Manage Orders</h1>
         </div>
+
+        <AdminTabs />
 
         {/* Filter pills */}
         <div className="mb-6 flex flex-wrap gap-2">
