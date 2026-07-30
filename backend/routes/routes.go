@@ -4,6 +4,7 @@ import (
 	"storee/backend/config"
 	"storee/backend/handlers"
 	"storee/backend/middleware"
+	"storee/backend/services"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -79,6 +80,11 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 			{
 				adminOrders.GET("", adminHandler.GetAllOrders)
 				adminOrders.PUT("/:id/status", adminHandler.UpdateOrderStatus)
+
+				// Shiprocket delivery partner
+				shippingHandler := handlers.NewShippingHandler(db, services.NewShiprocketClient(cfg.ShiprocketEmail, cfg.ShiprocketPassword), cfg.ShiprocketPickupLocation)
+				adminOrders.POST("/:id/ship", shippingHandler.ShipOrder)
+				adminOrders.GET("/:id/tracking", shippingHandler.GetTracking)
 			}
 		}
 	}

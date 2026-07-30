@@ -30,6 +30,7 @@ interface Address { line1: string; line2?: string; city: string; state: string; 
 interface Order {
   id: string; orderId: string; customerName: string; customerEmail: string; customerPhone: string;
   address: Address; items: OrderItem[]; totalAmount: number; status: string; paymentMethod: string; createdAt: string;
+  awbCode?: string; courierName?: string;
 }
 
 const statusStyles: Record<string, { bg: string; color: string }> = {
@@ -159,6 +160,19 @@ export default function OrderHistory() {
                       {order.address.line1}{order.address.line2 && `, ${order.address.line2}`}<br />
                       {order.address.city}, {order.address.state} {order.address.pincode}
                     </p>
+                    {order.awbCode && (
+                      <p className="text-xs mt-2" style={{ color: '#547254' }}>
+                        {order.courierName ? `Shipped via ${order.courierName} · ` : ''}
+                        <a
+                          href={`https://shiprocket.co/tracking/${order.awbCode}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-semibold"
+                        >
+                          Track your package (AWB {order.awbCode})
+                        </a>
+                      </p>
+                    )}
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs" style={{ color: '#a09590' }}>Payment: {order.paymentMethod}</span>

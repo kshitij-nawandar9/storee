@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getAdminOrders, updateOrderStatus } from '@/services/api';
-import { Package, ShoppingBag, MapPin, Pen } from 'lucide-react';
+import { getAdminOrders, updateOrderStatus, shipOrder, getOrderTracking } from '@/services/api';
+import { Package, ShoppingBag, MapPin, Pen, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   getStoredOrderItemCustomText,
@@ -11,7 +11,7 @@ import {
   getStoredOrderItemPrint,
 } from '@/utils/orderItems';
 
-const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'kshitij.nawandar@razorpay.com'];
+const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'nawandar.kshitij@gmail.com'];
 
 interface OrderItem {
   productId?: string;
@@ -26,7 +26,7 @@ interface OrderItem {
   variant?: { colorName?: string; price?: number; sku?: string };
 }
 interface Address { line1: string; line2?: string; city: string; state: string; pincode: string; }
-interface Order { id: string; orderId: string; customerName: string; customerEmail: string; customerPhone: string; address: Address | string; items: OrderItem[] | string; totalAmount: number; status: string; paymentMethod: string; createdAt: string; }
+interface Order { id: string; orderId: string; customerName: string; customerEmail: string; customerPhone: string; address: Address | string; items: OrderItem[] | string; totalAmount: number; status: string; paymentMethod: string; createdAt: string; shiprocketOrderId?: string; shipmentId?: string; awbCode?: string; courierName?: string; }
 
 const statusStyles: Record<string, { bg: string; color: string }> = {
   pending:    { bg: 'rgba(201,169,110,0.1)', color: '#8a6e38' },
@@ -85,6 +85,39 @@ export default function AdminOrders() {
       console.error('[AdminOrders] Failed to fetch orders:', err);
       setError(err.message); toast.error(err.message || 'Failed to fetch orders');
     } finally { setLoading(false); }
+  };
+
+  const [shippingOrderId, setShippingOrderId] = useState<string | null>(null);
+
+  const canShip = (order: Order) =>
+    !order.shipmentId &&
+    (order.status === 'paid' || order.status === 'processing' || (order.status === 'pending' && order.paymentMethod === 'cod'));
+
+  const handleShip = async (orderId: string) => {
+    if (!window.confirm(`Create a Shiprocket shipment for order #${orderId}?`)) return;
+    try {
+      setShippingOrderId(orderId);
+      const response = await shipOrder(orderId);
+      if (!response.success) throw new Error(response.message);
+      toast.success(`Shipment created in Shiprocket for #${orderId}`);
+      fetchOrders();
+    } catch (err: any) {
+      console.error('[AdminOrders] Failed to create shipment:', orderId, err);
+      toast.error(err.response?.data?.message || err.message || 'Failed to create shipment');
+    } finally { setShippingOrderId(null); }
+  };
+
+  const handleRefreshTracking = async (orderId: string) => {
+    try {
+      const response = await getOrderTracking(orderId);
+      if (!response.success) throw new Error(response.message);
+      const track = response.data?.tracking?.shipment_track?.[0];
+      toast.success(track?.current_status ? `#${orderId}: ${track.current_status}` : `No tracking updates yet for #${orderId}`);
+      fetchOrders();
+    } catch (err: any) {
+      console.error('[AdminOrders] Failed to fetch tracking:', orderId, err);
+      toast.error(err.response?.data?.message || err.message || 'Failed to fetch tracking');
+    }
   };
 
   const handleStatusChange = async (orderId: string, status: string) => {
@@ -242,6 +275,33 @@ export default function AdminOrders() {
                     </div>
                   </div>
 
+                  {/* Shipment info */}
+                  {order.shipmentId && (
+                    <div className="flex flex-wrap items-center gap-2 mb-4 pb-4 text-xs" style={{ borderBottom: '1px solid #F0E0C6', color: '#547254' }}>
+                      <Truck className="w-3.5 h-3.5" />
+                      <span className="font-semibold">Shiprocket #{order.shiprocketOrderId}</span>
+                      {order.awbCode ? (
+                        <a
+                          href={`https://shiprocket.co/tracking/${order.awbCode}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                        >
+                          AWB {order.awbCode}{order.courierName ? ` · ${order.courierName}` : ''}
+                        </a>
+                      ) : (
+                        <span style={{ color: '#8a7e78' }}>AWB pending</span>
+                      )}
+                      <button
+                        onClick={() => handleRefreshTracking(order.orderId)}
+                        className="underline cursor-pointer"
+                        style={{ background: 'none', border: 'none', color: '#8a6e38', fontSize: '0.75rem', padding: 0 }}
+                      >
+                        Refresh tracking
+                      </button>
+                    </div>
+                  )}
+
                   {/* Footer */}
                   <div className="flex justify-between items-center">
                     <div>
@@ -249,6 +309,17 @@ export default function AdminOrders() {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-semibold text-base" style={{ color: '#C4756E' }}>{formatAmount(order.totalAmount)}</span>
+                      {canShip(order) && (
+                        <button
+                          onClick={() => handleShip(order.orderId)}
+                          disabled={shippingOrderId === order.orderId}
+                          className="text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer transition-all disabled:opacity-50 flex items-center gap-1.5"
+                          style={{ background: 'rgba(196,117,110,0.12)', color: '#a85d56', border: 'none' }}
+                        >
+                          <Truck className="w-3.5 h-3.5" />
+                          {shippingOrderId === order.orderId ? 'Creating…' : 'Ship via Shiprocket'}
+                        </button>
+                      )}
                       {allowedTransitions[order.status]?.length > 0 && (
                         <select
                           value=""

@@ -299,3 +299,21 @@ export const updateOrderStatus = async (orderId: string, status: string): Promis
   console.log('[API] Order status update result:', { success: response.data?.success, orderId, status });
   return response.data;
 };
+
+// Shiprocket shipping APIs (admin)
+export const shipOrder = async (
+  orderId: string,
+  parcel?: { length?: number; breadth?: number; height?: number; weight?: number }
+): Promise<ApiResponse<any>> => {
+  console.log('[API] Creating Shiprocket shipment:', { orderId, parcel });
+  const response = await api.post(`/admin/orders/${orderId}/ship`, parcel || {});
+  console.log('[API] Shipment result:', { success: response.data?.success, orderId });
+  return response.data;
+};
+
+export const getOrderTracking = async (orderId: string): Promise<ApiResponse<any>> => {
+  console.log('[API] Fetching Shiprocket tracking:', { orderId });
+  const response = await api.get(`/admin/orders/${orderId}/tracking`);
+  console.log('[API] Tracking result:', { success: response.data?.success, orderId });
+  return response.data;
+};

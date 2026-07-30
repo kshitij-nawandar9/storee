@@ -6,20 +6,25 @@ import (
 )
 
 type Config struct {
-	Port            string
-	Env             string
-	DBHost          string
-	DBPort          string
-	DBUser          string
-	DBPassword      string
-	DBName          string
-	RazorpayKeyID   string
-	RazorpaySecret  string
-	FrontendURL     string
-	GoogleClientID  string
-	GoogleSecret    string
-	JWTSecret       string
-	AdminEmails     []string // List of admin email addresses
+	Port           string
+	Env            string
+	DBHost         string
+	DBPort         string
+	DBUser         string
+	DBPassword     string
+	DBName         string
+	RazorpayKeyID  string
+	RazorpaySecret string
+	FrontendURL    string
+	GoogleClientID string
+	GoogleSecret   string
+	JWTSecret      string
+	AdminEmails    []string // List of admin email addresses
+
+	// Shiprocket delivery partner integration
+	ShiprocketEmail          string // API user email (create under Settings > API in Shiprocket)
+	ShiprocketPassword       string // API user password
+	ShiprocketPickupLocation string // Pickup location nickname configured in Shiprocket
 }
 
 func Load() *Config {
@@ -32,20 +37,24 @@ func Load() *Config {
 	}
 
 	return &Config{
-		Port:            getEnv("PORT", "8080"),
-		Env:             getEnv("ENV", "development"),
-		DBHost:          getEnv("DB_HOST", "localhost"),
-		DBPort:          getEnv("DB_PORT", "3306"),
-		DBUser:          getEnv("DB_USER", "root"),
-		DBPassword:      getEnv("DB_PASSWORD", ""),
-		DBName:          getEnv("DB_NAME", "storee"),
-		RazorpayKeyID:   getEnv("RAZORPAY_KEY_ID", ""),
-		RazorpaySecret:  getEnv("RAZORPAY_KEY_SECRET", ""),
-		FrontendURL:     getEnv("FRONTEND_URL", "http://localhost:5173"),
-		GoogleClientID:  getEnv("GOOGLE_CLIENT_ID", ""),
-		GoogleSecret:    getEnv("GOOGLE_CLIENT_SECRET", ""),
-		JWTSecret:       getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
-		AdminEmails:     adminEmails,
+		Port:           getEnv("PORT", "8080"),
+		Env:            getEnv("ENV", "development"),
+		DBHost:         getEnv("DB_HOST", "localhost"),
+		DBPort:         getEnv("DB_PORT", "3306"),
+		DBUser:         getEnv("DB_USER", "root"),
+		DBPassword:     getEnv("DB_PASSWORD", ""),
+		DBName:         getEnv("DB_NAME", "storee"),
+		RazorpayKeyID:  getEnv("RAZORPAY_KEY_ID", ""),
+		RazorpaySecret: getEnv("RAZORPAY_KEY_SECRET", ""),
+		FrontendURL:    getEnv("FRONTEND_URL", "http://localhost:5173"),
+		GoogleClientID: getEnv("GOOGLE_CLIENT_ID", ""),
+		GoogleSecret:   getEnv("GOOGLE_CLIENT_SECRET", ""),
+		JWTSecret:      getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
+		AdminEmails:    adminEmails,
+
+		ShiprocketEmail:          getEnv("SHIPROCKET_EMAIL", ""),
+		ShiprocketPassword:       getEnv("SHIPROCKET_PASSWORD", ""),
+		ShiprocketPickupLocation: getEnv("SHIPROCKET_PICKUP_LOCATION", "Primary"),
 	}
 }
 

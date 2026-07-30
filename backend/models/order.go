@@ -24,8 +24,14 @@ type Order struct {
 	Status          string         `json:"status" gorm:"type:varchar(50);default:pending"` // pending, paid, processing, shipped, delivered, cancelled
 	PaymentID       string         `json:"paymentId" gorm:"type:varchar(255)"`             // Razorpay payment ID
 	PaymentMethod   string         `json:"paymentMethod" gorm:"type:varchar(50);not null"` // razorpay or cod
-	CreatedAt       time.Time      `json:"createdAt"`
-	UpdatedAt       time.Time      `json:"updatedAt"`
+
+	// Shiprocket shipment details (set when the order is pushed to Shiprocket)
+	ShiprocketOrderID string    `json:"shiprocketOrderId" gorm:"type:varchar(50);index"`
+	ShipmentID        string    `json:"shipmentId" gorm:"type:varchar(50)"`
+	AWBCode           string    `json:"awbCode" gorm:"type:varchar(50)"`
+	CourierName       string    `json:"courierName" gorm:"type:varchar(100)"`
+	CreatedAt         time.Time `json:"createdAt"`
+	UpdatedAt         time.Time `json:"updatedAt"`
 }
 
 // BeforeCreate hook to generate UUID
