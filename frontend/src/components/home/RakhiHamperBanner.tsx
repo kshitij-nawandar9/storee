@@ -138,7 +138,7 @@ export default function RakhiHamperBanner() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4" style={{ color: '#C9A96E' }} />
                   <div>
-                    <p className="text-xs font-bold" style={{ color: '#2a2220' }}>Personalised keychains</p>
+                    <p className="text-xs font-bold" style={{ color: '#2a2220' }}>Personalised hampers</p>
                     <p className="text-[0.68rem]" style={{ color: '#8a7e78' }}>Add a name before checkout</p>
                   </div>
                 </div>
