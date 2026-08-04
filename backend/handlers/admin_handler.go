@@ -257,11 +257,13 @@ func (h *AdminHandler) GetAllProducts(c *gin.Context) {
 // GetAllOrders handles GET /api/v1/admin/orders
 func (h *AdminHandler) GetAllOrders(c *gin.Context) {
 	var orders []models.Order
-	query := h.DB.Order("created_at DESC")
+	query := h.DB.Model(&models.Order{})
 
-	// Filter by status if provided
+	// Filter by status if provided; the default (all) view hides pending and cancelled orders
 	if status := c.Query("status"); status != "" {
 		query = query.Where("status = ?", status)
+	} else {
+		query = query.Where("status NOT IN ?", []string{"pending", "cancelled"})
 	}
 
 	// Filter by payment method if provided
@@ -285,13 +287,12 @@ func (h *AdminHandler) GetAllOrders(c *gin.Context) {
 	}
 
 	offset := (pageNum - 1) * limitNum
-	query = query.Offset(offset).Limit(limitNum)
 
-	// Get total count for pagination
+	// Get total count for pagination, with the same filters applied
 	var total int64
-	h.DB.Model(&models.Order{}).Count(&total)
+	query.Session(&gorm.Session{}).Count(&total)
 
-	if err := query.Find(&orders).Error; err != nil {
+	if err := query.Order("created_at DESC").Offset(offset).Limit(limitNum).Find(&orders).Error; err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to fetch orders", err)
 		return
 	}

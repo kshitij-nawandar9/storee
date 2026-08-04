@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -304,7 +305,7 @@ func TestGetAllOrders_Pagination(t *testing.T) {
 		db.Create(&models.Order{
 			OrderID: utils.GenerateOrderID(), CustomerName: "Test", CustomerEmail: "t@t.com",
 			CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
-			TotalAmount: 1000, PaymentMethod: "cod",
+			TotalAmount: 1000, PaymentMethod: "cod", Status: "paid",
 		})
 	}
 
@@ -358,6 +359,54 @@ func TestGetAllOrders_StatusFilter(t *testing.T) {
 	orders := data["orders"].([]interface{})
 	if len(orders) != 1 {
 		t.Errorf("filtered orders = %d, want 1", len(orders))
+	}
+}
+
+func TestGetAllOrders_DefaultExcludesPendingAndCancelled(t *testing.T) {
+	db := setupTestDB(t)
+	h := NewAdminHandler(db)
+
+	statuses := []string{"pending", "paid", "processing", "shipped", "delivered", "cancelled"}
+	for i, status := range statuses {
+		db.Create(&models.Order{
+			OrderID: fmt.Sprintf("BBBB00000%d", i+1), CustomerName: "Test", CustomerEmail: "t@t.com",
+			CustomerPhone: "1234567890", Address: datatypes.JSON([]byte(`{}`)), Items: datatypes.JSON([]byte(`[]`)),
+			TotalAmount: 1000, PaymentMethod: "cod", Status: status,
+		})
+	}
+
+	r := setupTestRouter()
+	r.GET("/admin/orders", h.GetAllOrders)
+
+	w := performJSONRequest(r, "GET", "/admin/orders", nil, nil)
+	if w.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d", w.Code, http.StatusOK)
+	}
+
+	var resp utils.ApiResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	data := resp.Data.(map[string]interface{})
+	orders := data["orders"].([]interface{})
+	if len(orders) != 4 {
+		t.Errorf("default orders = %d, want 4 (pending and cancelled excluded)", len(orders))
+	}
+	for _, o := range orders {
+		status := o.(map[string]interface{})["status"].(string)
+		if status == "pending" || status == "cancelled" {
+			t.Errorf("default view returned %s order", status)
+		}
+	}
+	pagination := data["pagination"].(map[string]interface{})
+	if pagination["total"].(float64) != 4 {
+		t.Errorf("total = %v, want 4", pagination["total"])
+	}
+
+	// Explicit status filters still surface the hidden statuses
+	w = performJSONRequest(r, "GET", "/admin/orders?status=pending", nil, nil)
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	data = resp.Data.(map[string]interface{})
+	if n := len(data["orders"].([]interface{})); n != 1 {
+		t.Errorf("pending filter orders = %d, want 1", n)
 	}
 }
 
