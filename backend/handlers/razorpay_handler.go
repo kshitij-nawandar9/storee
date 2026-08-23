@@ -23,6 +23,7 @@ type RazorpayHandler struct {
 	DB             *gorm.DB
 	Config         *config.Config
 	RazorpayClient *services.RazorpayClient
+	Notifier       *services.Notifier
 }
 
 func NewRazorpayHandler(db *gorm.DB, cfg *config.Config) *RazorpayHandler {
@@ -31,6 +32,13 @@ func NewRazorpayHandler(db *gorm.DB, cfg *config.Config) *RazorpayHandler {
 		Config:         cfg,
 		RazorpayClient: services.NewRazorpayClient(cfg.RazorpayKeyID, cfg.RazorpaySecret),
 	}
+}
+
+// WithNotifier attaches the order-notification outbox. Left unset (tests,
+// unconfigured deploys) the handler simply queues nothing.
+func (h *RazorpayHandler) WithNotifier(n *services.Notifier) *RazorpayHandler {
+	h.Notifier = n
+	return h
 }
 
 type CreateOrderRequest struct {
@@ -241,6 +249,8 @@ func (h *RazorpayHandler) VerifyPayment(c *gin.Context) {
 		return
 	}
 
+	h.Notifier.Enqueue(h.DB, &order, services.EventPaymentReceived)
+
 	response := map[string]string{
 		"paymentId": req.PaymentID,
 		"orderId":   order.OrderID, // Return our 10-digit order ID
@@ -364,6 +374,7 @@ func (h *RazorpayHandler) HandleWebhook(c *gin.Context) {
 			}
 
 			log.Printf("Webhook: Updated order %s to status: %s", dbOrder.OrderID, dbOrder.Status)
+			h.Notifier.Enqueue(h.DB, &dbOrder, services.EventPaymentReceived)
 		}
 
 	case "payment.failed":
@@ -374,6 +385,7 @@ func (h *RazorpayHandler) HandleWebhook(c *gin.Context) {
 			dbOrder.PaymentID = paymentID
 			h.DB.Save(&dbOrder)
 			log.Printf("Webhook: Marked order %s as cancelled due to payment failure", dbOrder.OrderID)
+			h.Notifier.Enqueue(h.DB, &dbOrder, services.EventOrderCancelled)
 		}
 
 	default:

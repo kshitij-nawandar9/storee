@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
+func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config, notifier *services.Notifier) {
 	// CORS middleware
 	router.Use(middleware.CORSMiddleware(cfg.FrontendURL))
 
@@ -32,7 +32,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Razorpay routes
-		razorpayHandler := handlers.NewRazorpayHandler(db, cfg)
+		razorpayHandler := handlers.NewRazorpayHandler(db, cfg).WithNotifier(notifier)
 		razorpay := v1.Group("/razorpay")
 		// Optional auth - links orders to user if logged in, but allows guest orders
 		razorpay.Use(middleware.OptionalAuthMiddleware(cfg.JWTSecret))
@@ -55,7 +55,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Order routes
-		orderHandler := handlers.NewOrderHandler(db)
+		orderHandler := handlers.NewOrderHandler(db).WithNotifier(notifier)
 		orders := v1.Group("/orders")
 		{
 			// Optional auth - links orders to user if logged in, but allows guest orders
@@ -65,7 +65,7 @@ func SetupRoutes(router *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		}
 
 		// Admin routes (protected with email-based admin auth)
-		adminHandler := handlers.NewAdminHandler(db)
+		adminHandler := handlers.NewAdminHandler(db).WithNotifier(notifier)
 		admin := v1.Group("/admin")
 		admin.Use(middleware.AdminAuthMiddleware(cfg.JWTSecret, cfg.AdminEmails))
 		{
