@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"storee/backend/config"
 	"storee/backend/database"
 	"storee/backend/routes"
+	"storee/backend/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -46,11 +48,22 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	// Order notifications: handlers write to an outbox, the worker drains it.
+	notifier := services.NewNotifier(
+		services.NewWhatsAppClient(cfg.WhatsAppPhoneNumberID, cfg.WhatsAppAccessToken, cfg.WhatsAppAPIVersion),
+		cfg.AdminWhatsAppNumbers,
+		cfg.WhatsAppLanguage,
+		cfg.NotificationsEnabled,
+	)
+	workerCtx, stopWorker := context.WithCancel(context.Background())
+	defer stopWorker()
+	go services.NewNotificationWorker(db, notifier).Start(workerCtx)
+
 	// Initialize router
 	router := gin.Default()
 
 	// Setup routes
-	routes.SetupRoutes(router, db, cfg)
+	routes.SetupRoutes(router, db, cfg, notifier)
 
 	// Start server
 	port := cfg.Port

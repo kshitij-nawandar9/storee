@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -25,6 +26,14 @@ type Config struct {
 	ShiprocketEmail          string // API user email (create under Settings > API in Shiprocket)
 	ShiprocketPassword       string // API user password
 	ShiprocketPickupLocation string // Pickup location nickname configured in Shiprocket
+
+	// WhatsApp Cloud API (Meta) order notifications
+	NotificationsEnabled  bool     // Master kill switch for outbound notifications
+	WhatsAppPhoneNumberID string   // Phone number ID of the WhatsApp Business number
+	WhatsAppAccessToken   string   // System user access token with whatsapp_business_messaging
+	WhatsAppAPIVersion    string   // Graph API version, e.g. "v21.0"
+	WhatsAppLanguage      string   // Language code the approved templates were submitted in
+	AdminWhatsAppNumbers  []string // Numbers that receive admin alerts (E.164, digits only)
 }
 
 func Load() *Config {
@@ -55,7 +64,37 @@ func Load() *Config {
 		ShiprocketEmail:          getEnv("SHIPROCKET_EMAIL", ""),
 		ShiprocketPassword:       getEnv("SHIPROCKET_PASSWORD", ""),
 		ShiprocketPickupLocation: getEnv("SHIPROCKET_PICKUP_LOCATION", "Primary"),
+
+		NotificationsEnabled:  getEnvBool("NOTIFICATIONS_ENABLED", true),
+		WhatsAppPhoneNumberID: getEnv("WHATSAPP_PHONE_NUMBER_ID", ""),
+		WhatsAppAccessToken:   getEnv("WHATSAPP_ACCESS_TOKEN", ""),
+		WhatsAppAPIVersion:    getEnv("WHATSAPP_API_VERSION", "v21.0"),
+		WhatsAppLanguage:      getEnv("WHATSAPP_TEMPLATE_LANGUAGE", "en"),
+		AdminWhatsAppNumbers:  splitList(getEnv("ADMIN_WHATSAPP_NUMBERS", "")),
 	}
+}
+
+// splitList parses a comma-separated env value into trimmed, non-empty entries.
+func splitList(raw string) []string {
+	var out []string
+	for _, part := range strings.Split(raw, ",") {
+		if trimmed := strings.TrimSpace(part); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	return out
+}
+
+func getEnvBool(key string, defaultValue bool) bool {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	parsed, err := strconv.ParseBool(strings.TrimSpace(value))
+	if err != nil {
+		return defaultValue
+	}
+	return parsed
 }
 
 func getEnv(key, defaultValue string) string {
