@@ -11,6 +11,7 @@ import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'l
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { imageAtWidth } from '@/utils/images';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -627,7 +628,7 @@ export default function Checkout() {
                   return (
                     <div key={`${item.product.id}-${item.variant?.id || ''}`} className="flex gap-3">
                       <img
-                        src={imageSrc}
+                        src={imageAtWidth(imageSrc, 200)}
                         alt={item.product.name}
                         className="w-16 h-16 object-cover rounded-xl border border-orange-200"
                         loading="lazy"

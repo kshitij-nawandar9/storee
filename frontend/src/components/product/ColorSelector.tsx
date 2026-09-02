@@ -1,3 +1,4 @@
+import { imageAtWidth } from '@/utils/images';
 import { useState, useEffect } from 'react';
 import type { ProductVariant } from '@/types';
 
@@ -67,7 +68,7 @@ export default function ColorSelector({
             >
               {variant.image && (
                 <img
-                  src={variant.image}
+                  src={imageAtWidth(variant.image, 200)}
                   alt={`${productName} - ${variant.colorName}`}
                   className="w-full h-full object-cover"
                   loading="lazy"

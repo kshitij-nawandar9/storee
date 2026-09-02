@@ -1,3 +1,5 @@
+import Img from '@/components/common/Img';
+import { imageAtWidth } from '@/utils/images';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ColorSelector from '@/components/product/ColorSelector';
@@ -94,12 +96,13 @@ export default function ProductDetail() {
               }}
             >
               {displayImage ? (
-                <img
+                <Img
                   src={displayImage}
                   alt={product.name}
+                  sizes="(min-width: 768px) 50vw, 100vw"
                   className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                   key={displayImage}
-                  loading="lazy"
+                  fetchPriority="high"
                   decoding="async"
                   onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.jpg'; }}
                 />
@@ -296,9 +299,10 @@ export default function ProductDetail() {
             </button>
 
             <div className="relative">
-              <img
+              <Img
                 src={displayImages[modalImageIndex]}
                 alt={product.name}
+                sizes="(min-width: 768px) 70vw, 95vw"
                 className="max-w-full max-h-[78vh] object-contain mx-auto rounded-xl"
                 decoding="async"
               />
@@ -337,7 +341,7 @@ export default function ProductDetail() {
                       opacity: modalImageIndex === index ? 1 : 0.6,
                     }}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                    <img src={imageAtWidth(img, 200)} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   </button>
                 ))}
               </div>

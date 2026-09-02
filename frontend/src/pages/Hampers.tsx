@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Gift, Heart, PackageCheck, Sparkles, Truck } from 'lucide-react';
+import Img from '@/components/common/Img';
 import HamperCard from '@/components/hamper/HamperCard';
 import RakhiThread from '@/components/hamper/RakhiThread';
 import { getRakhiHamperBySlug, RAKHI_BUDGETS, RAKHI_HAMPERS, type HamperBudget } from '@/data/hampers';
@@ -108,11 +109,12 @@ export default function Hampers() {
                 className="absolute left-0 top-6 w-[66%] max-w-[430px] overflow-hidden rounded-3xl rotate-[-4deg]"
                 style={{ background: '#F8EDDA', boxShadow: '0 20px 54px -24px rgba(42,34,32,0.42)' }}
               >
-                <img
+                <Img
                   src={heroHamper.images[0]?.url}
                   alt={heroHamper.name}
+                  sizes="(min-width: 1024px) 430px, 66vw"
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  fetchPriority="high"
                   decoding="async"
                 />
               </div>
@@ -120,9 +122,10 @@ export default function Hampers() {
                 className="absolute right-0 top-0 w-[45%] max-w-[300px] overflow-hidden rounded-2xl rotate-[5deg]"
                 style={{ background: '#F8EDDA', boxShadow: '0 18px 44px -24px rgba(42,34,32,0.38)' }}
               >
-                <img
+                <Img
                   src={sideHamper.images[0]?.url}
                   alt={sideHamper.name}
+                  sizes="(min-width: 1024px) 300px, 45vw"
                   className="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"

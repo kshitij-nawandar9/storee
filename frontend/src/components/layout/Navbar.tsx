@@ -4,6 +4,7 @@ import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
+import { imageAtWidth } from '@/utils/images';
 
 const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'nawandar.kshitij@gmail.com'];
 
@@ -111,7 +112,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
             {!logoError ? (
               <img
-                src={currentLogoPath}
+                src={imageAtWidth(currentLogoPath, 200)}
                 alt="Storee"
                 className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
                 decoding="async"

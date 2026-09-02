@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
+import Img from '@/components/common/Img';
 import SaleBanner from '@/components/home/SaleBanner';
 import RakhiHamperBanner from '@/components/home/RakhiHamperBanner';
 
@@ -55,11 +56,13 @@ export default function Home() {
 
       {/* ── HERO — taller on mobile via min-height ── */}
       <section className="relative w-full">
-        <img
+        <Img
           src="/images/banner/4.jpeg"
           alt="Storee — Carry beautifully"
+          sizes="100vw"
           className="w-full h-auto object-cover block sm:h-auto"
           style={{ minHeight: '55vh' }}
+          fetchPriority="high"
           decoding="async"
         />
         <div className="absolute bottom-0 left-0 right-0" style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.6) 0%, rgba(42,34,32,0.2) 60%, transparent 100%)', padding: '5rem 0 0' }}>
@@ -173,7 +176,7 @@ export default function Home() {
                 className="group relative rounded-xl sm:rounded-2xl overflow-hidden card-tilt animate-fade-in"
                 style={{ aspectRatio: '3/4', animationDelay: `${index * 0.07}s` }}
               >
-                <img src={image} alt={name} className="w-full h-full object-cover product-img" loading="lazy" decoding="async" />
+                <Img src={image} alt={name} sizes="(min-width: 1024px) 240px, 48vw" className="w-full h-full object-cover product-img" loading="lazy" decoding="async" />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.55) 0%, rgba(42,34,32,0.05) 45%, transparent 100%)' }} />
                 <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5">
                   <p className="font-hand text-[0.6rem] sm:text-sm leading-none" style={{ color: 'rgba(253,246,236,0.7)' }}>{sub}</p>

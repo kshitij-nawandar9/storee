@@ -3,6 +3,8 @@ import { Gift, Pen, ShoppingBag, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { RakhiHamper } from '@/data/hampers';
 import type { ProductVariant } from '@/types';
+import Img from '@/components/common/Img';
+import { imageAtWidth } from '@/utils/images';
 import { useCart } from '@/hooks/useCart';
 
 interface HamperCardProps {
@@ -57,9 +59,10 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
       }}
     >
       <div className="relative overflow-hidden" style={{ aspectRatio: '4/5', background: '#F8EDDA' }}>
-        <img
+        <Img
           src={preview}
           alt={hamper.name}
+          sizes="(min-width: 1280px) 400px, (min-width: 640px) 46vw, 92vw"
           className="product-img w-full h-full object-cover"
           loading="lazy"
           decoding="async"
@@ -152,7 +155,7 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
                     title={variant.colorName}
                     aria-label={`Choose ${variant.colorName} print`}
                   >
-                    <img src={variant.image} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                    <img src={imageAtWidth(variant.image, 200)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
                     {isSelected && (
                       <span
                         className="absolute inset-0"
