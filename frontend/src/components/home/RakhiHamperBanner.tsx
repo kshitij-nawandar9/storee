@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Gift, Sparkles } from 'lucide-react';
 import { getRakhiHamperBySlug, RAKHI_HAMPERS, type RakhiHamper } from '@/data/hampers';
+import Img from '@/components/common/Img';
 import RakhiThread from '@/components/hamper/RakhiThread';
 
 export default function RakhiHamperBanner() {
@@ -99,9 +100,10 @@ export default function RakhiHamperBanner() {
                 className="absolute left-6 top-2 z-20 w-[64%] max-w-[360px] overflow-hidden rounded-3xl rotate-[-3deg] transition-transform duration-500 hover:rotate-[-1deg] hover:scale-[1.02]"
                 style={{ boxShadow: '0 18px 45px -20px rgba(42,34,32,0.42)', background: '#F8EDDA' }}
               >
-                <img
+                <Img
                   src={hero.images[0]?.url}
                   alt={hero.name}
+                  sizes="(min-width: 1024px) 360px, 64vw"
                   className="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -121,9 +123,10 @@ export default function RakhiHamperBanner() {
                     background: '#F8EDDA',
                   }}
                 >
-                  <img
+                  <Img
                     src={hamper.images[0]?.url}
                     alt={hamper.name}
+                    sizes="(min-width: 1024px) 240px, 42vw"
                     className="h-full w-full object-cover"
                     loading="lazy"
                     decoding="async"

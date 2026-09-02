@@ -1,3 +1,4 @@
+import Img from '@/components/common/Img';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
@@ -41,9 +42,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Image */}
         <div className="relative overflow-hidden" style={{ aspectRatio: '4/5', background: '#F8EDDA' }}>
-          <img
+          <Img
             src={primaryImage || '/placeholder.jpg'}
             alt={product.name}
+            sizes="(min-width: 1280px) 300px, (min-width: 1024px) 31vw, 47vw"
             className="product-img w-full h-full object-cover"
             loading="lazy"
             decoding="async"

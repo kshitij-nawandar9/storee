@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useProducts } from '@/hooks/useProducts';
+import Img from '@/components/common/Img';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { Grid3x3, ArrowRight } from 'lucide-react';
@@ -130,9 +131,10 @@ export default function Products() {
                       style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.06)', animationDelay: `${index * 0.04}s` }}
                     >
                       <div className="relative overflow-hidden" style={{ aspectRatio: '4/5', background: '#F8EDDA' }}>
-                        <img
+                        <Img
                           src={variant?.image || '/placeholder.jpg'}
                           alt={`${product.name}${variant ? ` - ${variant.colorName}` : ''}`}
+                          sizes="(min-width: 1280px) 300px, (min-width: 1024px) 31vw, 47vw"
                           className="product-img w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"

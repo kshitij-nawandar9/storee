@@ -4,6 +4,7 @@ import type { CartItem as CartItemType } from '@/types';
 import QuantitySelector from '@/components/product/QuantitySelector';
 import PriceDisplay from '@/components/product/PriceDisplay';
 import { getSalePrice } from '@/utils/constants';
+import { imageAtWidth } from '@/utils/images';
 
 interface CartItemProps {
   item: CartItemType;
@@ -36,7 +37,7 @@ export default function CartItem({ item }: CartItemProps) {
       {/* Image */}
       <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden" style={{ background: '#F8EDDA' }}>
         <img
-          src={displayImage || '/placeholder.jpg'}
+          src={displayImage ? imageAtWidth(displayImage, 200) : '/placeholder.jpg'}
           alt={variant ? `${product.name} - ${variant.colorName}` : product.name}
           className="w-full h-full object-cover"
           loading="lazy"

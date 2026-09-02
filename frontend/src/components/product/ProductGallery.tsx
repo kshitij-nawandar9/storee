@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ProductVariant } from '@/types';
+import Img from '@/components/common/Img';
+import { imageAtWidth } from '@/utils/images';
 
 interface ProductGalleryProps {
   images: string[];
@@ -66,9 +68,10 @@ export default function ProductGallery({
         className="main-image cursor-pointer mb-4 overflow-hidden rounded-xl bg-gray-100 group relative"
         onClick={() => setIsModalOpen(true)}
       >
-        <img
+        <Img
           src={displayImages[selectedImage]}
           alt={productName}
+          sizes="(min-width: 768px) 50vw, 100vw"
           className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
           decoding="async"
@@ -120,7 +123,7 @@ export default function ProductGallery({
               }`}
             >
               <img
-                src={img}
+                src={imageAtWidth(img, 200)}
                 alt={`${productName} ${index + 1}`}
                 className="w-full h-20 object-cover rounded"
                 loading="lazy"
@@ -150,9 +153,10 @@ export default function ProductGallery({
             </button>
             
             <div className="relative">
-              <img
+              <Img
                 src={displayImages[selectedImage]}
                 alt={productName}
+                sizes="(min-width: 768px) 70vw, 95vw"
                 className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
                 decoding="async"
               />
@@ -190,7 +194,7 @@ export default function ProductGallery({
                     }`}
                   >
                     <img
-                      src={img}
+                      src={imageAtWidth(img, 200)}
                       alt=""
                       className="w-full h-full object-cover rounded"
                       loading="lazy"

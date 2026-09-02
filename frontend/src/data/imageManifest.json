@@ -1,0 +1,2368 @@
+{
+  "/images/banner/1.jpeg": {
+    "b": "/images/banner/1-dbea3323",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/banner/2.jpg": {
+    "b": "/images/banner/2-4751776c",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/banner/3.jpg": {
+    "b": "/images/banner/3-56a0e6d9",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/banner/4.jpeg": {
+    "b": "/images/banner/4-6b9e34c3",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/aqua.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/aqua-1bd986c0",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/beach.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/beach-eb605338",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/bunny.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/bunny-1bd13d50",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/jungle-safari-b3566f8b",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/lion.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/lion-7f860a04",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/marine.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/marine-017cc346",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/rainbow.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/rainbow-6648c747",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/space.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/space-4afe5fdc",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/sports.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/sports-abac7649",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/activity-bag-keychain/unicorn.png": {
+    "b": "/images/hampers/under-1100/activity-bag-keychain/unicorn-84ec6a45",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/aqua.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/aqua-b484b450",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/beach.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/beach-c4902565",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/bunny.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/bunny-00f2968e",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/jungle-safari.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/jungle-safari-6d16d233",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/lion.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/lion-44fb891b",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/marine.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/marine-cb7551cb",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/rainbow.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/rainbow-0a96e7f9",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/space.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/space-6ad02a09",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/unicorn.png": {
+    "b": "/images/hampers/under-1100/foldable-travel-kit-toiletry-kit/unicorn-4a1160de",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/aqua.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/aqua-fe287591",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/beach.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/beach-79e9766d",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/bunny.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/bunny-a28666cc",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/jungle-safari.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/jungle-safari-f60cd7d5",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/lion.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/lion-b2b3a34e",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/marine.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/marine-53802cc2",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/rainbow.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/rainbow-0db33bec",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/space.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/space-533d19a0",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/sports.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/sports-51eccdf4",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-1100/small-backpack-pencil-pouch/unicorn.png": {
+    "b": "/images/hampers/under-1100/small-backpack-pencil-pouch/unicorn-c7348515",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/aqua.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/aqua-7f32d806",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/beach.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/beach-ca141bd7",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/bunny.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/bunny-4156d676",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/jungle-safari-2dfe94c5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/lion.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/lion-3f3f6c12",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/marine.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/marine-ebb9a1ed",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/rainbow.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/rainbow-b9e7fc2d",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/space.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/space-e9f426cc",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/sports.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/sports-d54af264",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/crossbody-keychain/unicorn.png": {
+    "b": "/images/hampers/under-500/crossbody-keychain/unicorn-fede63e5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/aqua.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/aqua-aed22521",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/beach.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/beach-eabe17cc",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/bunny.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/bunny-56fd5b64",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/jungle-safari-0184187b",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/lion.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/lion-35e60682",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/marine.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/marine-c662b268",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/rainbow.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/rainbow-fb62a3b8",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/space.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/space-4ed1e7ad",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/sports.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/sports-1a239013",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/unicorn.png": {
+    "b": "/images/hampers/under-500/pencil-pouch-sunglasses-pouch-keychain/unicorn-991c6e71",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/aqua.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/aqua-a08359c7",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/beach.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/beach-48ad99b6",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/bunny.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/bunny-6a5688dd",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/jungle-safari-bed56ea8",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/lion.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/lion-cbba4252",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/marine.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/marine-e7558545",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/rainbow.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/rainbow-ed76af78",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/space.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/space-e2ae1152",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/sports.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/sports-53bd2247",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/sunglasses-pouch-keychain/unicorn.png": {
+    "b": "/images/hampers/under-500/sunglasses-pouch-keychain/unicorn-01d03b38",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/aqua.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/aqua-82b6acb1",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/beach.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/beach-6c1ed981",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/bunny.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/bunny-2497974d",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/jungle-safari-4f3e103f",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/lion.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/lion-88a78d74",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/marine.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/marine-ea33693a",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/rainbow.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/rainbow-6357de17",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/space.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/space-c73c19f3",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/sports.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/sports-074f414d",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-500/toiletry-sunglasses-keychain/unicorn.png": {
+    "b": "/images/hampers/under-500/toiletry-sunglasses-keychain/unicorn-817e9fa5",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/aqua.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/aqua-b7b3129a",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/beach.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/beach-14d90535",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/bunny.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/bunny-cc615e35",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/jungle-safari-e525ecdc",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/lion.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/lion-ba1d1b50",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/marine.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/marine-8ca0c00c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/rainbow.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/rainbow-131e190d",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/space.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/space-d55fff04",
+    "w": [
+      200,
+      400,
+      800,
+      1023
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/sports.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/sports-e998cfc0",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-800/duffle-bag-keychain/unicorn.png": {
+    "b": "/images/hampers/under-800/duffle-bag-keychain/unicorn-cdec7e0f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/aqua.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/aqua-04320524",
+    "w": [
+      200,
+      400,
+      800,
+      1027
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/beach.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/beach-e3165746",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/bunny.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/bunny-97369f38",
+    "w": [
+      200,
+      400,
+      800,
+      1036
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/jungle-safari.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/jungle-safari-e592afef",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/lion.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/lion-d763c1f0",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/marine.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/marine-77fadb8a",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/rainbow.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/rainbow-0715f4ef",
+    "w": [
+      200,
+      400,
+      800,
+      1013
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/space.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/space-4c1fcde5",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/sports.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/sports-5fce3901",
+    "w": [
+      200,
+      400,
+      800,
+      1122
+    ]
+  },
+  "/images/hampers/under-800/multipurpose-pouch-keychain/unicorn.png": {
+    "b": "/images/hampers/under-800/multipurpose-pouch-keychain/unicorn-8c1a1507",
+    "w": [
+      200,
+      400,
+      800,
+      1132
+    ]
+  },
+  "/images/logo/logo.jpeg": {
+    "b": "/images/logo/logo-bb6646c5",
+    "w": [
+      200,
+      400,
+      500
+    ]
+  },
+  "/images/products/accessories_kit/Aqua.jpg": {
+    "b": "/images/products/accessories_kit/aqua-b2b30aba",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/accessories_kit/Beach.jpg": {
+    "b": "/images/products/accessories_kit/beach-902c1c91",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/accessories_kit/Bunny.jpg": {
+    "b": "/images/products/accessories_kit/bunny-bb1846ad",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/accessories_kit/Jungle Safari.png": {
+    "b": "/images/products/accessories_kit/jungle-safari-196d6355",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/accessories_kit/Lion.jpg": {
+    "b": "/images/products/accessories_kit/lion-03f15587",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/accessories_kit/Marine.png": {
+    "b": "/images/products/accessories_kit/marine-57fa8977",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/accessories_kit/Rainbow.jpg": {
+    "b": "/images/products/accessories_kit/rainbow-88106482",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/accessories_kit/Unicorn.png": {
+    "b": "/images/products/accessories_kit/unicorn-0df55405",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/activity_bag/Aqua.png": {
+    "b": "/images/products/activity_bag/aqua-060160af",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Beach.png": {
+    "b": "/images/products/activity_bag/beach-c8a9ff9f",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Bunny.png": {
+    "b": "/images/products/activity_bag/bunny-71d03a5f",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Jungle Safari.png": {
+    "b": "/images/products/activity_bag/jungle-safari-5601d5ec",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/products/activity_bag/Lion.png": {
+    "b": "/images/products/activity_bag/lion-413daa3f",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/products/activity_bag/Marine.png": {
+    "b": "/images/products/activity_bag/marine-b699df3f",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Rainbow.png": {
+    "b": "/images/products/activity_bag/rainbow-4acd993b",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Space.png": {
+    "b": "/images/products/activity_bag/space-260ec895",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Sports.png": {
+    "b": "/images/products/activity_bag/sports-3c33ac8e",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/activity_bag/Unicorn.png": {
+    "b": "/images/products/activity_bag/unicorn-343675eb",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/crossbody_bag/Aqua.png": {
+    "b": "/images/products/crossbody_bag/aqua-39afbd16",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Beach.png": {
+    "b": "/images/products/crossbody_bag/beach-3f39182c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Bunny.png": {
+    "b": "/images/products/crossbody_bag/bunny-0233dfe8",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Jungle Safari.png": {
+    "b": "/images/products/crossbody_bag/jungle-safari-5cf88d30",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Lion.png": {
+    "b": "/images/products/crossbody_bag/lion-d8c9e88d",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Marine.png": {
+    "b": "/images/products/crossbody_bag/marine-3b862fff",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Rainbow.png": {
+    "b": "/images/products/crossbody_bag/rainbow-00d27e14",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Space.png": {
+    "b": "/images/products/crossbody_bag/space-5aed58b5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Sports.png": {
+    "b": "/images/products/crossbody_bag/sports-d6a0fbb5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/crossbody_bag/Unicorn.png": {
+    "b": "/images/products/crossbody_bag/unicorn-d7ca3595",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/dental_kit/Beach.png": {
+    "b": "/images/products/dental_kit/beach-0148659c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/dental_kit/Bunny.png": {
+    "b": "/images/products/dental_kit/bunny-c7fcfe10",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/dental_kit/Lion.png": {
+    "b": "/images/products/dental_kit/lion-f6c3172a",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/dental_kit/Marine.png": {
+    "b": "/images/products/dental_kit/marine-ce945c56",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/dental_kit/Rainbow.png": {
+    "b": "/images/products/dental_kit/rainbow-61bf9284",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Aqua.png": {
+    "b": "/images/products/duffle_bag/aqua-2bd8fbdf",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Beach.png": {
+    "b": "/images/products/duffle_bag/beach-638628da",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Bunny.png": {
+    "b": "/images/products/duffle_bag/bunny-ccae69c9",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Jungle Safari.png": {
+    "b": "/images/products/duffle_bag/jungle-safari-dc752c31",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Lion.png": {
+    "b": "/images/products/duffle_bag/lion-bd3f96c9",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Marine.png": {
+    "b": "/images/products/duffle_bag/marine-bd5c578a",
+    "w": [
+      200,
+      400,
+      800,
+      940
+    ]
+  },
+  "/images/products/duffle_bag/Rainbow.png": {
+    "b": "/images/products/duffle_bag/rainbow-ffec6fe3",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Space.png": {
+    "b": "/images/products/duffle_bag/space-8c08ed3b",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Sports.png": {
+    "b": "/images/products/duffle_bag/sports-7aa7216f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/duffle_bag/Unicorn.png": {
+    "b": "/images/products/duffle_bag/unicorn-7dbe33e8",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/foldable_travel_kit/Aqua.jpg": {
+    "b": "/images/products/foldable_travel_kit/aqua-5e397c4b",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/foldable_travel_kit/Beach.jpg": {
+    "b": "/images/products/foldable_travel_kit/beach-b13ff9fb",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/foldable_travel_kit/Bunny.jpg": {
+    "b": "/images/products/foldable_travel_kit/bunny-734e6ff2",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/foldable_travel_kit/Jungle Safari.png": {
+    "b": "/images/products/foldable_travel_kit/jungle-safari-4e66835f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/foldable_travel_kit/Lion.jpg": {
+    "b": "/images/products/foldable_travel_kit/lion-bd929b74",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/foldable_travel_kit/Marine.png": {
+    "b": "/images/products/foldable_travel_kit/marine-57fa8977",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/foldable_travel_kit/Rainbow.jpg": {
+    "b": "/images/products/foldable_travel_kit/rainbow-2986e629",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/foldable_travel_kit/Space.png": {
+    "b": "/images/products/foldable_travel_kit/space-263a9df5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/foldable_travel_kit/Unicorn.png": {
+    "b": "/images/products/foldable_travel_kit/unicorn-0df55405",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Aqua.png": {
+    "b": "/images/products/kids_bag/aqua-75a0a056",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Beach.png": {
+    "b": "/images/products/kids_bag/beach-47142e5f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Bunny.png": {
+    "b": "/images/products/kids_bag/bunny-6d9d8e0b",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Jungle Safari.png": {
+    "b": "/images/products/kids_bag/jungle-safari-fa0d08b1",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Lion.png": {
+    "b": "/images/products/kids_bag/lion-eaf07392",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Marine.png": {
+    "b": "/images/products/kids_bag/marine-d88669c4",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Rainbow.png": {
+    "b": "/images/products/kids_bag/rainbow-01555ce7",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Space.png": {
+    "b": "/images/products/kids_bag/space-7fb741d4",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Sports.png": {
+    "b": "/images/products/kids_bag/sports-1febe230",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/kids_bag/Unicorn.png": {
+    "b": "/images/products/kids_bag/unicorn-1118f1cc",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/medicine_kit/Aqua.jpg": {
+    "b": "/images/products/medicine_kit/aqua-720ec18b",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Beach.jpg": {
+    "b": "/images/products/medicine_kit/beach-9e710fe2",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Bunny.jpg": {
+    "b": "/images/products/medicine_kit/bunny-5440f321",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Jungle Safari.jpg": {
+    "b": "/images/products/medicine_kit/jungle-safari-e0b3ce0a",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Lion.jpg": {
+    "b": "/images/products/medicine_kit/lion-58b5d624",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Marine.jpg": {
+    "b": "/images/products/medicine_kit/marine-7a5f8e48",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Rainbow.jpg": {
+    "b": "/images/products/medicine_kit/rainbow-5ecad1a7",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Space.jpg": {
+    "b": "/images/products/medicine_kit/space-71852d97",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Space_open.png": {
+    "b": "/images/products/medicine_kit/space-open-e05973a3",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/medicine_kit/Sports.jpg": {
+    "b": "/images/products/medicine_kit/sports-9b8d5172",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/medicine_kit/Unicorn.jpg": {
+    "b": "/images/products/medicine_kit/unicorn-a02e9bdb",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Aqua.jpg": {
+    "b": "/images/products/multipurpose_pouch/aqua-2f5b1e0f",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Aqua_set.png": {
+    "b": "/images/products/multipurpose_pouch/aqua-set-ce505bd3",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Beach.jpg": {
+    "b": "/images/products/multipurpose_pouch/beach-228f8f68",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Bunny.jpg": {
+    "b": "/images/products/multipurpose_pouch/bunny-d66889d4",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Jungle Safari.png": {
+    "b": "/images/products/multipurpose_pouch/jungle-safari-5d2873ad",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Jungle Safari_set.png": {
+    "b": "/images/products/multipurpose_pouch/jungle-safari-set-b88b9701",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Lion.jpg": {
+    "b": "/images/products/multipurpose_pouch/lion-1989e4fc",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Marine.png": {
+    "b": "/images/products/multipurpose_pouch/marine-bd907ff7",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Rainbow.jpg": {
+    "b": "/images/products/multipurpose_pouch/rainbow-afe120a9",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/multipurpose_pouch/Space.png": {
+    "b": "/images/products/multipurpose_pouch/space-f9e59bff",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Space_set.png": {
+    "b": "/images/products/multipurpose_pouch/space-set-f0666623",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Sports.png": {
+    "b": "/images/products/multipurpose_pouch/sports-9392ef37",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Sports_set.png": {
+    "b": "/images/products/multipurpose_pouch/sports-set-1817f21b",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Unicorn.png": {
+    "b": "/images/products/multipurpose_pouch/unicorn-9351e952",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/multipurpose_pouch/Unicorn_set.png": {
+    "b": "/images/products/multipurpose_pouch/unicorn-set-48de71c0",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Aqua.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/aqua-c47d205d",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Beach.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/beach-496ba3cb",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Bunny.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/bunny-ee6ecf0a",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Jungle Safari.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/jungle-safari-a81aaa20",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Lion.jpg": {
+    "b": "/images/products/on_the_go_foldable_pouch/lion-16fd3cd7",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Marine.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/marine-00897170",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Rainbow.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/rainbow-f1802bb8",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Space.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/space-db065e36",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Sports.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/sports-39cd18d7",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/on_the_go_foldable_pouch/Unicorn.png": {
+    "b": "/images/products/on_the_go_foldable_pouch/unicorn-7cbd09f9",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pack_a_week_kit/Aqua.jpg": {
+    "b": "/images/products/pack_a_week_kit/aqua-e7eea9a7",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/pack_a_week_kit/Beach.jpg": {
+    "b": "/images/products/pack_a_week_kit/beach-beff4eb7",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/pack_a_week_kit/Bunny.jpg": {
+    "b": "/images/products/pack_a_week_kit/bunny-b6f1872a",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/pack_a_week_kit/Lion.jpg": {
+    "b": "/images/products/pack_a_week_kit/lion-d66af06d",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/pack_a_week_kit/Rainbow.jpg": {
+    "b": "/images/products/pack_a_week_kit/rainbow-1434c498",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Aqua.jpg": {
+    "b": "/images/products/packing_cubes/aqua-b3a4c464",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Beach.jpg": {
+    "b": "/images/products/packing_cubes/beach-46309767",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Bunny.jpg": {
+    "b": "/images/products/packing_cubes/bunny-7d49c62d",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Jungle Safari.png": {
+    "b": "/images/products/packing_cubes/jungle-safari-afdd1068",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/packing_cubes/Lion.jpg": {
+    "b": "/images/products/packing_cubes/lion-29f06766",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Marine.png": {
+    "b": "/images/products/packing_cubes/marine-96e90109",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/packing_cubes/Rainbow.jpg": {
+    "b": "/images/products/packing_cubes/rainbow-e5cef023",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/packing_cubes/Space.png": {
+    "b": "/images/products/packing_cubes/space-f0ba26ef",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/packing_cubes/Sports.png": {
+    "b": "/images/products/packing_cubes/sports-4ee6ff67",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/packing_cubes/Unicorn.png": {
+    "b": "/images/products/packing_cubes/unicorn-c41ceea7",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Aqua.png": {
+    "b": "/images/products/pencil_pouch/aqua-2cd9c56c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Beach.png": {
+    "b": "/images/products/pencil_pouch/beach-cda3e5a1",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Bunny.png": {
+    "b": "/images/products/pencil_pouch/bunny-ca0f5015",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Jungle Safari.png": {
+    "b": "/images/products/pencil_pouch/jungle-safari-ba43f2aa",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Lion.png": {
+    "b": "/images/products/pencil_pouch/lion-af60d662",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Marine.png": {
+    "b": "/images/products/pencil_pouch/marine-d4973ae4",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Rainbow.png": {
+    "b": "/images/products/pencil_pouch/rainbow-61022051",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Space.png": {
+    "b": "/images/products/pencil_pouch/space-8285b70b",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Sports.png": {
+    "b": "/images/products/pencil_pouch/sports-3c67498b",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/pencil_pouch/Unicorn.jpg": {
+    "b": "/images/products/pencil_pouch/unicorn-f26f0f2a",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/pencil_pouch/Unicorn_open.png": {
+    "b": "/images/products/pencil_pouch/unicorn-open-d4d505ca",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/shoe_pouch/Aqua.jpg": {
+    "b": "/images/products/shoe_pouch/aqua-6ae6218d",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/shoe_pouch/Beach.jpg": {
+    "b": "/images/products/shoe_pouch/beach-e97b5caa",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/shoe_pouch/Bunny.jpg": {
+    "b": "/images/products/shoe_pouch/bunny-61299bc9",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/shoe_pouch/Jungle Safari.png": {
+    "b": "/images/products/shoe_pouch/jungle-safari-d16dfa10",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/shoe_pouch/Lion.jpg": {
+    "b": "/images/products/shoe_pouch/lion-9e8a3749",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/shoe_pouch/Marine.png": {
+    "b": "/images/products/shoe_pouch/marine-5cdf287c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/shoe_pouch/Rainbow.jpg": {
+    "b": "/images/products/shoe_pouch/rainbow-369bcb3a",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/shoe_pouch/Space.png": {
+    "b": "/images/products/shoe_pouch/space-a7f03c90",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/shoe_pouch/Sports.png": {
+    "b": "/images/products/shoe_pouch/sports-6f06ed0f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/shoe_pouch/Unicorn.png": {
+    "b": "/images/products/shoe_pouch/unicorn-d11a076e",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/sunglasses_pouch/Aqua.png": {
+    "b": "/images/products/sunglasses_pouch/aqua-30b628b7",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Beach.png": {
+    "b": "/images/products/sunglasses_pouch/beach-8b06ebeb",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Bunny.png": {
+    "b": "/images/products/sunglasses_pouch/bunny-3699d2a1",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Jungle Safari.png": {
+    "b": "/images/products/sunglasses_pouch/jungle-safari-a76d0701",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Lion.png": {
+    "b": "/images/products/sunglasses_pouch/lion-00aeeb83",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Marine.png": {
+    "b": "/images/products/sunglasses_pouch/marine-eca6f041",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Rainbow.png": {
+    "b": "/images/products/sunglasses_pouch/rainbow-323e63bd",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Space.png": {
+    "b": "/images/products/sunglasses_pouch/space-9c103fce",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Sports.png": {
+    "b": "/images/products/sunglasses_pouch/sports-87c9a4b0",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Unicorn.png": {
+    "b": "/images/products/sunglasses_pouch/unicorn-33e9a045",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/sunglasses_pouch/Unicorn_open.png": {
+    "b": "/images/products/sunglasses_pouch/unicorn-open-eb2de594",
+    "w": [
+      200,
+      400,
+      800,
+      941
+    ]
+  },
+  "/images/products/toddlers_bag/Aqua.png": {
+    "b": "/images/products/toddlers_bag/aqua-bf896aae",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Beach.png": {
+    "b": "/images/products/toddlers_bag/beach-02c4af31",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Bunny.png": {
+    "b": "/images/products/toddlers_bag/bunny-5a54fe24",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Jungle safari.png": {
+    "b": "/images/products/toddlers_bag/jungle-safari-e5d535c5",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Lion.png": {
+    "b": "/images/products/toddlers_bag/lion-ffbd225f",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Marine.png": {
+    "b": "/images/products/toddlers_bag/marine-67f79b63",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/RAINBOW.png": {
+    "b": "/images/products/toddlers_bag/rainbow-01555ce7",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Space.png": {
+    "b": "/images/products/toddlers_bag/space-aee39c2e",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Sports.png": {
+    "b": "/images/products/toddlers_bag/sports-e8f407e4",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toddlers_bag/Unicorn.png": {
+    "b": "/images/products/toddlers_bag/unicorn-b227fabf",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toiletry_kit/Aqua.jpg": {
+    "b": "/images/products/toiletry_kit/aqua-22e27970",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/toiletry_kit/Beach.jpg": {
+    "b": "/images/products/toiletry_kit/beach-b8fd3978",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/toiletry_kit/Bunny.jpg": {
+    "b": "/images/products/toiletry_kit/bunny-aab7ec01",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/toiletry_kit/Jungle Safari.png": {
+    "b": "/images/products/toiletry_kit/jungle-safari-a5c0358a",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toiletry_kit/Lion.jpg": {
+    "b": "/images/products/toiletry_kit/lion-5280eefe",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/toiletry_kit/Marine.png": {
+    "b": "/images/products/toiletry_kit/marine-5814bf77",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toiletry_kit/Rainbow.jpg": {
+    "b": "/images/products/toiletry_kit/rainbow-1e2e8cc0",
+    "w": [
+      200,
+      400,
+      800,
+      1080
+    ]
+  },
+  "/images/products/toiletry_kit/Space.png": {
+    "b": "/images/products/toiletry_kit/space-92a16740",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toiletry_kit/Sports.png": {
+    "b": "/images/products/toiletry_kit/sports-91ddbf4c",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/toiletry_kit/Unicorn.png": {
+    "b": "/images/products/toiletry_kit/unicorn-c9fbf6ce",
+    "w": [
+      200,
+      400,
+      800,
+      1024
+    ]
+  },
+  "/images/products/wet_bags/Fruit.png": {
+    "b": "/images/products/wet_bags/fruit-1e353e0f",
+    "w": [
+      200,
+      400,
+      800,
+      1086
+    ]
+  },
+  "/images/products/wet_bags/Fruit_detail.png": {
+    "b": "/images/products/wet_bags/fruit-detail-26b36812",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/products/wet_bags/Fruit_set.png": {
+    "b": "/images/products/wet_bags/fruit-set-cad5cd7f",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  },
+  "/images/products/wet_bags/Fruit_set_alt.png": {
+    "b": "/images/products/wet_bags/fruit-set-alt-8c8135c1",
+    "w": [
+      200,
+      400,
+      800,
+      1280
+    ]
+  }
+}
