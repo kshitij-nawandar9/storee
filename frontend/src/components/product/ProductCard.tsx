@@ -1,17 +1,37 @@
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import Img from '@/components/common/Img';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
 import { getSalePrice } from '@/utils/constants';
 import toast from 'react-hot-toast';
-import { ShoppingBag, Sparkles, Heart } from 'lucide-react';
+import { ShoppingBag, Sparkles, Heart, Check } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
 }
 
+const CONFETTI_COLORS = ['#C4756E', '#C9A96E', '#8BA88A', '#F2B43C', '#D4A0D4'];
+
+// Fixed burst pattern so renders stay pure: 14 bits fanned out in a circle.
+const CONFETTI = Array.from({ length: 14 }, (_, i) => {
+  const angle = (i / 14) * Math.PI * 2;
+  const distance = 46 + (i % 3) * 16;
+  return {
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    x: Math.cos(angle) * distance,
+    y: Math.sin(angle) * distance - 18,
+    r: (i % 2 ? 1 : -1) * (120 + i * 25),
+  };
+});
+
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const [burst, setBurst] = useState(0);
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimer = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(addedTimer.current), []);
 
   const defaultVariant = product.variants?.find((v) => v.isDefault) ?? product.variants?.[0];
   const primaryImage =
@@ -29,6 +49,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const formattedOriginal = salePrice ? formatINR(displayPrice) : null;
 
   const variantCount = product.variants?.length ?? 0;
+
+  // A second print to reveal on hover.
+  const altImage = product.variants?.find((v) => v.image && v.image !== primaryImage)?.image;
 
   return (
     <div
@@ -50,6 +73,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             loading="lazy"
             decoding="async"
           />
+          {altImage && !isComingSoon && (
+            <Img
+              src={altImage}
+              alt=""
+              aria-hidden="true"
+              sizes="(min-width: 1280px) 300px, (min-width: 1024px) 31vw, 47vw"
+              className="img-swap product-img absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
 
           {/* Warm overlay on hover */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(to top, rgba(196,117,110,0.12) 0%, transparent 40%)' }} />
@@ -88,6 +122,10 @@ export default function ProductCard({ product }: ProductCardProps) {
                   e.preventDefault();
                   e.stopPropagation();
                   addItem(product, 1, defaultVariant ?? undefined);
+                  setBurst((n) => n + 1);
+                  setJustAdded(true);
+                  window.clearTimeout(addedTimer.current);
+                  addedTimer.current = window.setTimeout(() => setJustAdded(false), 1400);
                   toast(() => (
                     <span className="flex items-center gap-2 text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                       <Heart className="w-4 h-4 heart-pop" style={{ color: '#C4756E', fill: '#C4756E' }} />
@@ -98,16 +136,27 @@ export default function ProductCard({ product }: ProductCardProps) {
                     duration: 2000,
                   });
                 }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 bounce-tap"
+                className="relative w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 bounce-tap"
                 style={{
-                  background: '#C4756E',
+                  background: justAdded ? '#6d8d6b' : '#C4756E',
                   color: '#fff',
                   boxShadow: '0 4px 16px -4px rgba(196,117,110,0.35)',
                   fontFamily: "'DM Sans', sans-serif",
                 }}
               >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                Add to Bag
+                {justAdded ? <Check className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+                {justAdded ? 'Added' : 'Add to Bag'}
+                {burst > 0 && (
+                  <span key={burst} className="pointer-events-none absolute inset-0" aria-hidden="true">
+                    {CONFETTI.map((c, i) => (
+                      <span
+                        key={i}
+                        className="confetti-bit"
+                        style={{ background: c.color, '--cx': `${c.x}px`, '--cy': `${c.y}px`, '--cr': `${c.r}deg` } as CSSProperties}
+                      />
+                    ))}
+                  </span>
+                )}
               </button>
             </div>
           )}

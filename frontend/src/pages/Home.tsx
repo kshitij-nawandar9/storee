@@ -1,8 +1,17 @@
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Truck, Shield, RotateCcw, Star, Instagram, ArrowRight, Heart } from 'lucide-react';
 import Img from '@/components/common/Img';
 import SaleBanner from '@/components/home/SaleBanner';
-import RakhiHamperBanner from '@/components/home/RakhiHamperBanner';
+import Hero from '@/components/home/Hero';
+import PrintParade from '@/components/home/PrintParade';
+import PlayZone from '@/components/home/PlayZone';
+import DiwaliNight from '@/components/home/DiwaliNight';
+import PlayNudge from '@/components/home/PlayNudge';
+import { isDiwaliSeason } from '@/utils/constants';
+import { useHampersLocked } from '@/utils/rewards';
+import Reveal from '@/components/common/Reveal';
+import TiltLink from '@/components/common/TiltLink';
 
 const reviews = [
   {
@@ -24,6 +33,7 @@ const reviews = [
 ];
 
 export default function Home() {
+  const hampersLocked = useHampersLocked();
   return (
     <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
 
@@ -54,37 +64,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── HERO — taller on mobile via min-height ── */}
-      <section className="relative w-full">
-        <Img
-          src="/images/banner/4.jpeg"
-          alt="Storee — Carry beautifully"
-          sizes="100vw"
-          className="w-full h-auto object-cover block sm:h-auto"
-          style={{ minHeight: '55vh' }}
-          fetchPriority="high"
-          decoding="async"
-        />
-        <div className="absolute bottom-0 left-0 right-0" style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.6) 0%, rgba(42,34,32,0.2) 60%, transparent 100%)', padding: '5rem 0 0' }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 pb-4 sm:pb-5">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-              <div>
-                <p className="font-hand text-sm sm:text-xl" style={{ color: 'rgba(255,255,255,0.85)' }}>carry beautifully ✨</p>
-                <p className="font-serif font-medium text-sm sm:text-2xl leading-snug" style={{ color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-                  Cute bags &amp; pouches for little adventurers
-                </p>
-              </div>
-              <Link
-                to="/products"
-                className="self-start sm:flex-shrink-0 inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[0.65rem] sm:text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 bounce-tap arrow-nudge"
-                style={{ background: '#C4756E', color: '#fff', boxShadow: '0 4px 12px -4px rgba(196,117,110,0.4)' }}
-              >
-                Shop Now <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 arrow-icon" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── HERO ── */}
+      <Hero />
 
       {/* ── TRUST STRIP — scrolling marquee on mobile, grid on desktop ── */}
       <section style={{ background: '#FFFDF9', borderBottom: '1px solid #F0E0C6' }}>
@@ -138,8 +119,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LIMITED RAKHI HAMPERS ── */}
-      <RakhiHamperBanner />
+      {/* ── DIWALI NIGHT: light the diyas to unwrap the hampers (hides itself after the festive season) ── */}
+      {isDiwaliSeason() && <DiwaliNight />}
 
       {/* ── SALE BANNER WITH COUNTDOWN ── */}
       <SaleBanner />
@@ -164,17 +145,23 @@ export default function Home() {
 
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4">
             {[
-              { name: 'Rakhi Hampers', sub: 'limited festive gifts', link: '/hampers', image: '/images/hampers/under-800/multipurpose-pouch-keychain/jungle-safari.png' },
+              { name: 'Diwali Hampers', sub: 'limited festive gifts', link: '/hampers', image: '/images/hampers/under-800/multipurpose-pouch-keychain/jungle-safari.png' },
               { name: 'All', sub: 'explore everything', link: '/products', image: '/images/products/foldable_travel_kit/Rainbow.jpg' },
               { name: 'Bags', sub: 'for little adventures', link: '/products?category=Bags', image: '/images/products/kids_bag/Beach.png' },
               { name: 'Organisers and Pouches', sub: 'pack like a pro', link: '/products?category=Organisers+and+Pouches', image: '/images/products/packing_cubes/Lion.jpg' },
               { name: 'Speciality Kits', sub: 'for every little need', link: '/products?category=Speciality+Kits', image: '/images/products/pencil_pouch/Marine.png' },
             ].map(({ name, sub, link, image }, index) => (
-              <Link
-                key={name}
+              <Reveal key={name} delay={index * 80}>
+              <TiltLink
                 to={link}
-                className="group relative rounded-xl sm:rounded-2xl overflow-hidden card-tilt animate-fade-in"
-                style={{ aspectRatio: '3/4', animationDelay: `${index * 0.07}s` }}
+                onClick={(e) => {
+                  // Hampers stay wrapped until the diyas are lit
+                  if (link !== '/hampers' || !hampersLocked) return;
+                  e.preventDefault();
+                  document.getElementById('diwali-night')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className="group relative block rounded-xl sm:rounded-2xl overflow-hidden"
+                style={{ aspectRatio: '3/4' }}
               >
                 <Img src={image} alt={name} sizes="(min-width: 1024px) 240px, 48vw" className="w-full h-full object-cover product-img" loading="lazy" decoding="async" />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(42,34,32,0.55) 0%, rgba(42,34,32,0.05) 45%, transparent 100%)' }} />
@@ -185,11 +172,18 @@ export default function Home() {
                     Browse <ArrowRight className="w-3 h-3 arrow-icon" />
                   </span>
                 </div>
-              </Link>
+              </TiltLink>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
+
+      {/* ── PRINT PARADE ── */}
+      <PrintParade />
+
+      {/* ── PLAY ZONE: mini games ── */}
+      <PlayZone />
 
       {/* ── WHY STOREE — stacked on mobile, grid on desktop ── */}
       <section className="py-10 sm:py-16" style={{ background: '#FFFDF9' }}>
@@ -220,16 +214,17 @@ export default function Home() {
                 desc: 'We know the struggle of "where did I put it?" — that\'s why every pouch has smart compartments that actually make sense.',
                 bg: 'rgba(201,169,110,0.06)',
               },
-            ].map(({ emoji, title, desc, bg }) => (
+            ].map(({ emoji, title, desc, bg }, index) => (
+              <Reveal key={title} delay={index * 120} className={index === 1 ? 'md:mt-10' : ''}>
               <div
-                key={title}
-                className="p-5 sm:p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 group"
-                style={{ background: bg, boxShadow: '0 2px 12px -3px rgba(59,50,48,0.04)' }}
+                className="sticker p-5 sm:p-7 rounded-2xl group"
+                style={{ background: bg, boxShadow: '0 2px 12px -3px rgba(59,50,48,0.04)', '--tilt': `${[-2, 1.5, -1][index]}deg` } as CSSProperties}
               >
                 <div className="text-xl sm:text-2xl mb-2.5 sm:mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 inline-block">{emoji}</div>
                 <h3 className="font-serif text-base sm:text-lg font-medium mb-1 sm:mb-2" style={{ color: '#2a2220' }}>{title}</h3>
                 <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#6b5f58' }}>{desc}</p>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -245,11 +240,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5">
-            {reviews.map((r) => (
+            {reviews.map((r, index) => (
+              <Reveal key={r.name} delay={index * 120}>
               <div
-                key={r.name}
-                className="rounded-2xl p-5 sm:p-7 transition-all duration-300 hover:-translate-y-0.5"
-                style={{ background: '#FFFDF9', boxShadow: '0 2px 16px -4px rgba(59,50,48,0.06)' }}
+                className="sticker h-full rounded-2xl p-5 sm:p-7"
+                style={{ background: '#FFFDF9', boxShadow: '0 2px 16px -4px rgba(59,50,48,0.06)', '--tilt': `${index === 0 ? -1.2 : 1.2}deg` } as CSSProperties}
               >
                 <div className="flex gap-0.5 mb-2.5 sm:mb-3">
                   {Array.from({ length: r.rating }).map((_, i) => (
@@ -275,6 +270,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -341,6 +337,7 @@ export default function Home() {
         </div>
       </section>
 
+      <PlayNudge />
     </div>
   );
 }

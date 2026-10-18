@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { LAUNCH_SALE_DISCOUNT, LAUNCH_SALE_END_DATE } from '@/utils/constants';
+import { SALE_DISCOUNT, SALE_END_DATE, SALE_NAME, isSaleActive } from '@/utils/constants';
 
 interface TimeLeft {
   days: number;
@@ -11,7 +11,7 @@ interface TimeLeft {
 }
 
 function getTimeLeft(): TimeLeft | null {
-  const diff = new Date(LAUNCH_SALE_END_DATE).getTime() - Date.now();
+  const diff = new Date(SALE_END_DATE).getTime() - Date.now();
   if (diff <= 0) return null;
   return {
     days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -29,9 +29,10 @@ export default function SaleBanner() {
     return () => clearInterval(id);
   }, []);
 
-  if (LAUNCH_SALE_DISCOUNT <= 0) return null;
+  // timeLeft turns null when the end date passes, so the banner hides without a reload.
+  if (!isSaleActive() || !timeLeft) return null;
 
-  const discountPct = Math.round(LAUNCH_SALE_DISCOUNT * 100);
+  const discountPct = Math.round(SALE_DISCOUNT * 100);
 
   const segments: { value: number; label: string }[] = timeLeft
     ? [
@@ -49,7 +50,7 @@ export default function SaleBanner() {
     >
       <div className="max-w-2xl mx-auto px-4 text-center">
         <p className="font-hand text-sm sm:text-base mb-1" style={{ color: '#C4756E' }}>
-          psst... you came at the right time
+          🪔 {SALE_NAME} is on
         </p>
 
         <h2
@@ -60,11 +61,11 @@ export default function SaleBanner() {
             lineHeight: 1.15,
           }}
         >
-          FLAT {discountPct}% OFF Everything
+          FLAT {discountPct}% OFF Bags &amp; Pouches
         </h2>
 
         <p className="text-xs sm:text-sm mb-4" style={{ color: '#8a7e78', fontFamily: "'DM Sans', sans-serif" }}>
-          Our launch celebration — every bag, every pouch, every kit.
+          Every bag, pouch and kit, until Diwali. Gift hampers not included.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">

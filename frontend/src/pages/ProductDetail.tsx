@@ -13,10 +13,12 @@ import { FREE_SHIPPING_MESSAGE, RETURN_POLICY_MESSAGE, SHIPPING_INFO, getSalePri
 import { CheckCircle, ChevronLeft, ChevronRight, Pen, Ruler, RotateCcw, Shield, ShoppingCart, Truck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams] = useSearchParams();
+  const requestedPrint = searchParams.get('print');
   const { product, loading, error } = useProduct(slug || '');
   const { addItem } = useCart();
 
@@ -28,7 +30,10 @@ export default function ProductDetail() {
   const [customiseEnabled, setCustomiseEnabled] = useState(false);
   const [customText, setCustomText] = useState('');
 
-  const defaultVariant = product?.variants?.find((v) => v.isDefault) || product?.variants?.[0];
+  const defaultVariant =
+    (requestedPrint && product?.variants?.find((v) => v.colorName.toLowerCase() === requestedPrint.toLowerCase())) ||
+    product?.variants?.find((v) => v.isDefault) ||
+    product?.variants?.[0];
   const currentVariant = selectedVariant || defaultVariant;
 
   useEffect(() => {
@@ -144,7 +149,8 @@ export default function ProductDetail() {
                 <div className="mb-7">
                   <ColorSelector
                     variants={product.variants}
-                    selectedVariant={selectedVariant}
+                    // Start from the resolved variant so a ?print= link isn't overridden by the default print
+                    selectedVariant={currentVariant ?? null}
                     onVariantSelect={setSelectedVariant}
                     onVariantHover={setHoveredVariant}
                     productName={product.name}
