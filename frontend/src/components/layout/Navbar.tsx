@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ALL_PRINTS, goToHomeSection, goToPlayZone, useHampersLocked, useRewards, useStickerSheet } from '@/utils/rewards';
 import { ShoppingBag, Menu, X, User, LogOut, Package, ChevronDown, BarChart3 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,6 +13,16 @@ export default function Navbar() {
   const { getItemCount } = useCart();
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { prints: collectedPrints } = useRewards();
+  const stickerSheet = useStickerSheet();
+  const hampersLocked = useHampersLocked();
+  // Until the diyas are lit, hamper links take visitors to the diyas on the homepage
+  const openHampers = (e: { preventDefault: () => void }) => {
+    if (!hampersLocked) return;
+    e.preventDefault();
+    goToHomeSection(navigate, location.pathname, 'diwali-night');
+  };
   const itemCount = getItemCount();
   const [logoError, setLogoError] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -75,6 +86,8 @@ export default function Navbar() {
   const campaignLink = (
     <Link
       to="/hampers"
+      onClick={openHampers}
+      title={hampersLocked ? 'Light the diyas on the homepage to unwrap the hampers' : undefined}
       className="relative px-3 py-1.5 text-sm font-semibold transition-all duration-200 group/nav"
       style={{
         color: location.pathname === '/hampers' ? '#C4756E' : '#2D2A26',
@@ -82,12 +95,12 @@ export default function Navbar() {
       }}
     >
       <span className="inline-flex items-center gap-1.5 transition-transform duration-200 group-hover/nav:-translate-y-0.5">
-        Rakhi Hampers
+        Diwali Hampers
         <span
           className="rounded-full px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wide"
-          style={{ background: '#C4756E', color: '#FDF6EC' }}
+          style={{ background: hampersLocked ? '#2a2220' : '#C4756E', color: '#FDF6EC' }}
         >
-          Limited
+          {hampersLocked ? '🪔 Unlock' : 'Limited'}
         </span>
       </span>
       {location.pathname === '/hampers' && (
@@ -135,6 +148,19 @@ export default function Navbar() {
           {/* Right actions */}
           <div className="flex items-center gap-2">
 
+            {/* Sticker collection: a shortcut back to the games */}
+            {(collectedPrints.length > 0 || stickerSheet.ready) && (
+              <button
+                type="button"
+                onClick={() => goToPlayZone(navigate, location.pathname)}
+                className="hidden sm:inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition-transform duration-200 hover:-translate-y-0.5"
+                style={{ background: 'radial-gradient(circle at 35% 30%, #FFF3C4, #F2B43C)', color: '#2a2220' }}
+                title={stickerSheet.ready ? 'A free sticker sheet will be packed with your next order' : 'Print stickers you have collected. Play to collect more.'}
+              >
+                🎁 {stickerSheet.ready ? 'Sticker sheet unlocked' : `${collectedPrints.length}/${ALL_PRINTS.length} stickers`}
+              </button>
+            )}
+
             {/* Cart */}
             <Link
               to="/cart"
@@ -142,10 +168,14 @@ export default function Navbar() {
               aria-label="Shopping cart"
               style={{ color: '#2D2A26' }}
             >
-              <ShoppingBag className="w-[18px] h-[18px]" />
+              {/* Keyed on the count so the jiggle and pop replay whenever something is added */}
+              <span key={itemCount} className={`block ${itemCount > 0 ? 'bag-jiggle' : ''}`}>
+                <ShoppingBag className="w-[18px] h-[18px]" />
+              </span>
               {itemCount > 0 && (
                 <span
-                  className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 flex items-center justify-center text-[10px] font-bold text-white rounded-full"
+                  key={`badge-${itemCount}`}
+                  className="badge-pop absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 flex items-center justify-center text-[10px] font-bold text-white rounded-full"
                   style={{ background: '#C4756E' }}
                 >
                   {itemCount > 9 ? '9+' : itemCount}
@@ -239,7 +269,7 @@ export default function Navbar() {
               {[
                 { to: '/', label: 'Home' },
                 { to: '/products', label: 'Shop' },
-                { to: '/hampers', label: 'Rakhi Hampers' },
+                { to: '/hampers', label: hampersLocked ? 'Diwali Hampers · light the diyas to unlock 🪔' : 'Diwali Hampers' },
                 ...(isAuthenticated ? [{ to: '/orders', label: 'My Orders' }] : []),
                 ...(isAuthenticated && isAdmin
                   ? [
@@ -251,7 +281,10 @@ export default function Navbar() {
                 <Link
                   key={to}
                   to={to}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    setMobileMenuOpen(false);
+                    if (to === '/hampers') openHampers(e);
+                  }}
                   className="px-4 py-3 rounded-xl text-sm font-medium transition-colors"
                   style={{
                     color: isActive(to) ? '#C4756E' : '#2D2A26',

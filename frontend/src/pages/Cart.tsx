@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import StickerSheet from '@/components/rewards/StickerSheet';
+import { goToPlayZone, useStickerSheet } from '@/utils/rewards';
 import { useCart } from '@/hooks/useCart';
 import CartItem from '@/components/cart/CartItem';
 import PriceDisplay from '@/components/product/PriceDisplay';
@@ -7,6 +9,8 @@ import { ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 
 export default function Cart() {
   const { items, getTotal, clearCart } = useCart();
+  const navigate = useNavigate();
+  const stickerSheet = useStickerSheet();
   const total = getTotal();
   const isFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
   const shippingCost = isFreeShipping ? 0 : SHIPPING_FEE;
@@ -72,6 +76,33 @@ export default function Cart() {
           <div className="lg:col-span-1">
             <div className="rounded-2xl p-6 sticky top-24" style={{ background: '#FFFDF9', boxShadow: '0 2px 12px -3px rgba(59,50,48,0.06)' }}>
               <h2 className="font-serif text-lg font-medium mb-5" style={{ color: '#2a2220' }}>Order Summary</h2>
+
+              {/* Game reward: free sticker sheet (only when the reward is switched on) */}
+              {stickerSheet.ready && (
+                <div className="mb-5 flex items-center gap-3 rounded-xl p-3" style={{ background: '#FDF6EC', border: '1px dashed #E8D3B5' }}>
+                  <StickerSheet size="sm" />
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: '#2a2220' }}>🎁 Free 3D sticker sheet</p>
+                    <p className="text-xs" style={{ color: '#6b5f58' }}>Your game reward is in this order</p>
+                    <p className="mt-0.5 text-xs font-semibold" style={{ color: '#6d8d6b' }}>Free</p>
+                  </div>
+                </div>
+              )}
+              {stickerSheet.enabled && !stickerSheet.ready && (
+                <button
+                  type="button"
+                  onClick={() => goToPlayZone(navigate, '/cart')}
+                  className="mb-5 flex w-full items-center gap-3 rounded-xl p-3 text-left transition-transform hover:-translate-y-0.5"
+                  style={{ background: '#2a2220', color: '#FDF6EC' }}
+                >
+                  <span className="gift-bounce text-2xl" aria-hidden="true">🎁</span>
+                  <span className="flex-1 text-xs">
+                    <span className="block text-sm font-semibold">Want a free 3D sticker sheet?</span>
+                    Win a 30-second game and it's added to this order.
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0" style={{ color: '#F2B43C' }} />
+                </button>
+              )}
 
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between text-sm" style={{ color: '#6b5f58' }}>

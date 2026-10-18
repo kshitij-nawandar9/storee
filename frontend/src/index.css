@@ -377,3 +377,382 @@
 .arrow-nudge:hover .arrow-icon {
   transform: translateX(3px);
 }
+
+/* ─────────────────────────────────────────
+   MOTION KIT — scroll reveals, hero, print playground
+───────────────────────────────────────── */
+
+/* Springy easing shared by every playful interaction */
+:root {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Scroll reveal: elements rise in once when they enter the viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 28px)) scale(0.98);
+  transition: opacity 0.7s var(--ease-out), transform 0.8s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Paper grain over the whole site */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hero: rotating word */
+@keyframes wordIn {
+  0%   { transform: translateY(105%) rotate(4deg); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+.word-in { display: inline-block; animation: wordIn 0.65s var(--spring) both; }
+
+/* Hand-drawn underline that draws itself */
+@keyframes drawLine { from { stroke-dashoffset: 300; } to { stroke-dashoffset: 0; } }
+.draw-line { stroke-dasharray: 300; animation: drawLine 0.9s var(--ease-out) 0.15s both; }
+
+/* Hero: soft background blobs that drift and morph */
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+  33%      { transform: translate(30px, -20px) scale(1.06); border-radius: 58% 42% 38% 62% / 55% 38% 62% 45%; }
+  66%      { transform: translate(-20px, 25px) scale(0.96); border-radius: 37% 63% 52% 48% / 63% 52% 48% 37%; }
+}
+.blob { animation: blobDrift 16s ease-in-out infinite; filter: blur(2px); }
+.blob-slow { animation-duration: 22s; animation-direction: reverse; }
+
+/* Hero: photo stack */
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(1deg); }
+}
+.bob { animation: bob 5.5s ease-in-out infinite; }
+.stack-card {
+  transition: transform 0.7s var(--spring), box-shadow 0.4s ease;
+  will-change: transform;
+}
+.stack-card.is-leaving {
+  transition: transform 0.3s var(--ease-out);
+}
+
+/* Spinning sale stamp */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin 14s linear infinite; }
+
+/* Stickers drifting around */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25%      { transform: translate(6px, -10px) rotate(12deg); }
+  50%      { transform: translate(-4px, -16px) rotate(-6deg); }
+  75%      { transform: translate(-8px, -6px) rotate(8deg); }
+}
+.drift { animation: drift 9s ease-in-out infinite; }
+
+/* "tap me" nudge */
+@keyframes wiggle {
+  0%, 85%, 100% { transform: rotate(-6deg); }
+  90%           { transform: rotate(4deg) scale(1.06); }
+  95%           { transform: rotate(-10deg); }
+}
+.wiggle { animation: wiggle 3.2s ease-in-out infinite; }
+
+/* Print playground: bag pops in when the print changes */
+@keyframes popIn {
+  0%   { transform: scale(0.82) rotate(-7deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.pop-in { animation: popIn 0.6s var(--spring) both; }
+.print-swatch {
+  transition: transform 0.35s var(--spring), box-shadow 0.3s ease;
+}
+.print-swatch:hover { transform: translateY(-3px) scale(1.08); }
+.print-swatch:active { transform: scale(0.92); }
+.print-swatch:focus-visible { outline: 2px solid #C4756E; outline-offset: 3px; }
+
+/* Print parade marquee (reverse row) */
+.marquee-track-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite reverse;
+}
+.marquee-track-reverse:hover { animation-play-state: paused; }
+.parade-card { transition: transform 0.5s var(--spring); }
+.parade-card:hover { transform: rotate(0deg) scale(1.08) !important; z-index: 2; }
+
+/* Tilt cards: rotate toward the pointer with a moving glare */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition: transform 0.5s var(--ease-out);
+  transform-style: preserve-3d;
+}
+.tilt.is-tilting { transition: transform 0.12s linear; }
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 253, 249, 0.38), transparent 55%);
+}
+.tilt.is-tilting .tilt-glare { opacity: 1; }
+
+/* Sticker cards that straighten on hover */
+.sticker {
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.5s var(--spring), box-shadow 0.4s ease;
+}
+.sticker:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 40px -18px rgba(59, 50, 48, 0.25);
+}
+
+/* Add-to-bag confetti */
+@keyframes confetti {
+  0%   { transform: translate(-50%, -50%) rotate(0) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--cx)), calc(-50% + var(--cy))) rotate(var(--cr)) scale(0.4); opacity: 0; }
+}
+.confetti-bit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: confetti 0.75s var(--ease-out) forwards;
+}
+
+/* Cart icon pop whenever the count changes */
+@keyframes badgePop {
+  0%   { transform: scale(0.3); }
+  60%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.badge-pop { animation: badgePop 0.45s var(--spring) both; }
+@keyframes bagJiggle {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-14deg); }
+  50%      { transform: rotate(10deg); }
+  75%      { transform: rotate(-5deg); }
+}
+.bag-jiggle { animation: bagJiggle 0.55s ease-in-out both; }
+
+/* Product card: second print fades in on hover */
+.img-swap { transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out); }
+
+/* ─────────────────────────────────────────
+   PLAY ZONE — memory match + pack the bag
+───────────────────────────────────────── */
+.flip-card { perspective: 900px; }
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s var(--spring);
+}
+.flip-card.is-flipped .flip-inner { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.flip-back { transform: rotateY(180deg); }
+.flip-card:not(.is-flipped):hover .flip-inner { transform: rotateY(12deg) translateY(-3px); }
+
+@keyframes matchPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12) rotate(-3deg); }
+  100% { transform: scale(1); }
+}
+.match-pop { animation: matchPop 0.5s var(--spring); }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(3px); }
+}
+.shake { animation: shake 0.4s ease-in-out; }
+
+@keyframes piecePlace {
+  0%   { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.piece-place { animation: piecePlace 0.35s var(--spring); }
+
+/* ─────────────────────────────────────────
+   DIWALI NIGHT
+───────────────────────────────────────── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+.twinkle { animation: twinkle 3s ease-in-out infinite; }
+
+@keyframes flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1) rotate(-1deg); }
+  25%      { transform: scaleY(1.08) scaleX(0.95) rotate(2deg); }
+  50%      { transform: scaleY(0.94) scaleX(1.04) rotate(-2deg); }
+  75%      { transform: scaleY(1.05) scaleX(0.97) rotate(1deg); }
+}
+.flame { transform-origin: 50% 100%; transform-box: fill-box; animation: flicker 1.1s ease-in-out infinite; }
+
+.diya-glow {
+  transition: opacity 0.6s ease, transform 0.6s var(--spring);
+}
+
+.rangoli path,
+.rangoli circle.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--p, 0));
+}
+.rangoli .rangoli-fill { transition: opacity 1s ease; }
+
+@keyframes sparkleOut {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))) scale(0.2); opacity: 0; }
+}
+.spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: sparkleOut var(--sd, 0.9s) cubic-bezier(0.15, 0.8, 0.3, 1) forwards;
+}
+
+/* Respect visitors who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────
+   REWARD REVEAL — gift box that bursts open
+───────────────────────────────────────── */
+@keyframes giftShake {
+  0%, 100% { transform: rotate(0) scale(1); }
+  15%      { transform: rotate(-9deg) scale(1.04); }
+  30%      { transform: rotate(8deg) scale(1.06); }
+  45%      { transform: rotate(-6deg) scale(1.04); }
+  60%      { transform: rotate(5deg) scale(1.02); }
+  75%      { transform: rotate(-2deg); }
+}
+.gift-shake { animation: giftShake 0.9s ease-in-out infinite; }
+
+@keyframes lidOff {
+  0%   { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(-140%) rotate(-28deg); opacity: 0; }
+}
+.lid-off { animation: lidOff 0.55s var(--ease-out) forwards; }
+
+@keyframes rayspin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.reward-rays {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 520px;
+  height: 520px;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(rgba(242,180,60,0.16) 0 10deg, transparent 10deg 24deg);
+  border-radius: 9999px;
+  mask-image: radial-gradient(circle, black 30%, transparent 68%);
+  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 68%);
+  animation: rayspin 18s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes stickerIn {
+  0%   { transform: scale(0) rotate(-40deg); }
+  70%  { transform: scale(1.2) rotate(8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.sticker-in { animation: stickerIn 0.6s var(--spring) both; }
+
+@keyframes nudgeUp {
+  from { transform: translate(-50%, 140%); }
+  to   { transform: translate(-50%, 0); }
+}
+.nudge-up { animation: nudgeUp 0.5s var(--spring) both; }
+
+@keyframes giftBounce {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50%      { transform: translateY(-4px) rotate(6deg); }
+}
+.gift-bounce { display: inline-block; animation: giftBounce 1.4s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────
+   GIFT OPENING — rumble, burst, stickers fly out
+───────────────────────────────────────── */
+@keyframes rumble {
+  0%, 100% { transform: translate(-50%, -50%) rotate(0); }
+  10% { transform: translate(calc(-50% - 3px), -50%) rotate(-4deg); }
+  20% { transform: translate(calc(-50% + 3px), calc(-50% - 2px)) rotate(4deg); }
+  30% { transform: translate(calc(-50% - 4px), -50%) rotate(-6deg); }
+  40% { transform: translate(calc(-50% + 4px), calc(-50% - 3px)) rotate(6deg); }
+  50% { transform: translate(-50%, -50%) rotate(0); }
+}
+.gift-rumble { animation: rumble 0.7s ease-in-out infinite; }
+
+@keyframes boxDrop {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  25%  { transform: translate(-50%, -50%) scale(1.18, 0.82); }
+  55%  { transform: translate(-50%, -50%) scale(0.96, 1.06); opacity: 1; }
+  100% { transform: translate(-50%, calc(-50% + 40px)) scale(0.9); opacity: 0; }
+}
+.box-drop { animation: boxDrop 0.9s var(--ease-out) forwards; }
+
+@keyframes lidPop {
+  0%   { transform: translate(0, 0) rotate(0); }
+  100% { transform: translate(60px, -170px) rotate(38deg); opacity: 0; }
+}
+.lid-pop { animation: lidPop 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+
+@keyframes glowPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+  50%      { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+.glow-pulse { animation: glowPulse 1.2s ease-in-out infinite; }
+
+@keyframes burstIn {
+  0%   { transform: translate(-50%, -50%) scale(0) rotate(0); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(25deg); opacity: 1; }
+}
+.burst-in { animation: burstIn 0.8s var(--ease-out) forwards; }
+
+@keyframes flyOut {
+  0%   { transform: translate(-50%, -50%) translate(0, 30px) scale(0.2) rotate(0); opacity: 0; }
+  15%  { opacity: 1; }
+  55%  { transform: translate(-50%, -50%) translate(calc(var(--fx) * 0.55), -88px) scale(1.2) rotate(calc(var(--fr) * -2)); }
+  100% { transform: translate(-50%, -50%) translate(var(--fx), var(--fy)) scale(1) rotate(var(--fr)); opacity: 1; }
+}
+.fly-out { animation: flyOut 0.95s cubic-bezier(0.25, 1.2, 0.5, 1) both; }
+
+@keyframes floatUp {
+  0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+  20%  { transform: translate(-50%, -8px) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -46px) scale(1); opacity: 0; }
+}
+.float-up { animation: floatUp 0.9s var(--ease-out) forwards; }

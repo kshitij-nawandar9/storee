@@ -97,7 +97,7 @@ export default function HamperCard({ hamper, index = 0 }: HamperCardProps) {
         <div className="mb-2 flex min-h-[76px] items-start justify-between gap-3">
           <div>
             <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.14em]" style={{ color: hamper.accent }}>
-              Rakhi hamper
+              Diwali hamper
             </p>
             <h3 className="font-serif text-lg font-medium leading-tight" style={{ color: '#2a2220' }}>
               {hamper.name}

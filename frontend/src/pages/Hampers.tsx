@@ -2,9 +2,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Gift, Heart, PackageCheck, Sparkles, Truck } from 'lucide-react';
 import Img from '@/components/common/Img';
 import HamperCard from '@/components/hamper/HamperCard';
-import RakhiThread from '@/components/hamper/RakhiThread';
 import { getRakhiHamperBySlug, RAKHI_BUDGETS, RAKHI_HAMPERS, type HamperBudget } from '@/data/hampers';
-import { FREE_SHIPPING_MESSAGE } from '@/utils/constants';
+import { DIWALI_ORDER_BY_LABEL, FREE_SHIPPING_MESSAGE, isBeforeDiwaliCutoff } from '@/utils/constants';
 
 type ActiveBudget = 'all' | HamperBudget;
 
@@ -49,15 +48,20 @@ export default function Hampers() {
               </div>
 
               <p className="font-hand text-xl sm:text-2xl mb-1" style={{ color: '#C4756E' }}>
-                for the sibling who deserves the cute stuff
+                for the little ones who deserve the cute stuff
               </p>
               <h1 className="font-serif font-medium leading-tight mb-4" style={{ fontSize: 'clamp(2.4rem, 7vw, 5rem)', color: '#2a2220' }}>
-                Rakhi Hampers
+                Diwali Hampers
               </h1>
-              <RakhiThread className="mb-5 hidden sm:block opacity-85" variant="gold" />
               <p className="max-w-xl text-sm sm:text-base leading-relaxed mb-6" style={{ color: '#6b5f58' }}>
                 Gift-ready bundles with playful prints, useful bags and pouches, and personalised keychains in budget-friendly picks.
               </p>
+              {isBeforeDiwaliCutoff() && (
+                <p className="mb-6 -mt-2 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: '#2a2220' }}>
+                  <Truck className="h-4 w-4 flex-shrink-0" style={{ color: '#C4756E' }} />
+                  Order by {DIWALI_ORDER_BY_LABEL} for Diwali delivery
+                </p>
+              )}
 
               <div className="flex flex-wrap gap-2 mb-7">
                 {RAKHI_BUDGETS.map((budget) => {
@@ -182,7 +186,7 @@ export default function Hampers() {
               Browse the full Storee collection
             </h2>
             <p className="text-sm max-w-md mx-auto mb-6" style={{ color: '#6b5f58' }}>
-              Mix a hamper with an extra pouch, bag, or organiser to build your own sibling gift set.
+              Mix a hamper with an extra pouch, bag, or organiser to build your own Diwali gift set.
             </p>
             <Link to="/products" className="btn-outline arrow-nudge">
               Shop All Products <ArrowRight className="h-4 w-4 arrow-icon" />
