@@ -35,7 +35,7 @@ export default function PlayNudge() {
   const label = stickerSheet.ready
     ? 'Sticker sheet unlocked · shop now'
     : stickerSheet.enabled
-      ? 'Win a free 3D sticker sheet'
+      ? 'Play & win a surprise gift'
       : prints.length
         ? `${prints.length} of ${ALL_PRINTS.length} stickers · play on`
         : 'Play & find your lucky print';

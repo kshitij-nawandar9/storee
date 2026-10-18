@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import Reveal from '@/components/common/Reveal';
 import MemoryMatch from '@/components/home/games/MemoryMatch';
 import PackTheBag from '@/components/home/games/PackTheBag';
 import { Link } from 'react-router-dom';
 import StickerSheet from '@/components/rewards/StickerSheet';
+import { GiftBox } from '@/components/rewards/RewardReveal';
 import { ALL_PRINTS, BADGES, PRINT_COLORS, printSwatch, useRewards, useStickerSheet, type BadgeId } from '@/utils/rewards';
 
 const GAMES = [
@@ -13,6 +14,44 @@ const GAMES = [
 
 type GameId = (typeof GAMES)[number]['id'];
 
+const NAVY = '#1f2a44';
+
+// Print bubbles drifting up the background (fixed values so renders stay pure)
+const BUBBLES = ALL_PRINTS.map((print, i) => ({
+  print,
+  left: (i * 9.7 + 3) % 96,
+  size: 34 + ((i * 17) % 4) * 14,
+  rise: 16 + ((i * 7) % 5) * 3,
+  delay: -((i * 5.3) % 18),
+  sway: (i % 2 ? 1 : -1) * (14 + (i % 3) * 10),
+  opacity: i % 3 === 0 ? 0.55 : 0.9,
+}));
+
+// Headline word that bobs letter by letter, in print colours
+const WAVE_COLORS = ['#E85D3A', '#1E7FD8', '#E9A23B', '#4A7C59', '#C4756E', '#5BA3A0', '#8E5BB5'];
+
+function WavyText({ text }: { text: string }) {
+  let n = 0; // running letter index, for the wave delay and colour
+  return (
+    <span aria-label={text}>
+      {text.split(' ').map((word, w) => (
+        // Each word stays on one line; only the gaps between words can wrap
+        <span key={w} aria-hidden="true" className="inline-block whitespace-nowrap">
+          {word.split('').map((ch) => {
+            const i = n++;
+            return (
+              <span key={i} className="letter-bob" style={{ animationDelay: `${i * 0.08}s`, color: WAVE_COLORS[i % WAVE_COLORS.length] }}>
+                {ch}
+              </span>
+            );
+          })}
+          {w < text.split(' ').length - 1 && '\u00A0'}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function PlayZone() {
   const [game, setGame] = useState<GameId>('memory');
   const active = GAMES.find((g) => g.id === game)!;
@@ -20,28 +59,73 @@ export default function PlayZone() {
   const stickerSheet = useStickerSheet();
 
   return (
-    <section id="play-zone" className="relative scroll-mt-20 overflow-hidden py-14 sm:py-20" style={{ background: 'linear-gradient(180deg, #FDF6EC 0%, #FBEFE3 100%)' }}>
-      <div aria-hidden="true" className="blob pointer-events-none absolute -left-24 top-10 h-72 w-72" style={{ background: 'radial-gradient(circle, rgba(139,168,138,0.18), transparent 70%)' }} />
-      <div aria-hidden="true" className="blob blob-slow pointer-events-none absolute -right-20 bottom-0 h-80 w-80" style={{ background: 'radial-gradient(circle, rgba(201,169,110,0.2), transparent 70%)' }} />
+    <section
+      id="play-zone"
+      className="relative scroll-mt-20 overflow-hidden pb-24 pt-24 sm:pb-28 sm:pt-28"
+      style={{ background: 'linear-gradient(180deg, #FDF6EC 0%, #D6EFEA 7%, #A9DCD5 30%, #9AD4CC 60%, #BFE5DF 88%, #FDF6EC 100%)' }}
+    >
+      {/* Playroom decor: rising print bubbles and twinkling sparkles */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {BUBBLES.map((b) => (
+          <span
+            key={b.print}
+            className="bubble-rise absolute overflow-hidden rounded-full"
+            style={{
+              left: `${b.left}%`,
+              bottom: -80,
+              width: b.size,
+              height: b.size,
+              boxShadow: '0 0 0 3px rgba(255,253,249,0.85), 0 10px 20px -10px rgba(31,42,68,0.4)',
+              animationDelay: `${b.delay}s`,
+              '--rise': `${b.rise}s`,
+              '--sway': `${b.sway}px`,
+              '--bubble-opacity': b.opacity,
+            } as CSSProperties}
+          >
+            <img src={printSwatch(b.print)} alt="" className="h-full w-full object-cover" loading="lazy" />
+          </span>
+        ))}
+        {Array.from({ length: 18 }, (_, i) => (
+          <span
+            key={i}
+            className="twinkle absolute"
+            style={{ left: `${(i * 37) % 100}%`, top: `${8 + ((i * 23) % 84)}%`, animationDelay: `${(i % 6) * 0.45}s`, color: ['#FFF6D6', '#F2B43C', '#FFFFFF', '#E85D3A'][i % 4], fontSize: 10 + (i % 3) * 6 }}
+          >
+            ✦
+          </span>
+        ))}
+      </div>
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mb-6 text-center sm:mb-8">
-          <span className="section-label mb-2">Play zone</span>
-          <h2 className="font-serif font-medium" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', lineHeight: 1.05, letterSpacing: '-0.025em', color: '#2a2220' }}>
-            Got a minute? Play a round.
+          <span className="mb-3 inline-block rounded-full px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.16em]" style={{ background: NAVY, color: '#F2B43C' }}>
+            🎮 Play zone
+          </span>
+          <h2 className="font-serif font-medium" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.6rem)', lineHeight: 1.05, letterSpacing: '-0.025em', color: NAVY }}>
+            Got a minute? <WavyText text="Play a round." />
           </h2>
-          <p className="font-hand mt-1 text-lg sm:text-xl" style={{ color: '#C4756E' }}>(warning: it's hard to stop at one)</p>
+          <p className="font-hand mt-1 text-xl sm:text-2xl" style={{ color: NAVY, opacity: 0.75 }}>(warning: it's hard to stop at one)</p>
         </Reveal>
 
         {/* Sticker album: the prize (when switched on), the stickers found so far, and badges */}
         <Reveal className="mb-8">
           <div
             className="relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-[28px] p-5 sm:p-7 md:grid-cols-[auto_1fr] md:gap-10"
-            style={{ background: '#FFFDF9', border: '1px solid #F2E4D0', boxShadow: '0 24px 60px -40px rgba(59,42,38,0.4)' }}
+            style={{ background: '#FFFDF9', boxShadow: '0 8px 0 rgba(31,42,68,0.12), 0 30px 60px -30px rgba(31,42,68,0.45)' }}
           >
-            {stickerSheet.enabled && (
+            {/* Before a win the prize stays wrapped: a mystery box. After, the real sheet. */}
+            {stickerSheet.enabled && !stickerSheet.ready && (
+              <div className="relative mx-auto h-[190px] w-[220px]">
+                <span className="glow-pulse absolute left-1/2 top-1/2 h-44 w-44 rounded-full" style={{ background: 'radial-gradient(circle, rgba(242,180,60,0.35), rgba(242,180,60,0) 65%)' }} aria-hidden="true" />
+                <GiftBox phase="box" idle />
+                <span className="font-serif absolute left-[62%] top-[18%] flex h-9 w-9 rotate-12 items-center justify-center rounded-full text-lg font-semibold" style={{ background: '#1f2a44', color: '#F2B43C', boxShadow: '0 4px 0 #121a2e' }} aria-hidden="true">
+                  ?
+                </span>
+              </div>
+            )}
+            {stickerSheet.ready && (
               <div className="relative mx-auto w-fit pt-2">
-                <div className={stickerSheet.ready ? '' : 'opacity-90'}>
+                <div>
                   <StickerSheet />
                 </div>
                 {/* Rubber stamp */}
@@ -54,25 +138,25 @@ export default function PlayZone() {
                     boxShadow: `inset 0 0 0 2px rgba(255,253,249,0.9), inset 0 0 0 3.5px ${stickerSheet.ready ? '#4f7a4e' : '#C4756E'}`,
                   }}
                 >
-                  {stickerSheet.ready ? <>Unlocked<br />ships free</> : <>Win any<br />game</>}
+                  Unlocked<br />ships free
                 </span>
               </div>
             )}
 
             <div className="min-w-0">
-              <p className="section-label mb-1">Your sticker album</p>
+              <p className="section-label mb-1">{stickerSheet.enabled && !stickerSheet.ready ? 'Mystery gift' : 'Your sticker album'}</p>
               <h3 className="font-serif text-2xl font-medium leading-tight sm:text-[1.7rem]" style={{ color: '#2a2220' }}>
                 {stickerSheet.enabled
                   ? stickerSheet.ready
                     ? 'Your sticker sheet is coming with your next order.'
-                    : 'Win a round, get the real sheet in your parcel.'
+                    : 'A surprise gift is waiting for you.'
                   : `${prints.length} of ${ALL_PRINTS.length} prints found`}
               </h3>
               <p className="mt-1.5 text-sm" style={{ color: '#6b5f58' }}>
                 {stickerSheet.enabled
                   ? stickerSheet.ready
                     ? 'Puffy 3D stickers of all 10 prints, packed free. One sheet per order.'
-                    : 'Puffy 3D stickers of all 10 prints, packed free with your order.'
+                    : "Win any round to unwrap it. It's real, and it's free."
                   : 'Every Print match round deals new prints. Find all 10.'}
                 {stickerSheet.ready && (
                   <Link to="/products" className="ml-1.5 font-semibold underline decoration-[#C4756E] decoration-2 underline-offset-4" style={{ color: '#2a2220' }}>
@@ -134,7 +218,7 @@ export default function PlayZone() {
 
         {/* Game switcher */}
         <div className="mb-5 flex justify-center">
-          <div className="inline-flex gap-1 rounded-full p-1" role="tablist" aria-label="Choose a game" style={{ background: '#FFFDF9', border: '1px solid #F0E0C6' }}>
+          <div className="inline-flex gap-3" role="tablist" aria-label="Choose a game">
             {GAMES.map((g) => {
               const isActive = g.id === game;
               return (
@@ -144,8 +228,13 @@ export default function PlayZone() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setGame(g.id)}
-                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300"
-                  style={{ background: isActive ? '#2a2220' : 'transparent', color: isActive ? '#FDF6EC' : '#4a443e' }}
+                  className="toy-btn inline-flex items-center gap-1.5 rounded-2xl px-5 py-2.5 text-sm font-bold sm:text-base"
+                  style={{
+                    background: isActive ? '#F2B43C' : '#FFFDF9',
+                    color: NAVY,
+                    boxShadow: isActive ? '0 5px 0 #C9902A, 0 12px 20px -10px rgba(201,144,42,0.6)' : '0 5px 0 rgba(31,42,68,0.15)',
+                    transform: isActive ? 'translateY(-2px) rotate(-1.5deg)' : undefined,
+                  }}
                 >
                   <span aria-hidden="true">{g.emoji}</span> {g.label}
                 </button>
@@ -155,8 +244,8 @@ export default function PlayZone() {
         </div>
 
         <Reveal delay={100}>
-          <div className="rounded-3xl p-4 sm:p-7" style={{ background: '#FFFDF9', boxShadow: '0 24px 60px -36px rgba(59,42,38,0.35)', border: '1px solid #F5E8D6' }}>
-            <p className="mb-4 text-center text-sm" style={{ color: '#6b5f58' }}>{active.blurb}</p>
+          <div className="rounded-[28px] p-4 sm:p-7" style={{ background: '#FFFDF9', boxShadow: '0 8px 0 rgba(31,42,68,0.12), 0 30px 60px -30px rgba(31,42,68,0.45)' }}>
+            <p className="mb-4 text-center text-sm font-semibold" style={{ color: NAVY }}>{active.blurb}</p>
             {/* Keyed so switching tabs starts a fresh game */}
             <div key={game} className="animate-fade-in" role="tabpanel">
               {game === 'memory' ? <MemoryMatch /> : <PackTheBag />}

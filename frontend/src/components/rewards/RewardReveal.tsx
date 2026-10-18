@@ -24,7 +24,7 @@ interface RewardRevealProps {
   stickerSheet?: boolean;
 }
 
-type Phase = 'box' | 'opening' | 'done';
+export type Phase = 'box' | 'opening' | 'done';
 
 const CONFETTI_COLORS = ['#C4756E', '#C9A96E', '#8BA88A', '#F2B43C', '#D4A0D4', '#5BA3A0'];
 const CONFETTI = Array.from({ length: 40 }, (_, i) => {
@@ -41,10 +41,14 @@ function arcSpot(i: number, count: number) {
   return { x: offset * spacing, y: offset * offset * 5 - 18, r: offset * 7 };
 }
 
-/** A wrapped present drawn in CSS: rumbles while waiting, then the lid bursts off. */
-function GiftBox({ phase }: { phase: Phase }) {
+/** A wrapped present drawn in CSS: rumbles while waiting, then the lid bursts off. `idle` makes it a gentle wiggle. */
+export function GiftBox({ phase, idle = false }: { phase: Phase; idle?: boolean }) {
   return (
-    <div className={`absolute left-1/2 top-1/2 ${phase === 'box' ? 'gift-rumble' : 'box-drop'}`} style={{ width: 128, height: 118 }} aria-hidden="true">
+    <div
+      className={`absolute left-1/2 top-1/2 ${phase === 'box' ? 'gift-rumble' : 'box-drop'}`}
+      style={{ width: 128, height: 118, ...(idle ? { animationDuration: '2.6s' } : {}) }}
+      aria-hidden="true"
+    >
       {/* body */}
       <div
         className="absolute inset-x-0 bottom-0 rounded-b-2xl"

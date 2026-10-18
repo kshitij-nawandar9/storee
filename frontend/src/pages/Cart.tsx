@@ -97,8 +97,8 @@ export default function Cart() {
                 >
                   <span className="gift-bounce text-2xl" aria-hidden="true">🎁</span>
                   <span className="flex-1 text-xs">
-                    <span className="block text-sm font-semibold">Want a free 3D sticker sheet?</span>
-                    Win a 30-second game and it's added to this order.
+                    <span className="block text-sm font-semibold">A surprise gift is waiting</span>
+                    Win a 30-second game to unwrap it for this order.
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0" style={{ color: '#F2B43C' }} />
                 </button>

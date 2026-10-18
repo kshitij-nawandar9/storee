@@ -72,7 +72,7 @@ export default function Hero() {
   const invite = stickerSheet.ready
     ? { tag: 'Won', text: 'Sticker sheet unlocked · shop now', go: () => navigate('/products') }
     : stickerSheet.enabled
-      ? { tag: 'Free', text: 'Win a free 3D sticker sheet · 30-sec game', go: null }
+      ? { tag: 'New', text: 'Play a 30-sec game & win a surprise gift', go: null }
       : prints.length
         ? { tag: `${prints.length} of ${ALL_PRINTS.length}`, text: 'stickers collected · keep playing', go: null }
         : { tag: 'New', text: 'Play a 30-sec game & find your lucky print', go: null };

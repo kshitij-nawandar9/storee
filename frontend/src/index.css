@@ -756,3 +756,37 @@
   100% { transform: translate(-50%, -46px) scale(1); opacity: 0; }
 }
 .float-up { animation: floatUp 0.9s var(--ease-out) forwards; }
+
+/* ─────────────────────────────────────────
+   PLAYROOM — the games section's own bright world
+───────────────────────────────────────── */
+/* Print bubbles rising through the section */
+@keyframes bubbleRise {
+  0%   { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+  10%  { opacity: var(--bubble-opacity, 0.9); }
+  50%  { transform: translateY(-55vh) translateX(var(--sway, 20px)) rotate(120deg); }
+  90%  { opacity: var(--bubble-opacity, 0.9); }
+  100% { transform: translateY(-110vh) translateX(0) rotate(240deg); opacity: 0; }
+}
+.bubble-rise { animation: bubbleRise var(--rise, 18s) linear infinite; }
+
+/* Headline letters bob like a wave */
+@keyframes letterBob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50%      { transform: translateY(-0.12em) rotate(-4deg); }
+}
+.letter-bob { display: inline-block; animation: letterBob 1.6s ease-in-out infinite; }
+
+/* Toy buttons: chunky bottom edge that squashes when pressed */
+.toy-btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+.toy-btn:active { transform: translateY(3px); }
+
+/* Card backs wobble a little on hover */
+@keyframes cardWobble {
+  0%, 100% { transform: rotate(0); }
+  30%      { transform: rotate(-3deg) translateY(-3px); }
+  70%      { transform: rotate(2deg) translateY(-2px); }
+}
+.flip-card:not(.is-flipped):hover .card-back-face { animation: cardWobble 0.5s ease-in-out; }

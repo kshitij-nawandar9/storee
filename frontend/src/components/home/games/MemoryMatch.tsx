@@ -179,14 +179,14 @@ export default function MemoryMatch() {
       {/* Scoreboard */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2 text-xs font-semibold" style={{ color: '#4a443e' }}>
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5" style={{ background: '#FDF6EC' }}>
-            <Footprints className="h-3.5 w-3.5" style={{ color: '#C4756E' }} /> {moves} {moves === 1 ? 'move' : 'moves'}
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5" style={{ background: '#FDE3DD', color: '#9a3a22' }}>
+            <Footprints className="h-3.5 w-3.5" /> {moves} {moves === 1 ? 'move' : 'moves'}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 tabular-nums" style={{ background: '#FDF6EC' }}>
-            <Timer className="h-3.5 w-3.5" style={{ color: '#C4756E' }} /> {formatTime(elapsed)}
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 tabular-nums" style={{ background: '#D8F0EC', color: '#255e59' }}>
+            <Timer className="h-3.5 w-3.5" /> {formatTime(elapsed)}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5" style={{ background: '#FDF6EC' }}>
-            <Trophy className="h-3.5 w-3.5" style={{ color: '#C9A96E' }} /> Best: {best ?? '—'}
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5" style={{ background: '#FFF0C7', color: '#7a5a12' }}>
+            <Trophy className="h-3.5 w-3.5" /> Best: {best ?? '—'}
           </span>
         </div>
         <button type="button" onClick={restart} className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors hover:text-[#C4756E]" style={{ color: '#6b5f58' }}>
@@ -222,17 +222,17 @@ export default function MemoryMatch() {
               <span className="flip-inner block">
                 {/* Card back (shown first) */}
                 <span
-                  className="flip-face flex items-center justify-center"
+                  className="flip-face card-back-face flex items-center justify-center"
                   style={{
-                    background: 'radial-gradient(circle at 30% 25%, #d68b84, #C4756E 55%, #a85d56)',
-                    boxShadow: '0 8px 18px -10px rgba(59,42,38,0.45), inset 0 0 0 3px rgba(255,253,249,0.35)',
+                    background: 'radial-gradient(circle at 30% 20%, #34457a, #1f2a44 65%)',
+                    boxShadow: '0 5px 0 #121a2e, 0 12px 18px -10px rgba(31,42,68,0.6), inset 0 0 0 3px rgba(242,180,60,0.85)',
                   }}
                 >
                   <span
-                    className="absolute inset-2 rounded-[10px] opacity-40"
-                    style={{ backgroundImage: 'radial-gradient(rgba(255,253,249,0.9) 1.2px, transparent 1.4px)', backgroundSize: '12px 12px' }}
+                    className="absolute inset-2.5 rounded-[9px] opacity-60"
+                    style={{ backgroundImage: 'radial-gradient(#F2B43C 1.3px, transparent 1.5px)', backgroundSize: '13px 13px' }}
                   />
-                  <span className="font-serif relative text-2xl font-semibold sm:text-3xl" style={{ color: '#FFFDF9' }}>S</span>
+                  <span className="font-serif relative flex h-10 w-10 items-center justify-center rounded-full text-xl font-semibold sm:h-12 sm:w-12 sm:text-2xl" style={{ background: '#F2B43C', color: '#1f2a44', boxShadow: '0 3px 0 #C9902A' }}>S</span>
                 </span>
                 {/* Card front */}
                 <span
