@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"storee/backend/models"
+	"storee/backend/services"
 	"storee/backend/utils"
 
 	"github.com/gin-gonic/gin"
@@ -14,11 +15,28 @@ import (
 )
 
 type AdminHandler struct {
-	DB *gorm.DB
+	DB       *gorm.DB
+	Notifier *services.Notifier
 }
 
 func NewAdminHandler(db *gorm.DB) *AdminHandler {
 	return &AdminHandler{DB: db}
+}
+
+// WithNotifier attaches the order-notification outbox. Left unset (tests,
+// unconfigured deploys) the handler simply queues nothing.
+func (h *AdminHandler) WithNotifier(n *services.Notifier) *AdminHandler {
+	h.Notifier = n
+	return h
+}
+
+// statusChangeEvents maps the statuses an admin can set to the customer
+// notification they trigger. Statuses without an entry (processing) are
+// internal fulfilment steps the customer doesn't need a message about.
+var statusChangeEvents = map[string]string{
+	"shipped":   services.EventOrderShipped,
+	"delivered": services.EventOrderDelivered,
+	"cancelled": services.EventOrderCancelled,
 }
 
 type CreateProductRequest struct {
@@ -341,6 +359,10 @@ func (h *AdminHandler) UpdateOrderStatus(c *gin.Context) {
 	if err := h.DB.Save(&order).Error; err != nil {
 		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to update order status", err)
 		return
+	}
+
+	if event, ok := statusChangeEvents[order.Status]; ok {
+		h.Notifier.Enqueue(h.DB, &order, event)
 	}
 
 	utils.SuccessResponse(c, http.StatusOK, "Order status updated successfully", order)

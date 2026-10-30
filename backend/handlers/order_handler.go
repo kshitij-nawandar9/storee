@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"storee/backend/models"
+	"storee/backend/services"
 	"storee/backend/utils"
 
 	"github.com/gin-gonic/gin"
@@ -14,11 +15,19 @@ import (
 )
 
 type OrderHandler struct {
-	DB *gorm.DB
+	DB       *gorm.DB
+	Notifier *services.Notifier
 }
 
 func NewOrderHandler(db *gorm.DB) *OrderHandler {
 	return &OrderHandler{DB: db}
+}
+
+// WithNotifier attaches the order-notification outbox. Left unset (tests,
+// unconfigured deploys) the handler simply queues nothing.
+func (h *OrderHandler) WithNotifier(n *services.Notifier) *OrderHandler {
+	h.Notifier = n
+	return h
 }
 
 type CreateCODOrderRequest struct {
@@ -157,6 +166,8 @@ func (h *OrderHandler) CreateCODOrder(c *gin.Context) {
 	} else {
 		log.Printf("COD order created successfully: %s (guest order)", orderID)
 	}
+	h.Notifier.Enqueue(h.DB, &order, services.EventOrderPlaced)
+
 	utils.SuccessResponse(c, http.StatusCreated, "COD order created successfully", order)
 }
 
