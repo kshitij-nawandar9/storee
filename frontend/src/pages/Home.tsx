@@ -5,11 +5,9 @@ import Img from '@/components/common/Img';
 import SaleBanner from '@/components/home/SaleBanner';
 import Hero from '@/components/home/Hero';
 import PrintParade from '@/components/home/PrintParade';
-import PlayZone from '@/components/home/PlayZone';
 import DiwaliNight from '@/components/home/DiwaliNight';
-import PlayNudge from '@/components/home/PlayNudge';
 import { isDiwaliSeason } from '@/utils/constants';
-import { useHampersLocked } from '@/utils/rewards';
+import { useHampersLocked } from '@/utils/diwali';
 import Reveal from '@/components/common/Reveal';
 import TiltLink from '@/components/common/TiltLink';
 
@@ -182,9 +180,6 @@ export default function Home() {
       {/* ── PRINT PARADE ── */}
       <PrintParade />
 
-      {/* ── PLAY ZONE: mini games ── */}
-      <PlayZone />
-
       {/* ── WHY STOREE — stacked on mobile, grid on desktop ── */}
       <section className="py-10 sm:py-16" style={{ background: '#FFFDF9' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -337,7 +332,6 @@ export default function Home() {
         </div>
       </section>
 
-      <PlayNudge />
     </div>
   );
 }

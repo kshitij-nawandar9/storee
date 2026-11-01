@@ -5,7 +5,7 @@ import { trackEvent } from '@/services/analytics';
 import Img from '@/components/common/Img';
 import { getRakhiHamperBySlug, type RakhiHamper } from '@/data/hampers';
 import { DIWALI_ORDER_BY_LABEL, isBeforeDiwaliCutoff } from '@/utils/constants';
-import { BADGES, earnBadge, hasBadge } from '@/utils/rewards';
+import { hasLitDiyas, markDiyasLit } from '@/utils/diwali';
 
 const DIYA_COUNT = 7;
 const SPARK_COLORS = ['#FFD36E', '#F2B43C', '#FFF3C4', '#F4A7A0', '#FFFFFF'];
@@ -127,10 +127,9 @@ export default function DiwaliNight() {
   const [tapped, setTapped] = useState<Set<number>>(() => new Set());
   const [bursts, setBursts] = useState<Burst[]>([]);
   // Visitors who already lit the diyas see the hampers unwrapped straight away
-  const [alreadyLit] = useState(() => hasBadge('diwali-lit'));
+  const [alreadyLit] = useState(hasLitDiyas);
   const [celebrated, setCelebrated] = useState(alreadyLit);
   const [phase, setPhase] = useState<'locked' | 'opening' | 'open'>(alreadyLit ? 'open' : 'locked');
-  const [badgeNew, setBadgeNew] = useState(false);
   const burstId = useRef(0);
   const timers = useRef<number[]>([]);
 
@@ -190,7 +189,7 @@ export default function DiwaliNight() {
     if (!celebrated || alreadyLit) return;
     celebrate();
     trackEvent('diwali_diyas_all_lit');
-    setBadgeNew(earnBadge('diwali-lit'));
+    markDiyasLit();
     setPhase('opening');
     timers.current.push(window.setTimeout(() => setPhase('open'), 650));
     // celebrate only reads refs and stable setters
@@ -266,11 +265,6 @@ export default function DiwaliNight() {
             </div>
           ) : (
             <div className="mt-8">
-              {badgeNew && (
-                <p className="sticker-in mx-auto mb-5 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold" style={{ background: 'radial-gradient(circle at 35% 30%, #FFF3C4, #F2B43C)', color: '#2a2220' }}>
-                  {BADGES['diwali-lit'].emoji} You earned the {BADGES['diwali-lit'].label} badge
-                </p>
-              )}
               <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
                 {HAMPER_PICKS.map((h, i) => (
                   <Link

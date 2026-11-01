@@ -1,5 +1,5 @@
 import type { CartItem } from '@/types';
-import { STICKER_SHEET, getSalePrice } from '@/utils/constants';
+import { getSalePrice } from '@/utils/constants';
 
 export interface CheckoutOrderItem {
   productId: string;
@@ -14,8 +14,6 @@ export interface CheckoutOrderItem {
   printName?: string;
   sku?: string;
   customText?: string;
-  /** ₹0 extra packed by hand (the game-reward sticker sheet). Not sent to Shiprocket. */
-  isFreeGift?: boolean;
   product: {
     id: string;
     name: string;
@@ -66,25 +64,7 @@ const primaryImage = (item: CartItem) =>
   item.product.images?.find((image) => image.isPrimary)?.url ||
   item.product.images?.[0]?.url;
 
-const stickerSheetItem = (): CheckoutOrderItem => ({
-  productId: 'sticker-sheet',
-  name: STICKER_SHEET.name,
-  slug: 'sticker-sheet',
-  category: 'Free gift',
-  quantity: 1,
-  price: 0,
-  lineTotal: 0,
-  sku: STICKER_SHEET.sku,
-  isFreeGift: true,
-  product: { id: 'sticker-sheet', name: STICKER_SHEET.name, slug: 'sticker-sheet', category: 'Free gift', basePrice: 0 },
-});
-
-export const buildCheckoutOrderItems = (items: CartItem[], { stickerSheet = false } = {}): CheckoutOrderItem[] => [
-  ...buildProductItems(items),
-  ...(stickerSheet && items.length > 0 ? [stickerSheetItem()] : []),
-];
-
-const buildProductItems = (items: CartItem[]): CheckoutOrderItem[] =>
+export const buildCheckoutOrderItems = (items: CartItem[]): CheckoutOrderItem[] =>
   items.map((item) => {
     const unitPrice = item.variant?.price ?? item.product.basePrice;
     const effectiveUnitPrice = getSalePrice(unitPrice, item.product) ?? unitPrice;

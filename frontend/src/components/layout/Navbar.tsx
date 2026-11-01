@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ALL_PRINTS, goToHomeSection, goToPlayZone, useHampersLocked, useRewards, useStickerSheet } from '@/utils/rewards';
+import { goToHomeSection, useHampersLocked } from '@/utils/diwali';
 import { ShoppingBag, Menu, X, User, LogOut, Package, ChevronDown, BarChart3 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,8 +14,6 @@ export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { prints: collectedPrints } = useRewards();
-  const stickerSheet = useStickerSheet();
   const hampersLocked = useHampersLocked();
   // Until the diyas are lit, hamper links take visitors to the diyas on the homepage
   const openHampers = (e: { preventDefault: () => void }) => {
@@ -147,19 +145,6 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
-
-            {/* Sticker collection: a shortcut back to the games */}
-            {(collectedPrints.length > 0 || stickerSheet.ready) && (
-              <button
-                type="button"
-                onClick={() => goToPlayZone(navigate, location.pathname)}
-                className="hidden sm:inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition-transform duration-200 hover:-translate-y-0.5"
-                style={{ background: 'radial-gradient(circle at 35% 30%, #FFF3C4, #F2B43C)', color: '#2a2220' }}
-                title={stickerSheet.ready ? 'A free sticker sheet will be packed with your next order' : 'Print stickers you have collected. Play to collect more.'}
-              >
-                🎁 {stickerSheet.ready ? 'Sticker sheet unlocked' : `${collectedPrints.length}/${ALL_PRINTS.length} stickers`}
-              </button>
-            )}
 
             {/* Cart */}
             <Link

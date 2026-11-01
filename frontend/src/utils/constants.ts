@@ -33,14 +33,6 @@ export const DIWALI_NIGHT_END_DATE = '2026-11-15T00:00:00+05:30';
 export const isDiwaliSeason = () =>
   Date.now() < new Date(DIWALI_NIGHT_END_DATE).getTime();
 
-// Game reward: a free 3D sticker sheet packed with the order.
-// Off by default. Turn it on (VITE_STICKER_REWARD=true) only once sheets are in stock, and off again when they run out.
-export const STICKER_REWARD_ENABLED = import.meta.env.VITE_STICKER_REWARD === 'true';
-export const STICKER_SHEET = {
-  name: 'Free 3D sticker sheet',
-  sku: 'STOREE-STICKER-SHEET',
-} as const;
-
 // The internal category keeps its original name because it is stored with orders.
 export const isHamperProduct = (product: Pick<Product, 'category'>) =>
   product.category === 'Rakhi Hampers';
