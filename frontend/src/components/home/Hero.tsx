@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, RefreshCw } from 'lucide-react';
 import Img from '@/components/common/Img';
 import { PRODUCTS_DATA } from '@/data/products';
 import { useInView } from '@/hooks/useInView';
 import { SALE_DISCOUNT, SALE_NAME, getSalePrice, isSaleActive } from '@/utils/constants';
-import { useHampersLocked } from '@/utils/diwali';
+import { ALL_PRINTS, useHampersLocked, useRewards, useStickerSheet } from '@/utils/rewards';
 
 const WORDS = ['school runs', 'sleepovers', 'road trips', 'Diwali gifting', 'packing'];
 
@@ -63,7 +63,19 @@ export default function Hero() {
   const shuffleTimer = useRef<number | undefined>(undefined);
   const { ref: sectionRef, inView } = useInView<HTMLElement>({ rootMargin: '0px' });
 
+  const { prints } = useRewards();
+  const stickerSheet = useStickerSheet();
   const hampersLocked = useHampersLocked();
+  const navigate = useNavigate();
+
+  // What the invite at the top of the hero says, depending on the visitor's progress
+  const invite = stickerSheet.ready
+    ? { tag: 'Won', text: 'Sticker sheet unlocked · shop now', go: () => navigate('/products') }
+    : stickerSheet.enabled
+      ? { tag: 'New', text: 'Play a 30-sec game & win a surprise gift', go: null }
+      : prints.length
+        ? { tag: `${prints.length} of ${ALL_PRINTS.length}`, text: 'stickers collected · keep playing', go: null }
+        : { tag: 'New', text: 'Play a 30-sec game & unwrap a surprise', go: null };
   const saleOn = isSaleActive();
   const discountPct = Math.round(SALE_DISCOUNT * 100);
 
@@ -119,6 +131,21 @@ export default function Hero() {
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-6 px-4 pb-12 pt-8 sm:px-6 sm:pt-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-8 lg:pb-20 lg:pt-16">
         {/* Copy */}
         <div className="relative z-10">
+          {/* Game invite: the first thing people see */}
+          <button
+            type="button"
+            onClick={() => (invite.go ? invite.go() : document.getElementById('play-zone')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))}
+            className="group mb-5 inline-flex max-w-full items-center gap-2 rounded-full py-1.5 pl-1.5 pr-4 text-left text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 sm:text-sm animate-slide-up bounce-tap"
+            style={{ background: '#2a2220', color: '#FDF6EC', boxShadow: '0 10px 26px -12px rgba(42,34,32,0.6)' }}
+          >
+            <span className="rounded-full px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider sm:text-[0.65rem]" style={{ background: '#F2B43C', color: '#2a2220' }}>
+              {invite.tag}
+            </span>
+            <span className="gift-bounce" aria-hidden="true">🎁</span>
+            <span className="truncate">{invite.text}</span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1" style={{ color: '#F2B43C' }} />
+          </button>
+
           <p className="font-hand mb-2 text-xl sm:text-2xl animate-fade-in" style={{ color: '#C4756E' }}>
             carry beautifully ✨
           </p>
