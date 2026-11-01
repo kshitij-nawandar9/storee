@@ -7,11 +7,10 @@ import { useState, useEffect, useRef } from 'react';
 import { LOGO_PATH, FALLBACK_LOGO_PATH } from '@/utils/logo';
 import { imageAtWidth } from '@/utils/images';
 
-const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'nawandar.kshitij@gmail.com'];
 
 export default function Navbar() {
   const { getItemCount } = useCart();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isAdmin } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const hampersLocked = useHampersLocked();
@@ -30,7 +29,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
 
   useEffect(() => { setProfilePictureError(false); }, [user?.picture]);
 

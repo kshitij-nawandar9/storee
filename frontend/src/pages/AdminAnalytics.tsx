@@ -1,31 +1,10 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import AdminTabs from '@/components/common/AdminTabs';
 import { BarChart3, ExternalLink } from 'lucide-react';
-
-const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'nawandar.kshitij@gmail.com'];
 
 const DASHBOARD_URL = import.meta.env.VITE_POSTHOG_DASHBOARD_URL;
 
 export default function AdminAnalytics() {
-  const { isAuthenticated, user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
-  const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
-
-  useEffect(() => {
-    if (authLoading) return;
-    if (!isAuthenticated || !isAdmin) navigate('/signin');
-  }, [isAuthenticated, authLoading, isAdmin, navigate]);
-
-  if (authLoading) return null;
-
-  if (!isAdmin) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#FDF6EC' }}>
-      <p className="text-sm" style={{ color: '#8a7e78' }}>Access denied. Admin privileges required.</p>
-    </div>
-  );
-
+  // RequireAuth (admin) only shows this page to a confirmed admin session
   return (
     <div className="min-h-screen" style={{ background: '#FDF6EC' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-20">

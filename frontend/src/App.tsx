@@ -1,6 +1,7 @@
 import Footer from '@/components/layout/Footer';
 import Navbar from '@/components/layout/Navbar';
 import { AuthProvider } from '@/contexts/AuthContext';
+import RequireAuth from '@/components/auth/RequireAuth';
 import Cart from '@/pages/Cart';
 import Checkout from '@/pages/Checkout';
 import Home from '@/pages/Home';
@@ -22,8 +23,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <PageViewTracker />
         <ScrollToTop />
         <div className="flex flex-col min-h-screen">
@@ -37,10 +38,10 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/orders" element={<RequireAuth><OrderHistory /></RequireAuth>} />
             <Route path="/orders/:id" element={<OrderConfirmation />} />
-            <Route path="/admin/orders" element={<AdminOrders />} />
-            <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/admin/orders" element={<RequireAuth admin><AdminOrders /></RequireAuth>} />
+            <Route path="/admin/analytics" element={<RequireAuth admin><AdminAnalytics /></RequireAuth>} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
@@ -50,8 +51,8 @@ function App() {
           <Toaster position="top-right" />
           <div className="grain-overlay" aria-hidden="true" />
         </div>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
