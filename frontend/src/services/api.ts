@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import type { Product, ApiResponse } from '@/types';
 import { mockProducts } from '@/data/mockProducts';
 import type { CheckoutOrderItem } from '@/utils/orderItems';
+import { AUTH_EXPIRED_EVENT, TOKEN_KEY } from '@/utils/session';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 console.log('[API] Environment check:', {
@@ -29,7 +30,7 @@ export const createIdempotencyKey = (): string => {
 // Request interceptor - add auth token if available
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -49,12 +50,12 @@ api.interceptors.response.use(
     if (error.response) {
       console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → ${error.response.status}`, error.response.data);
 
-      // If we get a 401, the token is expired or invalid — clear auth state
-      if (error.response.status === 401 && localStorage.getItem('auth_token')) {
-        console.warn('[API] Received 401 — clearing stale auth token');
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_user');
-        window.location.reload();
+      // A 401 on a request that carried our token means the session is no longer valid.
+      // The auth context signs out, explains why, and offers sign-in — no page reload.
+      const sentToken = Boolean(error.config?.headers?.Authorization);
+      if (error.response.status === 401 && sentToken) {
+        console.warn('[API] Received 401 — session expired');
+        window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
       }
     } else if (error.request) {
       console.error(`[API] ${error.config?.method?.toUpperCase()} ${error.config?.url} → No response (backend unreachable)`, { timeout: error.config?.timeout });

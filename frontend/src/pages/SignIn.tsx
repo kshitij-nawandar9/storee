@@ -1,19 +1,24 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { safeRedirect } from '@/utils/session';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { User, ShoppingBag } from 'lucide-react';
 
 export default function SignIn() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, sessionExpired } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Where to go after signing in: the page that sent them here, or their orders
+  const redirectTo = safeRedirect(searchParams.get('redirect'));
+  const expired = sessionExpired || searchParams.get('reason') === 'expired';
 
   useEffect(() => {
     // Redirect if already authenticated
     if (!authLoading && isAuthenticated) {
-      navigate('/orders');
+      navigate(redirectTo, { replace: true });
     }
-  }, [isAuthenticated, authLoading, navigate]);
+  }, [isAuthenticated, authLoading, navigate, redirectTo]);
 
   if (authLoading) {
     return (
@@ -43,6 +48,12 @@ export default function SignIn() {
               Sign in to view your orders and track your purchases
             </p>
           </div>
+
+          {expired && (
+            <div className="mb-6 rounded-xl px-4 py-3 text-sm" role="status" style={{ background: '#FDF1E7', border: '1px solid #F0D3BE', color: '#7a4a32' }}>
+              Your session expired. Sign in again to continue where you left off.
+            </div>
+          )}
 
           <div className="mb-6">
             <GoogleLoginButton />

@@ -48,17 +48,16 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function OrderHistory() {
-  const { isAuthenticated, token, loading: authLoading } = useAuth();
+  const { token } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // RequireAuth only shows this page for a confirmed session
   useEffect(() => {
-    if (authLoading) return;
-    if (!isAuthenticated) { navigate('/signin'); return; }
     fetchOrderHistory();
-  }, [isAuthenticated, authLoading, token, navigate]);
+  }, [token]);
 
   const fetchOrderHistory = async () => {
     try {
@@ -89,8 +88,7 @@ export default function OrderHistory() {
   const formatDate = (s: string) => new Date(s).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
   const formatAmount = (a: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(a / 100);
 
-  if (authLoading || loading) return <LoadingSpinner />;
-  if (!isAuthenticated) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
   return (

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminTabs from '@/components/common/AdminTabs';
-import { useNavigate } from 'react-router-dom';
 import { getAdminOrders, updateOrderStatus, shipOrder, getOrderTracking } from '@/services/api';
 import { Package, ShoppingBag, MapPin, Pen, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -12,7 +11,6 @@ import {
   getStoredOrderItemPrint,
 } from '@/utils/orderItems';
 
-const ADMIN_EMAILS = ['thestoree.in@gmail.com', 'nawandar.kshitij@gmail.com'];
 
 interface OrderItem {
   productId?: string;
@@ -48,21 +46,18 @@ const allowedTransitions: Record<string, string[]> = {
 };
 
 export default function AdminOrders() {
-  const { isAuthenticated, user, loading: authLoading } = useAuth();
+  const { token } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ page: 1, limit: 50, total: 0, pages: 1 });
-  const navigate = useNavigate();
-  const isAdmin = user && ADMIN_EMAILS.includes(user.email?.toLowerCase() || '');
-
+  // RequireAuth (admin) only shows this page to a confirmed admin session
   useEffect(() => {
-    if (authLoading) return;
-    if (!isAuthenticated || !isAdmin) { navigate('/signin'); return; }
     fetchOrders();
-  }, [isAuthenticated, authLoading, isAdmin, statusFilter, page, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, statusFilter, page]);
 
   const fetchOrders = async () => {
     try {
@@ -141,18 +136,12 @@ export default function AdminOrders() {
   const formatAmount = (a: number) => `₹${(a / 100).toFixed(2)}`;
   const formatDate = (s: string) => new Date(s).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  if (authLoading || loading) return (
+  if (loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: '#FDF6EC' }}>
       <div className="text-center">
         <div className="animate-spin rounded-full h-10 w-10 mx-auto" style={{ borderBottom: '2px solid #C4756E' }} />
         <p className="mt-3 text-sm" style={{ color: '#8a7e78' }}>Loading orders...</p>
       </div>
-    </div>
-  );
-
-  if (!isAdmin) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#FDF6EC' }}>
-      <p className="text-sm" style={{ color: '#8a7e78' }}>Access denied. Admin privileges required.</p>
     </div>
   );
 

@@ -1,5 +1,6 @@
 import PriceDisplay from '@/components/product/PriceDisplay';
 import { useCart } from '@/hooks/useCart';
+import { useAuth } from '@/contexts/AuthContext';
 import { trackEvent } from '@/services/analytics';
 import { createIdempotencyKey, createRazorpayOrder, verifyPayment } from '@/services/api';
 import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razorpay';
@@ -15,6 +16,7 @@ import { imageAtWidth } from '@/utils/images';
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const { isAuthenticated, loading: authLoading, user, ensureSession } = useAuth();
   const { items, getTotal, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<{
@@ -183,6 +185,12 @@ export default function Checkout() {
       return;
     }
 
+    // If the saved session ran out, stop here once so the order isn't silently placed as a guest.
+    // The banner switches to guest; paying again continues as a guest.
+    if (!ensureSession()) {
+      return;
+    }
+
     submittingRef.current = true;
     setLoading(true);
 
@@ -340,6 +348,24 @@ export default function Checkout() {
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Who this order belongs to */}
+            {!authLoading && (
+              <div
+                className="flex flex-wrap items-center justify-between gap-2 rounded-2xl px-5 py-3.5 text-sm"
+                style={isAuthenticated ? { background: '#EEF4EC', color: '#3f5f3e' } : { background: '#FDF1E7', color: '#7a4a32' }}
+                role="status"
+              >
+                {isAuthenticated ? (
+                  <span>Signed in as <strong>{user?.email}</strong>. This order will appear in My Orders.</span>
+                ) : (
+                  <>
+                    <span>Checking out as a guest. Sign in to see this order in My Orders later.</span>
+                    <Link to="/signin?redirect=%2Fcheckout" className="font-semibold underline underline-offset-4">Sign in</Link>
+                  </>
+                )}
+              </div>
+            )}
+
             {/* Shipping Address */}
             <div className="card p-8">
               <div className="flex items-center justify-between mb-6">
