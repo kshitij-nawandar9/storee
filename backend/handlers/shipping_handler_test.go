@@ -102,3 +102,20 @@ func TestBuildShiprocketOrder_InvalidData(t *testing.T) {
 		t.Error("expected error for empty items, got nil")
 	}
 }
+
+func TestBuildShiprocketOrder_SkipsFreeGifts(t *testing.T) {
+	order := testOrder()
+	order.Items = datatypes.JSON([]byte(`[{"name":"Dental Kit","sku":"DK-1","quantity":1,"price":49900},{"name":"Free 3D sticker sheet","sku":"STICKER-SHEET","quantity":1,"price":0,"isFreeGift":true}]`))
+	req, err := BuildShiprocketOrder(order, "Primary", ShipOrderRequest{})
+	if err != nil {
+		t.Fatalf("BuildShiprocketOrder() error = %v", err)
+	}
+	if len(req.OrderItems) != 1 || req.OrderItems[0].SKU != "DK-1" {
+		t.Errorf("free gift should be left out of Shiprocket items, got %+v", req.OrderItems)
+	}
+
+	order.Items = datatypes.JSON([]byte(`[{"name":"Free 3D sticker sheet","quantity":1,"price":0,"isFreeGift":true}]`))
+	if _, err := BuildShiprocketOrder(order, "Primary", ShipOrderRequest{}); err == nil {
+		t.Error("expected error when an order has only free gifts, got nil")
+	}
+}
