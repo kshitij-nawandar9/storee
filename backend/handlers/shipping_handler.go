@@ -53,14 +53,11 @@ type orderAddress struct {
 // orderItem mirrors the item JSON stored on an order, including the
 // fallback locations the frontend uses for name/price/sku.
 type orderItem struct {
-	// IsFreeGift marks ₹0 extras (like the game-reward sticker sheet) that are packed by hand
-	// and must not be sent to Shiprocket as sellable items.
-	IsFreeGift bool   `json:"isFreeGift"`
-	Name       string `json:"name"`
-	SKU        string `json:"sku"`
-	Quantity   int    `json:"quantity"`
-	Price      int64  `json:"price"` // in paise
-	Product    struct {
+	Name     string `json:"name"`
+	SKU      string `json:"sku"`
+	Quantity int    `json:"quantity"`
+	Price    int64  `json:"price"` // in paise
+	Product  struct {
 		Name      string `json:"name"`
 		BasePrice int64  `json:"basePrice"`
 	} `json:"product"`
@@ -90,9 +87,6 @@ func BuildShiprocketOrder(order *models.Order, pickupLocation string, req ShipOr
 
 	srItems := make([]services.ShiprocketOrderItem, 0, len(items))
 	for i, item := range items {
-		if item.IsFreeGift {
-			continue
-		}
 		name := item.Name
 		if name == "" {
 			name = item.Product.Name
@@ -124,10 +118,6 @@ func BuildShiprocketOrder(order *models.Order, pickupLocation string, req ShipOr
 			Units:        qty,
 			SellingPrice: float64(price) / 100, // paise -> rupees
 		})
-	}
-
-	if len(srItems) == 0 {
-		return nil, fmt.Errorf("order has no shippable items")
 	}
 
 	// Shiprocket wants first and last name separately.

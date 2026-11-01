@@ -14,7 +14,6 @@ import { CheckCircle, ChevronLeft, ChevronRight, Pen, Ruler, RotateCcw, Shield, 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useRewards } from '@/utils/rewards';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -30,8 +29,6 @@ export default function ProductDetail() {
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [customiseEnabled, setCustomiseEnabled] = useState(false);
   const [customText, setCustomText] = useState('');
-  // A name typed into a game name tag, offered here as a one-tap personalisation
-  const { kidName } = useRewards();
 
   const defaultVariant =
     (requestedPrint && product?.variants?.find((v) => v.colorName.toLowerCase() === requestedPrint.toLowerCase())) ||
@@ -169,19 +166,6 @@ export default function ProductDetail() {
               {/* Free Customisation */}
               {supportsCustomisation && (
                 <div className="mb-7">
-                  {kidName && customText.trim() !== kidName && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCustomiseEnabled(true);
-                        setCustomText(kidName);
-                      }}
-                      className="bounce-tap mb-3 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5"
-                      style={{ background: '#1f2a44', color: '#FDF6EC' }}
-                    >
-                      <span aria-hidden="true">🏷️</span> Make it {kidName}'s
-                    </button>
-                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Pen className="w-4 h-4" style={{ color: '#C4756E' }} />

@@ -6,8 +6,6 @@ import { initializeRazorpayCheckout, loadRazorpayScript } from '@/services/razor
 import type { Address } from '@/types';
 import { CURRENCY_SYMBOL, FREE_SHIPPING_MESSAGE, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, getSalePrice } from '@/utils/constants';
 import { buildCheckoutOrderItems } from '@/utils/orderItems';
-import { consumeStickerSheet, useStickerSheet } from '@/utils/rewards';
-import StickerSheet from '@/components/rewards/StickerSheet';
 import { getSavedAddresses, getDefaultAddress, saveAddress, type SavedAddress } from '@/utils/savedAddresses';
 import { ArrowRight, CreditCard, Lock, ShoppingBag, Truck, Save, Check } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -18,7 +16,6 @@ import { imageAtWidth } from '@/utils/images';
 export default function Checkout() {
   const navigate = useNavigate();
   const { items, getTotal, clearCart } = useCart();
-  const { ready: stickerSheetReady } = useStickerSheet();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<{
     name: string;
@@ -219,7 +216,7 @@ export default function Checkout() {
       console.log('[Checkout] Step 1: Razorpay script loaded');
 
       // Step 2: Create order on backend
-      const orderItems = buildCheckoutOrderItems(items, { stickerSheet: stickerSheetReady });
+      const orderItems = buildCheckoutOrderItems(items);
       console.log('[Checkout] Step 2: Creating order...', { amount: finalTotal, itemCount: orderItems.length });
       const orderPayload = {
         amount: finalTotal,
@@ -281,7 +278,6 @@ export default function Checkout() {
               });
               toast.success('Order placed successfully!');
               clearCart();
-              if (orderItems.some((item) => item.isFreeGift)) consumeStickerSheet();
               orderIdempotencyRef.current = null;
               navigate(`/orders/${orderId}`);
             } else {
@@ -647,17 +643,6 @@ export default function Checkout() {
                   );
                 })}
               </div>
-
-              {stickerSheetReady && (
-                <div className="mb-6 flex items-center gap-3 rounded-xl p-3" style={{ background: '#FDF6EC', border: '1px dashed #E8D3B5' }}>
-                  <StickerSheet size="sm" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-gray-900">🎁 Free 3D sticker sheet</p>
-                    <p className="text-xs text-gray-600">Your game reward, packed with this order</p>
-                    <p className="text-sm font-semibold text-green-600">Free</p>
-                  </div>
-                </div>
-              )}
 
               <div className="border-t-2 border-gray-200 pt-6 space-y-4">
                 <div className="flex justify-between text-gray-700">
