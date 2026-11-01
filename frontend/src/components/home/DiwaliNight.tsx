@@ -6,6 +6,7 @@ import Img from '@/components/common/Img';
 import { getRakhiHamperBySlug, type RakhiHamper } from '@/data/hampers';
 import { DIWALI_ORDER_BY_LABEL, isBeforeDiwaliCutoff } from '@/utils/constants';
 import { hasLitDiyas, markDiyasLit } from '@/utils/diwali';
+import { useInView } from '@/hooks/useInView';
 
 const DIYA_COUNT = 7;
 const SPARK_COLORS = ['#FFD36E', '#F2B43C', '#FFF3C4', '#F4A7A0', '#FFFFFF'];
@@ -125,6 +126,10 @@ export default function DiwaliNight() {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
   const [tapped, setTapped] = useState<Set<number>>(() => new Set());
+  // Diyas light themselves one by one once the row is on screen; tapping just speeds it up
+  const [autoCount, setAutoCount] = useState(0);
+  const autoRef = useRef(0);
+  const { ref: rowRef, inView: rowVisible } = useInView<HTMLDivElement>({ once: true, rootMargin: '0px 0px -25% 0px' });
   const [bursts, setBursts] = useState<Burst[]>([]);
   // Visitors who already lit the diyas see the hampers unwrapped straight away
   const [alreadyLit] = useState(hasLitDiyas);
@@ -160,7 +165,7 @@ export default function DiwaliNight() {
 
   useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
 
-  const isLit = (i: number) => alreadyLit || tapped.has(i);
+  const isLit = (i: number) => alreadyLit || tapped.has(i) || i < autoCount;
   const allLit = Array.from({ length: DIYA_COUNT }, (_, i) => i).every(isLit);
 
   const addBurst = (x: number, y: number, big = false) => {
@@ -201,8 +206,7 @@ export default function DiwaliNight() {
     addBurst(e.clientX - rect.left, e.clientY - rect.top);
   };
 
-  const lightDiya = (i: number) => {
-    setTapped((t) => new Set(t).add(i));
+  const burstAtDiya = (i: number) => {
     const el = sectionRef.current;
     const btn = el?.querySelectorAll('[data-diya]')[i] as HTMLElement | undefined;
     if (el && btn) {
@@ -212,6 +216,40 @@ export default function DiwaliNight() {
     }
   };
 
+  const lightDiya = (i: number) => {
+    setTapped((t) => new Set(t).add(i));
+    burstAtDiya(i);
+  };
+
+  // Auto-light: a short pause, then one diya every ~0.28s, each with a sparkle
+  useEffect(() => {
+    if (alreadyLit || !rowVisible) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let interval: number | undefined;
+    const start = window.setTimeout(() => {
+      if (reduceMotion) {
+        setAutoCount(DIYA_COUNT);
+        return;
+      }
+      interval = window.setInterval(() => {
+        const i = autoRef.current;
+        if (i >= DIYA_COUNT) {
+          window.clearInterval(interval);
+          return;
+        }
+        autoRef.current = i + 1;
+        setAutoCount(i + 1);
+        burstAtDiya(i);
+      }, 280);
+    }, 450);
+    return () => {
+      window.clearTimeout(start);
+      window.clearInterval(interval);
+    };
+    // burstAtDiya only reads refs and stable setters
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alreadyLit, rowVisible]);
+
   return (
     <section
       ref={sectionRef}
@@ -219,7 +257,7 @@ export default function DiwaliNight() {
       onClick={handleSectionClick}
       className="relative scroll-mt-0 cursor-pointer select-none overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #FDF6EC 0%, #E9C3A8 7%, #8a4a5a 16%, #3a2550 26%, #1c1735 38%, #1c1735 80%, #3a2550 90%, #8a4a5a 95%, #FDF6EC 100%)' }}
-      aria-label="Diwali night: light the diyas to unwrap the hampers"
+      aria-label="Diwali night: the diyas light up to unwrap the hampers"
     >
       {/* Stars */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-[18%] bottom-[12%]">
@@ -240,10 +278,10 @@ export default function DiwaliNight() {
             {phase === 'open' ? 'Your gifts are unwrapped' : 'Light up the night'}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm sm:text-base" style={{ color: 'rgba(255,247,232,0.85)', textShadow: '0 2px 12px rgba(28,23,53,1)' }}>
-            {phase === 'open' ? "This year's Diwali hampers are unwrapped. Pick one for someone special." : "Tap all seven diyas to unwrap this year's Diwali hampers."}
+            {phase === 'open' ? "This year's Diwali hampers are unwrapped. Pick one for someone special." : "Watch the diyas light up and unwrap this year's Diwali hampers."}
           </p>
 
-          <div className="mt-10 flex items-end justify-center gap-0.5 sm:gap-3">
+          <div ref={rowRef} className="mt-10 flex items-end justify-center gap-0.5 sm:gap-3">
             {Array.from({ length: DIYA_COUNT }, (_, i) => (
               <span key={i} data-diya>
                 <Diya index={i} lit={isLit(i)} onLight={() => lightDiya(i)} />
@@ -255,7 +293,6 @@ export default function DiwaliNight() {
             <div className="mt-8">
               <p className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,211,110,0.8)' }}>
                 {Array.from({ length: DIYA_COUNT }, (_, i) => i).filter(isLit).length} of {DIYA_COUNT} lit
-                {phase === 'locked' && ` · ${DIYA_COUNT - Array.from({ length: DIYA_COUNT }, (_, i) => i).filter(isLit).length} to go`}
               </p>
               <div className="mx-auto mt-8 grid max-w-lg grid-cols-3 gap-3 sm:gap-6">
                 {HAMPER_PICKS.map((h, i) => (
