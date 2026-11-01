@@ -48,6 +48,7 @@ function App() {
           </main>
           <Footer />
           <Toaster position="top-right" />
+          <div className="grain-overlay" aria-hidden="true" />
         </div>
       </BrowserRouter>
     </AuthProvider>
