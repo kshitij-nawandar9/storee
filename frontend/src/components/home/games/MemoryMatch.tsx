@@ -152,7 +152,7 @@ export default function MemoryMatch() {
                   : 'Your lucky print',
             badges,
             newPrints,
-            pick: { title: `${lucky} crossbody bag`, image: `/images/products/crossbody_bag/${lucky}.png`, to: `/products/crossbody-bag?print=${encodeURIComponent(lucky)}` },
+            pick: { title: `${lucky} crossbody bag`, image: `/images/products/crossbody_bag/${lucky}.png`, to: `/products/crossbody-bag?print=${encodeURIComponent(lucky)}`, slug: 'crossbody-bag', print: lucky, color: PRINT_COLORS[lucky] },
           }), 700);
         }
       }, 450);

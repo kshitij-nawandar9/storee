@@ -38,7 +38,7 @@ export default function PlayNudge() {
       ? 'Play & win a surprise gift'
       : prints.length
         ? `${prints.length} of ${ALL_PRINTS.length} stickers · play on`
-        : 'Play & find your lucky print';
+        : 'Play & unwrap a surprise';
 
   return (
     <div className="nudge-up fixed bottom-4 left-1/2 z-[65] flex items-center gap-1 rounded-full py-1 pl-1 pr-1.5" style={{ background: '#2a2220', boxShadow: '0 16px 36px -14px rgba(42,34,32,0.7)' }}>

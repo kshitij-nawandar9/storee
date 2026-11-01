@@ -5,7 +5,8 @@ import PackTheBag from '@/components/home/games/PackTheBag';
 import { Link } from 'react-router-dom';
 import StickerSheet from '@/components/rewards/StickerSheet';
 import { GiftBox } from '@/components/rewards/RewardReveal';
-import { ALL_PRINTS, BADGES, PRINT_COLORS, printSwatch, useRewards, useStickerSheet, type BadgeId } from '@/utils/rewards';
+import { ALL_PRINTS, BADGES, PRINT_COLORS, hasWonAGame, printSwatch, useRewards, useStickerSheet, type BadgeId, type PrintName } from '@/utils/rewards';
+import { NameTagPreview } from '@/components/rewards/NameTag';
 
 const GAMES = [
   { id: 'memory', label: 'Print match', emoji: '🃏', blurb: 'Flip the cards and find every pair of prints.' },
@@ -55,8 +56,12 @@ function WavyText({ text }: { text: string }) {
 export default function PlayZone() {
   const [game, setGame] = useState<GameId>('memory');
   const active = GAMES.find((g) => g.id === game)!;
-  const { prints, badges } = useRewards();
+  const { prints, badges, kidName, lastPick } = useRewards();
   const stickerSheet = useStickerSheet();
+  const won = hasWonAGame(badges);
+  // The prize stays wrapped until the visitor has something to unwrap
+  const showMystery = stickerSheet.enabled ? !stickerSheet.ready : !won;
+  const showNameTag = !stickerSheet.enabled && won && Boolean(lastPick);
 
   return (
     <section
@@ -113,8 +118,8 @@ export default function PlayZone() {
             className="relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-[28px] p-5 sm:p-7 md:grid-cols-[auto_1fr] md:gap-10"
             style={{ background: '#FFFDF9', boxShadow: '0 8px 0 rgba(31,42,68,0.12), 0 30px 60px -30px rgba(31,42,68,0.45)' }}
           >
-            {/* Before a win the prize stays wrapped: a mystery box. After, the real sheet. */}
-            {stickerSheet.enabled && !stickerSheet.ready && (
+            {/* Before a win: a wrapped mystery box. After: the sticker sheet (if switched on) or their name tag. */}
+            {showMystery && (
               <div className="relative mx-auto h-[190px] w-[220px]">
                 <span className="glow-pulse absolute left-1/2 top-1/2 h-44 w-44 rounded-full" style={{ background: 'radial-gradient(circle, rgba(242,180,60,0.35), rgba(242,180,60,0) 65%)' }} aria-hidden="true" />
                 <GiftBox phase="box" idle />
@@ -125,42 +130,50 @@ export default function PlayZone() {
             )}
             {stickerSheet.ready && (
               <div className="relative mx-auto w-fit pt-2">
-                <div>
-                  <StickerSheet />
-                </div>
+                <StickerSheet />
                 {/* Rubber stamp */}
                 <span
-                  className={`absolute -right-4 top-1 rotate-[14deg] rounded-md px-2.5 py-1 text-center text-[0.62rem] font-black uppercase leading-tight tracking-[0.16em] ${stickerSheet.ready ? 'sticker-in' : ''}`}
-                  style={{
-                    color: stickerSheet.ready ? '#4f7a4e' : '#C4756E',
-                    border: `2.5px solid ${stickerSheet.ready ? '#4f7a4e' : '#C4756E'}`,
-                    background: 'rgba(255,253,249,0.88)',
-                    boxShadow: `inset 0 0 0 2px rgba(255,253,249,0.9), inset 0 0 0 3.5px ${stickerSheet.ready ? '#4f7a4e' : '#C4756E'}`,
-                  }}
+                  className="sticker-in absolute -right-4 top-1 rotate-[14deg] rounded-md px-2.5 py-1 text-center text-[0.62rem] font-black uppercase leading-tight tracking-[0.16em]"
+                  style={{ color: '#4f7a4e', border: '2.5px solid #4f7a4e', background: 'rgba(255,253,249,0.88)', boxShadow: 'inset 0 0 0 2px rgba(255,253,249,0.9), inset 0 0 0 3.5px #4f7a4e' }}
                 >
                   Unlocked<br />ships free
                 </span>
               </div>
             )}
+            {showNameTag && lastPick && (
+              <Link to={`/products/${lastPick.slug}?print=${encodeURIComponent(lastPick.print)}`} className="mx-auto block transition-transform hover:-translate-y-1" aria-label={`See the ${lastPick.print} bag`}>
+                <NameTagPreview image={lastPick.image} name={kidName} color={PRINT_COLORS[lastPick.print as PrintName]} />
+              </Link>
+            )}
 
             <div className="min-w-0">
-              <p className="section-label mb-1">{stickerSheet.enabled && !stickerSheet.ready ? 'Mystery gift' : 'Your sticker album'}</p>
+              <p className="section-label mb-1">{showMystery ? 'Mystery gift' : kidName ? `${kidName}'s sticker album` : 'Your sticker album'}</p>
               <h3 className="font-serif text-2xl font-medium leading-tight sm:text-[1.7rem]" style={{ color: '#2a2220' }}>
-                {stickerSheet.enabled
-                  ? stickerSheet.ready
+                {showMystery
+                  ? stickerSheet.enabled ? 'A surprise gift is waiting for you.' : 'A surprise is waiting for you.'
+                  : stickerSheet.ready
                     ? 'Your sticker sheet is coming with your next order.'
-                    : 'A surprise gift is waiting for you.'
-                  : `${prints.length} of ${ALL_PRINTS.length} prints found`}
+                    : showNameTag && kidName
+                      ? `${kidName}'s bag is ready for a name tag.`
+                      : showNameTag
+                        ? 'Put a name on it.'
+                        : `${prints.length} of ${ALL_PRINTS.length} prints found`}
               </h3>
               <p className="mt-1.5 text-sm" style={{ color: '#6b5f58' }}>
-                {stickerSheet.enabled
-                  ? stickerSheet.ready
+                {showMystery
+                  ? stickerSheet.enabled ? "Win any round to unwrap it. It's real, and it's free." : 'Win any round to unwrap it.'
+                  : stickerSheet.ready
                     ? 'Puffy 3D stickers of all 10 prints, packed free. One sheet per order.'
-                    : "Win any round to unwrap it. It's real, and it's free."
-                  : 'Every Print match round deals new prints. Find all 10.'}
-                {stickerSheet.ready && (
-                  <Link to="/products" className="ml-1.5 font-semibold underline decoration-[#C4756E] decoration-2 underline-offset-4" style={{ color: '#2a2220' }}>
-                    Shop now
+                    : showNameTag
+                      ? 'Every Storee bag can carry a name, free. Keep playing to find all 10 prints.'
+                      : 'Every Print match round deals new prints. Find all 10.'}
+                {(stickerSheet.ready || showNameTag) && (
+                  <Link
+                    to={showNameTag && lastPick ? `/products/${lastPick.slug}?print=${encodeURIComponent(lastPick.print)}` : '/products'}
+                    className="ml-1.5 font-semibold underline decoration-[#C4756E] decoration-2 underline-offset-4"
+                    style={{ color: '#2a2220' }}
+                  >
+                    {showNameTag ? (kidName ? `Make it ${kidName}'s` : 'Make it yours') : 'Shop now'}
                   </Link>
                 )}
               </p>

@@ -44,9 +44,22 @@ interface RewardsState {
   badges: BadgeId[];
   /** A sticker sheet is waiting to be packed with the next order. Winning a game sets it; placing an order uses it up. */
   sheetReady: boolean;
+  /** The name typed into a name tag, reused to personalise the site. Same 10-character limit as free customisation. */
+  kidName: string;
+  /** The bag shown in the last name tag reveal, so the homepage can keep showing it. */
+  lastPick: LastPick | null;
+}
+
+export interface LastPick {
+  slug: string;
+  print: string;
+  image: string;
 }
 
 const KEY = 'storee:rewards';
+
+/** Matches the free customisation limit on product pages. */
+export const NAME_MAX = 10;
 const listeners = new Set<() => void>();
 
 function read(): RewardsState {
@@ -56,13 +69,17 @@ function read(): RewardsState {
       prints: Array.isArray(parsed.prints) ? parsed.prints.filter((p: string) => (ALL_PRINTS as readonly string[]).includes(p)) : [],
       badges: Array.isArray(parsed.badges) ? parsed.badges.filter((b: string) => b in BADGES) : [],
       sheetReady: parsed.sheetReady === true,
+      kidName: typeof parsed.kidName === 'string' ? parsed.kidName.slice(0, NAME_MAX) : '',
+      lastPick: parsed.lastPick && typeof parsed.lastPick.slug === 'string' ? parsed.lastPick : null,
     };
   } catch {
-    return { prints: [], badges: [], sheetReady: false };
+    return { ...EMPTY };
   }
 }
 
-let state: RewardsState = typeof window === 'undefined' ? { prints: [], badges: [], sheetReady: false } : read();
+const EMPTY: RewardsState = { prints: [], badges: [], sheetReady: false, kidName: '', lastPick: null };
+
+let state: RewardsState = typeof window === 'undefined' ? { ...EMPTY } : read();
 
 function write(next: RewardsState) {
   state = next;
@@ -107,6 +124,22 @@ export function useStickerSheet() {
   const { sheetReady } = useRewards();
   return { enabled: STICKER_REWARD_ENABLED, ready: STICKER_REWARD_ENABLED && sheetReady };
 }
+
+/** Remembers the name from a name tag so product pages can offer it. */
+export function saveKidName(name: string) {
+  const clean = name.trim().slice(0, NAME_MAX);
+  if (clean !== state.kidName) write({ ...state, kidName: clean });
+}
+
+export function saveLastPick(pick: LastPick) {
+  const prev = state.lastPick;
+  if (prev && prev.slug === pick.slug && prev.print === pick.print) return;
+  write({ ...state, lastPick: pick });
+}
+
+/** True once the visitor has won any game. */
+export const hasWonAGame = (badges: BadgeId[]) =>
+  badges.some((b) => b === 'memory-win' || b === 'pack-1' || b === 'pack-2' || b === 'pack-3');
 
 export function hasBadge(id: BadgeId) {
   return state.badges.includes(id);

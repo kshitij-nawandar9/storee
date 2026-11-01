@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, X } from 'lucide-react';
 import Img from '@/components/common/Img';
 import StickerSheet from '@/components/rewards/StickerSheet';
+import NameTagMoment from '@/components/rewards/NameTag';
 import { BADGES, PRINT_COLORS, printSwatch, type BadgeId, type PrintName } from '@/utils/rewards';
 import { DIWALI_ORDER_BY_LABEL, FREE_SHIPPING_MESSAGE, SALE_DISCOUNT, SALE_NAME, isBeforeDiwaliCutoff, isSaleActive } from '@/utils/constants';
 
@@ -11,6 +12,10 @@ export interface RewardPick {
   title: string;
   image: string;
   to: string;
+  /** When set, the pick becomes a "who's it for?" name tag moment for this product and print. */
+  slug?: string;
+  print?: string;
+  color?: string;
 }
 
 interface RewardRevealProps {
@@ -208,8 +213,11 @@ export default function RewardReveal({ open, onClose, headline, badges, newPrint
               </div>
             )}
 
-            {/* Personal pick */}
-            {pick && (
+            {/* Personal pick: a name tag on the bag, or a plain link if the product can't carry a name */}
+            {pick?.slug && pick.print && (
+              <NameTagMoment slug={pick.slug} print={pick.print} image={pick.image} color={pick.color} onAdded={onClose} />
+            )}
+            {pick && !pick.slug && (
               <Link to={pick.to} onClick={onClose} className="group mt-5 flex items-center gap-3 rounded-2xl p-2.5 text-left transition-all hover:-translate-y-0.5" style={{ background: '#FDF6EC', border: '1px solid #F0E0C6' }}>
                 <span className="h-16 w-14 shrink-0 overflow-hidden rounded-xl">
                   <Img src={pick.image} alt="" sizes="56px" className="h-full w-full object-cover" />
@@ -229,10 +237,16 @@ export default function RewardReveal({ open, onClose, headline, badges, newPrint
               {isBeforeDiwaliCutoff() && <p>Order by {DIWALI_ORDER_BY_LABEL} for Diwali delivery</p>}
             </div>
 
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <Link to={pick?.to ?? '/products'} onClick={onClose} className="btn-primary bounce-tap arrow-nudge">
-                {pick ? 'Go to my lucky pick' : 'Start shopping'} <ArrowRight className="h-4 w-4 arrow-icon" />
-              </Link>
+            <div className="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
+              {pick?.slug ? (
+                <Link to={pick.to} onClick={onClose} className="text-sm font-semibold underline decoration-[#C4756E] decoration-2 underline-offset-4" style={{ color: '#2a2220' }}>
+                  View the bag
+                </Link>
+              ) : (
+                <Link to={pick?.to ?? '/products'} onClick={onClose} className="btn-primary bounce-tap arrow-nudge">
+                  {pick ? 'Go to my lucky pick' : 'Start shopping'} <ArrowRight className="h-4 w-4 arrow-icon" />
+                </Link>
+              )}
               <button type="button" onClick={onClose} className="btn-ghost">Keep playing</button>
             </div>
           </div>

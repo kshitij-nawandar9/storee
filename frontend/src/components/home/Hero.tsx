@@ -75,7 +75,7 @@ export default function Hero() {
       ? { tag: 'New', text: 'Play a 30-sec game & win a surprise gift', go: null }
       : prints.length
         ? { tag: `${prints.length} of ${ALL_PRINTS.length}`, text: 'stickers collected · keep playing', go: null }
-        : { tag: 'New', text: 'Play a 30-sec game & find your lucky print', go: null };
+        : { tag: 'New', text: 'Play a 30-sec game & unwrap a surprise', go: null };
   const saleOn = isSaleActive();
   const discountPct = Math.round(SALE_DISCOUNT * 100);
 

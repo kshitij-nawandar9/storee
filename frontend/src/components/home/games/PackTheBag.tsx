@@ -204,6 +204,8 @@ export default function PackTheBag() {
             title: `${finalReveal.print} packing cubes`,
             image: `/images/products/packing_cubes/${finalReveal.print}.${['Jungle Safari', 'Marine', 'Space', 'Sports', 'Unicorn'].includes(finalReveal.print) ? 'png' : 'jpg'}`,
             to: `/products/packing-cubes?print=${encodeURIComponent(finalReveal.print)}`,
+            slug: 'packing-cubes',
+            print: finalReveal.print,
           }}
         />
       )}
