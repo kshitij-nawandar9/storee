@@ -13,7 +13,7 @@ export const RETURN_POLICY_MESSAGE = 'Hassle-free 7-day replacement policy';
 // Product sale. Hampers are excluded from this discount.
 // The discount stops applying everywhere (banner, cart, checkout) once SALE_END_DATE passes.
 export const SALE_NAME = 'Diwali Sale';
-export const SALE_DISCOUNT = 0.2; // set to 0 to disable
+export const SALE_DISCOUNT = 0.25; // set to 0 to disable
 export const SALE_END_DATE = '2026-11-08T23:59:59+05:30'; // Diwali day
 
 export const isSaleActive = () =>
@@ -37,11 +37,14 @@ export const isDiwaliSeason = () =>
 export const isHamperProduct = (product: Pick<Product, 'category'>) =>
   product.category === 'Rakhi Hampers';
 
-/** Return the sale price (in paise) after the sale discount, or undefined if no sale is active or the product is excluded. */
+/**
+ * Return the sale price (in paise) after the sale discount, or undefined if no sale is active or the product is excluded.
+ * Rounded down to a whole rupee, so prices never show paise and the customer always gets at least the advertised discount.
+ */
 export function getSalePrice(regularPrice: number, product?: Pick<Product, 'category'>): number | undefined {
   if (!isSaleActive()) return undefined;
   if (!product || isHamperProduct(product)) return undefined;
-  return Math.round(regularPrice * (1 - SALE_DISCOUNT));
+  return Math.floor((regularPrice * (1 - SALE_DISCOUNT)) / 100) * 100;
 }
 
 export const WHATSAPP_NUMBER = ''; // To be configured
