@@ -28,7 +28,7 @@ export const isBeforeDiwaliCutoff = () =>
   Date.now() < new Date(DIWALI_ORDER_BY_DATE).getTime();
 
 // The festive "Diwali night" homepage section hides itself after this date.
-export const DIWALI_NIGHT_END_DATE = '2026-11-15T00:00:00+05:30';
+export const DIWALI_NIGHT_END_DATE = '2026-12-01T00:00:00+05:30';
 
 export const isDiwaliSeason = () =>
   Date.now() < new Date(DIWALI_NIGHT_END_DATE).getTime();
